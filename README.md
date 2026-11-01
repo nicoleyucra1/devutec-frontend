@@ -5,7 +5,6 @@ Frontend web de DevUTEC, hecho con React y Vite.
 ## Cómo correrlo
 
 ```bash
-cd web
 cp .env.example .env
 npm install
 npm run dev
