@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { AuthContext } from './authContext'
 import { authService } from '../services/authService'
+import { userService } from '../services/userService'
 import { setSessionExpiredHandler } from '../services/api'
 import { tokenStorage } from '../utils/tokenStorage'
 
@@ -17,13 +18,18 @@ export function AuthProvider({ children }) {
     setSessionExpiredHandler(logout)
   }, [logout])
 
-  // Mientras no exista GET /users/me, el usuario se arma con la respuesta del login
-  const startSession = (data) => {
-    const sessionUser = { email: data.email, rol: data.rol }
+  // Guarda los tokens y pide los datos completos del usuario (id y nombre) a GET /users/me
+  const startSession = async (data) => {
     tokenStorage.setTokens(data.accessToken, data.refreshToken)
-    tokenStorage.setUser(sessionUser)
-    setUser(sessionUser)
-    return sessionUser
+    try {
+      const me = await userService.getMe()
+      tokenStorage.setUser(me)
+      setUser(me)
+      return me
+    } catch (error) {
+      tokenStorage.clear()
+      throw error
+    }
   }
 
   const login = async (credentials) => startSession(await authService.login(credentials))
