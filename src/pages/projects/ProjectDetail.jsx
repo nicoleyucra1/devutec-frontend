@@ -108,9 +108,12 @@ export default function ProjectDetail() {
               <Link className="button" to={`/projects/${project.id}/edit`}>
                 Editar
               </Link>
-              <button type="button" className="danger" onClick={() => setConfirmOpen(true)}>
-                Eliminar
-              </button>
+              {/* La API solo permite eliminar proyectos abiertos y sin contratos */}
+              {project.status === 'OPEN' && (
+                <button type="button" className="danger" onClick={() => setConfirmOpen(true)}>
+                  Eliminar
+                </button>
+              )}
             </>
           )}
         </footer>
