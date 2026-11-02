@@ -1,4 +1,4 @@
-/* Estilos base mínimos; el kit de componentes define el resto */
+@import "tailwindcss";
 *,
 *::before,
 *::after {
