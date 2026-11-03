@@ -34,3 +34,39 @@ export function validateRegister({ nombre, email, password, confirmPassword, rol
   if (!rol) errors.rol = 'Elige si quieres contratar o trabajar'
   return errors
 }
+
+// Reglas del perfil de freelancer. Son las mismas que valida PUT /freelancers/me.
+const GITHUB_USERNAME_REGEX = /^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$/
+
+function isHttpUrl(value) {
+  try {
+    const url = new URL(value)
+    return url.protocol === 'http:' || url.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
+// Todos los campos son opcionales: solo se valida lo que el freelancer llenó.
+// Si marca egresado, el ciclo no se valida porque no se envía.
+export function validateFreelancerProfile({ universidad, ciclo, egresado, tarifaHora, portafolioUrl, githubUsername }) {
+  const errors = {}
+  if (universidad.trim().length > 255) errors.universidad = 'La universidad no puede tener más de 255 caracteres'
+
+  if (!egresado && ciclo !== '') {
+    const value = Number(ciclo)
+    if (!Number.isInteger(value) || value < 1 || value > 10) errors.ciclo = 'El ciclo debe estar entre 1 y 10'
+  }
+
+  if (tarifaHora !== '' && !(Number(tarifaHora) > 0)) errors.tarifaHora = 'La tarifa por hora debe ser mayor a cero'
+
+  const url = portafolioUrl.trim()
+  if (url && !isHttpUrl(url)) errors.portafolioUrl = 'La URL del portafolio no es válida (debe empezar con http:// o https://)'
+  else if (url.length > 255) errors.portafolioUrl = 'La URL del portafolio no puede tener más de 255 caracteres'
+
+  const github = githubUsername.trim()
+  if (github && !GITHUB_USERNAME_REGEX.test(github)) {
+    errors.githubUsername = 'El usuario de GitHub solo puede tener letras, números y guiones (máx. 39)'
+  }
+  return errors
+}
