@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import AuthLayout from '../components/auth/AuthLayout'
-import FormField from '../components/auth/FormField'
+import Button from '../components/ui/Button'
+import Input from '../components/ui/Input'
 import { useAuth } from '../hooks/useAuth'
 import { errorMessage } from '../utils/errorMessage'
 import { validateLogin } from '../utils/validation'
@@ -53,7 +54,7 @@ export default function Login() {
   return (
     <AuthLayout title="Iniciar sesión" subtitle="Entra para ver proyectos y postulaciones">
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
-        <FormField
+        <Input
           label="Correo"
           name="email"
           type="email"
@@ -62,7 +63,7 @@ export default function Login() {
           onChange={handleChange}
           error={errors.email}
         />
-        <FormField
+        <Input
           label="Contraseña"
           name="password"
           type="password"
@@ -78,13 +79,11 @@ export default function Login() {
           </p>
         )}
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full rounded-lg bg-indigo-600 px-4 py-2 font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+        <Button
+          type="submit" loading={submitting} className="w-full"
         >
           {submitting ? 'Entrando...' : 'Entrar'}
-        </button>
+        </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-gray-600">
