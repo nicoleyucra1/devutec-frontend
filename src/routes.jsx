@@ -14,6 +14,7 @@ const ProjectEdit = lazy(() => import('./pages/projects/ProjectEdit'))
 const MyProjects = lazy(() => import('./pages/projects/MyProjects'))
 const ApplyToProject = lazy(() => import('./pages/applications/ApplyToProject'))
 const MyApplications = lazy(() => import('./pages/applications/MyApplications'))
+const ProjectApplications = lazy(() => import('./pages/applications/ProjectApplications'))
 
 export default function AppRoutes() {
   return (
@@ -34,6 +35,7 @@ export default function AppRoutes() {
         <Route element={<PrivateRoute roles={['CLIENT']} />}>
           <Route path="/projects/new" element={<ProjectCreate />} />
           <Route path="/my-projects" element={<MyProjects />} />
+          <Route path="/projects/:id/applications" element={<ProjectApplications />} />
         </Route>
 
         {/* Dueño del proyecto o admin (el backend valida que sea el dueño) */}
