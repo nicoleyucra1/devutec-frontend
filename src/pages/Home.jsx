@@ -20,9 +20,23 @@ export default function Home() {
           Cerrar sesión
         </button>
       </div>
-      <Link to="/projects" className="mt-8 inline-block font-semibold text-indigo-600 hover:underline">
-        Explorar proyectos →
-      </Link>
+      <div className="mt-8 flex flex-wrap gap-6">
+        <Link to="/projects" className="font-semibold text-indigo-600 hover:underline">
+          Explorar proyectos →
+        </Link>
+        {user.rol === 'FREELANCER' && (
+          <>
+            <Link to="/profile/edit" className="font-semibold text-indigo-600 hover:underline">
+              Editar mi perfil →
+            </Link>
+            {user.id && (
+              <Link to={`/freelancers/${user.id}`} className="font-semibold text-indigo-600 hover:underline">
+                Ver mi perfil público →
+              </Link>
+            )}
+          </>
+        )}
+      </div>
     </main>
   )
 }
