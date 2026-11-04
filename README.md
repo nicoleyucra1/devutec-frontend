@@ -49,7 +49,7 @@ export const projectService = {
 import { useAuth } from '../hooks/useAuth'
 
 const { user, isAuthenticated, login, register, logout } = useAuth()
-// user = { email, rol } con rol CLIENT, FREELANCER o ADMIN
+// user = { id, nombre, email, rol } con rol CLIENT, FREELANCER o ADMIN (viene de GET /users/me)
 ```
 
 ## Cómo proteger una ruta
@@ -75,3 +75,43 @@ Sin sesión, `PrivateRoute` manda a `/login` y después del login se vuelve a la
 ## Renovación del token
 
 El access token dura 15 minutos. Cuando una petición recibe 401, el interceptor de `services/api.js` pide un token nuevo a `/auth/refresh` y reintenta la petición una sola vez. Si varias peticiones reciben 401 al mismo tiempo, todas esperan la misma renovación. Si el refresh también falla, se cierra la sesión.
+
+## Mensajes de error
+
+`utils/errorMessage.js` convierte cualquier error de axios en un texto para la pantalla:
+
+| Caso | Mensaje |
+|---|---|
+| 400 | El mensaje de validación del backend |
+| 401 | Tu sesión expiró |
+| 403 | No tienes permiso |
+| 404 | No encontramos lo que buscas |
+| 409 | El mensaje del backend (por ejemplo, ya postulaste) |
+| 500 o más | El servidor tuvo un problema |
+| Timeout o sin conexión | Aviso de conexión |
+
+```js
+try {
+  await projectService.create(data)
+} catch (error) {
+  setError(errorMessage(error))
+}
+```
+
+Las peticiones GET que fallan por conexión, timeout o 502/503/504 se reintentan solas hasta dos veces antes de llegar al `catch`.
+
+## Toasts
+
+Para avisos cortos que se cierran solos:
+
+```js
+import { useToast } from '../hooks/useToast'
+
+const toast = useToast()
+toast.success('Proyecto creado')
+toast.error(errorMessage(error))
+```
+
+## Error boundary
+
+Si un componente lanza un error al renderizar, `components/ErrorBoundary.jsx` muestra una pantalla de "Algo salió mal" con botones para recargar o volver al inicio, en lugar de dejar la página en blanco.
