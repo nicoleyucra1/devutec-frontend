@@ -15,6 +15,8 @@ const MyProjects = lazy(() => import('./pages/projects/MyProjects'))
 const ApplyToProject = lazy(() => import('./pages/applications/ApplyToProject'))
 const MyApplications = lazy(() => import('./pages/applications/MyApplications'))
 const ProjectApplications = lazy(() => import('./pages/applications/ProjectApplications'))
+const MyContracts = lazy(() => import('./pages/contracts/MyContracts'))
+const ContractDetail = lazy(() => import('./pages/contracts/ContractDetail'))
 
 export default function AppRoutes() {
   return (
@@ -29,6 +31,8 @@ export default function AppRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<ProjectsExplore />} />
           <Route path="/projects/:id" element={<ProjectDetail />} />
+          <Route path="/contracts" element={<MyContracts />} />
+          <Route path="/contracts/:id" element={<ContractDetail />} />
         </Route>
 
         {/* Solo clientes */}
