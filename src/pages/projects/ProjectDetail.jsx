@@ -4,7 +4,6 @@ import ProjectStatusBadge from '../../components/projects/ProjectStatusBadge'
 import ConfirmDialog from '../../components/projects/ConfirmDialog'
 import { useProject } from '../../hooks/useProject'
 import { useProjectActions } from '../../hooks/useProjectActions'
-import { useCurrentUser } from '../../hooks/useCurrentUser'
 import { useAuth } from '../../hooks/useAuth'
 import { formatBudget, formatDate } from '../../utils/format'
 import '../../components/projects/projects.css'
@@ -14,11 +13,11 @@ export default function ProjectDetail() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { data: project, loading, error, reload } = useProject(id)
-  const { data: me } = useCurrentUser()
   const actions = useProjectActions()
   const [confirmOpen, setConfirmOpen] = useState(false)
 
-  const isOwner = Boolean(me && project && me.id === project.clientId)
+  // El id del usuario viene de la sesión (AuthProvider lo obtiene de GET /users/me al iniciar sesión)
+  const isOwner = Boolean(user?.id && project && user.id === project.clientId)
   const canManage = isOwner || user?.rol === 'ADMIN'
 
   const handleDelete = async () => {
