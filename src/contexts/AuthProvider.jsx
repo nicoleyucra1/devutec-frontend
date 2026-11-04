@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { AuthContext } from './authContext'
 import { authService } from '../services/authService'
 import { userService } from '../services/userService'
+import { useToast } from '../hooks/useToast'
 import { setSessionExpiredHandler } from '../services/api'
 import { tokenStorage } from '../utils/tokenStorage'
 
@@ -14,9 +15,15 @@ export function AuthProvider({ children }) {
     setUser(null)
   }, [])
 
+  const toast = useToast()
+
+  // Si el refresh falla, se cierra la sesión y se avisa por qué se volvió al login
   useEffect(() => {
-    setSessionExpiredHandler(logout)
-  }, [logout])
+    setSessionExpiredHandler(() => {
+      logout()
+      toast.info('Tu sesión expiró. Vuelve a iniciar sesión.')
+    })
+  }, [logout, toast])
 
   // Guarda los tokens y pide los datos completos del usuario (id y nombre) a GET /users/me
   const startSession = async (data) => {
