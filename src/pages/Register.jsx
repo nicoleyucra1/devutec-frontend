@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import AuthLayout from '../components/auth/AuthLayout'
-import FormField from '../components/auth/FormField'
+import Button from '../components/ui/Button'
+import Input from '../components/ui/Input'
 import { useAuth } from '../hooks/useAuth'
 import { errorMessage } from '../utils/errorMessage'
 import { validateRegister } from '../utils/validation'
@@ -87,7 +88,7 @@ export default function Register() {
           {errors.rol && <span className="mt-1 block text-sm text-red-600">{errors.rol}</span>}
         </fieldset>
 
-        <FormField
+        <Input
           label="Nombre completo"
           name="nombre"
           autoComplete="name"
@@ -95,7 +96,7 @@ export default function Register() {
           onChange={handleChange}
           error={errors.nombre}
         />
-        <FormField
+        <Input
           label="Correo"
           name="email"
           type="email"
@@ -104,7 +105,7 @@ export default function Register() {
           onChange={handleChange}
           error={errors.email}
         />
-        <FormField
+        <Input
           label="Contraseña"
           name="password"
           type="password"
@@ -114,7 +115,7 @@ export default function Register() {
           onChange={handleChange}
           error={errors.password}
         />
-        <FormField
+        <Input
           label="Repite la contraseña"
           name="confirmPassword"
           type="password"
@@ -130,13 +131,11 @@ export default function Register() {
           </p>
         )}
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full rounded-lg bg-indigo-600 px-4 py-2 font-semibold text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+        <Button
+          type="submit" loading={submitting} className="w-full"
         >
           {submitting ? 'Creando cuenta...' : 'Crear cuenta'}
-        </button>
+        </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-gray-600">
