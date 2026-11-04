@@ -4,6 +4,7 @@ import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import Card from '../../components/ui/Card'
 import ConfirmDialog from '../../components/ui/ConfirmDialog'
+import ContractReviews from '../../components/contracts/ContractReviews'
 import Skeleton from '../../components/ui/Skeleton'
 import { useAuth } from '../../hooks/useAuth'
 import { useContract } from '../../hooks/useContracts'
@@ -162,6 +163,14 @@ export default function ContractDetail() {
               <Button onClick={() => setPending('confirm')}>Confirmar entrega y liberar pago</Button>
             )}
           </footer>
+        )}
+
+        {contract.status === 'CONFIRMED' && (isClient || isFreelancer) && (
+          <ContractReviews
+            contractId={contract.id}
+            userName={user.nombre}
+            revieweeName={isClient ? contract.freelancerName : 'el cliente'}
+          />
         )}
       </Card>
 

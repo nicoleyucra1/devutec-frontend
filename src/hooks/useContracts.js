@@ -10,3 +10,9 @@ export function useMyContracts() {
 export function useContract(id) {
   return useAsync((options) => contractService.getById(id, options), [id])
 }
+
+
+//Reseñas de un contrato (GET /contracts/{id}/reviews)
+export function useContractReviews(id) {
+  return useAsync((options) => contractService.getReviews(id, options), [id])
+}
