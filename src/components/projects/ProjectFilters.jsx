@@ -1,75 +1,75 @@
+import Button from '../ui/Button'
+import Card from '../ui/Card'
+import Input from '../ui/Input'
+import { fieldClass, labelClass } from './fieldStyles'
 import { STATUS_LABELS } from '../../utils/format'
 
 // Controles de filtro. El texto de búsqueda se maneja aparte para aplicarle debounce.
 export default function ProjectFilters({ search, onSearchChange, filters, onFilterChange, skills, onClear }) {
   return (
-    <form className="filters card" onSubmit={(event) => event.preventDefault()} role="search">
-      <label className="filters-search">
-        Buscar
-        <input
-          type="search"
-          placeholder="Título o descripción"
-          value={search}
-          onChange={(event) => onSearchChange(event.target.value)}
+    <Card className="mb-6">
+      <form role="search" onSubmit={(event) => event.preventDefault()} className="grid items-end gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="sm:col-span-2 lg:col-span-3">
+          <Input
+            label="Buscar"
+            type="search"
+            placeholder="Título o descripción"
+            value={search}
+            onChange={(event) => onSearchChange(event.target.value)}
+          />
+        </div>
+
+        <label className="block">
+          <span className={labelClass}>Estado</span>
+          <select className={fieldClass} value={filters.status} onChange={(event) => onFilterChange('status', event.target.value)}>
+            <option value="">Todos</option>
+            {Object.entries(STATUS_LABELS).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="block">
+          <span className={labelClass}>Habilidad</span>
+          <select className={fieldClass} value={filters.skillId} onChange={(event) => onFilterChange('skillId', event.target.value)}>
+            <option value="">Todas</option>
+            {skills?.map((skill) => (
+              <option key={skill.id} value={skill.id}>
+                {skill.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <Input
+          label="Entrega antes de"
+          type="date"
+          value={filters.deadlineBefore}
+          onChange={(event) => onFilterChange('deadlineBefore', event.target.value)}
         />
-      </label>
 
-      <label>
-        Estado
-        <select value={filters.status} onChange={(event) => onFilterChange('status', event.target.value)}>
-          <option value="">Todos</option>
-          {Object.entries(STATUS_LABELS).map(([value, label]) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <label>
-        Habilidad
-        <select value={filters.skillId} onChange={(event) => onFilterChange('skillId', event.target.value)}>
-          <option value="">Todas</option>
-          {skills?.map((skill) => (
-            <option key={skill.id} value={skill.id}>
-              {skill.name}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <label>
-        Presupuesto mín.
-        <input
+        <Input
+          label="Presupuesto mín. (S/)"
           type="number"
           min="0"
           value={filters.minBudget}
           onChange={(event) => onFilterChange('minBudget', event.target.value)}
         />
-      </label>
 
-      <label>
-        Presupuesto máx.
-        <input
+        <Input
+          label="Presupuesto máx. (S/)"
           type="number"
           min="0"
           value={filters.maxBudget}
           onChange={(event) => onFilterChange('maxBudget', event.target.value)}
         />
-      </label>
 
-      <label>
-        Entrega antes de
-        <input
-          type="date"
-          value={filters.deadlineBefore}
-          onChange={(event) => onFilterChange('deadlineBefore', event.target.value)}
-        />
-      </label>
-
-      <button type="button" onClick={onClear}>
-        Limpiar filtros
-      </button>
-    </form>
+        <Button variant="secondary" onClick={onClear}>
+          Limpiar filtros
+        </Button>
+      </form>
+    </Card>
   )
 }

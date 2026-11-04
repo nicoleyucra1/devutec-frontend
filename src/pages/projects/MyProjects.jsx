@@ -1,56 +1,57 @@
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
-import ProjectCard from '../../components/projects/ProjectCard'
-import Pagination from '../../components/projects/Pagination'
+import { useSearchParams } from 'react-router-dom'
+import EmptyState from '../../components/ui/EmptyState'
+import Pagination from '../../components/ui/Pagination'
+import ButtonLink from '../../components/projects/ButtonLink'
+import ErrorBox from '../../components/projects/ErrorBox'
+import ProjectGrid from '../../components/projects/ProjectGrid'
 import { useMyProjects } from '../../hooks/useMyProjects'
-import '../../components/projects/projects.css'
+import { readPageParams } from '../../utils/pageParams'
 
 export default function MyProjects() {
-  const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
-  const page = Math.max(Number(searchParams.get('page')) || 1, 1)
-  const { data, loading, error, reload } = useMyProjects({ page, size: 9 })
+  const { page, size } = readPageParams(searchParams)
+  const { data, loading, error, reload } = useMyProjects({ page, size })
 
-  const handlePageChange = (nextPage) => setSearchParams(nextPage > 1 ? { page: nextPage } : {})
+  const setPageParams = (nextPage, nextSize) => {
+    const params = {}
+    if (nextPage > 1) params.page = nextPage
+    if (nextSize !== 10) params.size = nextSize
+    setSearchParams(params)
+  }
 
   return (
-    <main className="container">
-      <header className="page-header">
-        <h1>Mis proyectos</h1>
-        <Link className="button primary" to="/projects/new">
-          + Publicar proyecto
-        </Link>
+    <main className="mx-auto max-w-6xl px-4 py-10">
+      <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Mis proyectos</h1>
+          <p className="mt-1 text-sm text-gray-500">Los proyectos que publicaste, del más reciente al más antiguo</p>
+        </div>
+        <ButtonLink to="/projects/new">+ Publicar proyecto</ButtonLink>
       </header>
 
-      {location.state?.message && <p className="success">{location.state.message}</p>}
+      {loading && <ProjectGrid loading />}
 
-      {loading && <p className="state">Cargando tus proyectos...</p>}
-
-      {!loading && error && (
-        <div className="state error">
-          <p>{error}</p>
-          <button type="button" onClick={reload}>
-            Reintentar
-          </button>
-        </div>
-      )}
+      {!loading && error && <ErrorBox message={error} onRetry={reload} />}
 
       {!loading && !error && data?.content.length === 0 && (
-        <div className="state">
-          <p>Todavía no has publicado proyectos.</p>
-          <Link className="button primary" to="/projects/new">
-            Publicar mi primer proyecto
-          </Link>
-        </div>
+        <EmptyState
+          title="Todavía no has publicado proyectos"
+          message="Cuenta qué necesitas y recibe propuestas de estudiantes de UTEC."
+          action={<ButtonLink to="/projects/new">Publicar mi primer proyecto</ButtonLink>}
+        />
       )}
 
       {!loading && !error && data?.content.length > 0 && (
         <>
-          <section className="project-grid">
-            {data.content.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </section>
-          <Pagination page={page} totalPages={data.totalPages} onChange={handlePageChange} />
+          <ProjectGrid projects={data.content} />
+          <Pagination
+            page={page}
+            size={size}
+            totalPages={data.totalPages}
+            totalElements={data.totalElements}
+            onPageChange={(nextPage) => setPageParams(nextPage, size)}
+            onSizeChange={(nextSize) => setPageParams(1, nextSize)}
+          />
         </>
       )}
     </main>

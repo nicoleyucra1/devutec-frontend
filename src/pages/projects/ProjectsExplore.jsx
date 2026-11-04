@@ -1,23 +1,26 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
-import ProjectCard from '../../components/projects/ProjectCard'
+import { useSearchParams } from 'react-router-dom'
+import EmptyState from '../../components/ui/EmptyState'
+import Button from '../../components/ui/Button'
+import Pagination from '../../components/ui/Pagination'
+import ButtonLink from '../../components/projects/ButtonLink'
 import ProjectFilters from '../../components/projects/ProjectFilters'
-import Pagination from '../../components/projects/Pagination'
+import ProjectGrid from '../../components/projects/ProjectGrid'
+import ErrorBox from '../../components/projects/ErrorBox'
 import { useProjects } from '../../hooks/useProjects'
 import { useSkills } from '../../hooks/useSkills'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useAuth } from '../../hooks/useAuth'
-import '../../components/projects/projects.css'
+import { readPageParams } from '../../utils/pageParams'
 
 const FILTER_KEYS = ['status', 'skillId', 'minBudget', 'maxBudget', 'deadlineBefore']
-const PAGE_SIZE = 9
 
-// Explorar proyectos: los filtros y la página viven en la URL (?search=&status=&page=2),
+// Explorar proyectos: los filtros y la página viven en la URL (?search=&status=&page=2&size=25),
 // así se puede compartir el enlace o volver atrás sin perder la búsqueda.
 export default function ProjectsExplore() {
   const { user } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
-  const page = Math.max(Number(searchParams.get('page')) || 1, 1)
+  const { page, size } = readPageParams(searchParams)
   const urlSearch = searchParams.get('search') ?? ''
 
   const filters = useMemo(
@@ -54,12 +57,7 @@ export default function ProjectsExplore() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch])
 
-  const { data, loading, error, reload } = useProjects({
-    ...filters,
-    search: urlSearch,
-    page,
-    size: PAGE_SIZE,
-  })
+  const { data, loading, error, reload } = useProjects({ ...filters, search: urlSearch, page, size })
   const skills = useSkills()
 
   const handleFilterChange = (key, value) => updateParams({ [key]: value, page: null })
@@ -67,22 +65,28 @@ export default function ProjectsExplore() {
     updateParams({ page: nextPage > 1 ? nextPage : null })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+  const handleSizeChange = (nextSize) => updateParams({ size: nextSize, page: null })
   const handleClear = () => {
     setSearch('')
     setSearchParams({})
   }
 
   return (
-    <main className="container">
-      <header className="page-header">
+    <main className="mx-auto max-w-6xl px-4 py-10">
+      <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1>Explorar proyectos</h1>
-          {data && <p className="muted">{data.totalElements} proyecto(s) encontrados</p>}
+          <h1 className="text-2xl font-bold text-gray-900">Explorar proyectos</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            {data ? `${data.totalElements} proyecto(s) encontrados` : 'Encuentra un proyecto que encaje contigo'}
+          </p>
         </div>
         {user?.rol === 'CLIENT' && (
-          <Link className="button primary" to="/projects/new">
-            + Publicar proyecto
-          </Link>
+          <div className="flex gap-2">
+            <ButtonLink to="/my-projects" variant="secondary">
+              Mis proyectos
+            </ButtonLink>
+            <ButtonLink to="/projects/new">+ Publicar proyecto</ButtonLink>
+          </div>
         )}
       </header>
 
@@ -95,34 +99,33 @@ export default function ProjectsExplore() {
         onClear={handleClear}
       />
 
-      {loading && <p className="state">Cargando proyectos...</p>}
+      {loading && <ProjectGrid loading />}
 
-      {!loading && error && (
-        <div className="state error">
-          <p>{error}</p>
-          <button type="button" onClick={reload}>
-            Reintentar
-          </button>
-        </div>
-      )}
+      {!loading && error && <ErrorBox message={error} onRetry={reload} />}
 
       {!loading && !error && data?.content.length === 0 && (
-        <div className="state">
-          <p>No hay proyectos que coincidan con tu búsqueda.</p>
-          <button type="button" onClick={handleClear}>
-            Limpiar filtros
-          </button>
-        </div>
+        <EmptyState
+          title="No hay proyectos que coincidan"
+          message="Prueba con otras palabras o quita algunos filtros."
+          action={
+            <Button variant="secondary" onClick={handleClear}>
+              Limpiar filtros
+            </Button>
+          }
+        />
       )}
 
       {!loading && !error && data?.content.length > 0 && (
         <>
-          <section className="project-grid">
-            {data.content.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </section>
-          <Pagination page={page} totalPages={data.totalPages} onChange={handlePageChange} />
+          <ProjectGrid projects={data.content} />
+          <Pagination
+            page={page}
+            size={size}
+            totalPages={data.totalPages}
+            totalElements={data.totalElements}
+            onPageChange={handlePageChange}
+            onSizeChange={handleSizeChange}
+          />
         </>
       )}
     </main>
