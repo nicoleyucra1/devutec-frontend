@@ -1,7 +1,12 @@
 import { useState } from 'react'
+import Button from '../ui/Button'
+import Card from '../ui/Card'
+import Input from '../ui/Input'
+import Skeleton from '../ui/Skeleton'
+import { fieldClass, labelClass } from './fieldStyles'
 import { useSkills } from '../../hooks/useSkills'
 
-const EMPTY = { title: '', description: '', budget: '', deadline: '', skillIds: [] }
+const EMPTY = { title: '', description: '', budget: '', deadline: '', location: '', skillIds: [] }
 
 function toFormValues(project) {
   if (!project) return EMPTY
@@ -10,6 +15,7 @@ function toFormValues(project) {
     description: project.description ?? '',
     budget: project.budget ?? '',
     deadline: project.deadline ?? '',
+    location: project.location ?? '',
     skillIds: project.skills?.map((skill) => skill.id) ?? [],
   }
 }
@@ -20,6 +26,7 @@ function validate(values) {
   else if (values.title.length > 255) errors.title = 'Máximo 255 caracteres'
   if (values.budget === '') errors.budget = 'El presupuesto es obligatorio'
   else if (Number(values.budget) <= 0) errors.budget = 'El presupuesto debe ser mayor a cero'
+  if (values.location.length > 100) errors.location = 'Máximo 100 caracteres'
   return errors
 }
 
@@ -51,75 +58,91 @@ export default function ProjectForm({ initialProject, submitLabel, saving, serve
       description: values.description.trim() || null,
       budget: Number(values.budget),
       deadline: values.deadline || null,
+      location: values.location.trim() || null,
       skillIds: values.skillIds,
     })
   }
 
   return (
-    <form className="card form" onSubmit={handleSubmit} noValidate>
-      <label>
-        Título *
-        <input
+    <Card>
+      <form className="space-y-5" onSubmit={handleSubmit} noValidate>
+        <Input
+          label="Título *"
           value={values.title}
           onChange={(event) => setField('title', event.target.value)}
-          aria-invalid={Boolean(errors.title)}
+          error={errors.title}
           maxLength={255}
         />
-        {errors.title && <span className="field-error">{errors.title}</span>}
-      </label>
 
-      <label>
-        Descripción
-        <textarea
-          rows={5}
-          value={values.description}
-          onChange={(event) => setField('description', event.target.value)}
-        />
-      </label>
+        <label className="block">
+          <span className={labelClass}>Descripción</span>
+          <textarea
+            rows={5}
+            className={fieldClass}
+            value={values.description}
+            onChange={(event) => setField('description', event.target.value)}
+          />
+        </label>
 
-      <div className="form-row">
-        <label>
-          Presupuesto (S/) *
-          <input
+        <div className="grid gap-5 sm:grid-cols-2">
+          <Input
+            label="Presupuesto (S/) *"
             type="number"
             min="1"
             step="0.01"
             value={values.budget}
             onChange={(event) => setField('budget', event.target.value)}
-            aria-invalid={Boolean(errors.budget)}
+            error={errors.budget}
           />
-          {errors.budget && <span className="field-error">{errors.budget}</span>}
-        </label>
-
-        <label>
-          Fecha límite
-          <input type="date" value={values.deadline} onChange={(event) => setField('deadline', event.target.value)} />
-        </label>
-      </div>
-
-      <fieldset>
-        <legend>Habilidades requeridas</legend>
-        {skills.loading && <p>Cargando habilidades...</p>}
-        {skills.error && <p className="error">{skills.error}</p>}
-        <div className="skill-options">
-          {skills.data?.map((skill) => (
-            <label key={skill.id} className="checkbox">
-              <input
-                type="checkbox"
-                checked={values.skillIds.includes(skill.id)}
-                onChange={() => toggleSkill(skill.id)}
-              />
-              {skill.name}
-            </label>
-          ))}
+          <Input
+            label="Fecha límite"
+            type="date"
+            value={values.deadline}
+            onChange={(event) => setField('deadline', event.target.value)}
+          />
         </div>
-      </fieldset>
 
-      {serverError && <p className="error">{serverError}</p>}
+        <Input
+          label="Ubicación (opcional)"
+          placeholder="Por ejemplo: Barranco, Lima"
+          value={values.location}
+          onChange={(event) => setField('location', event.target.value)}
+          error={errors.location}
+          maxLength={100}
+        />
 
-      <button type="submit" className="primary" disabled={saving}>
-        {saving ? 'Guardando...' : submitLabel}
-      </button>
-    </form>
+        <fieldset>
+          <legend className={labelClass}>Habilidades requeridas</legend>
+          {skills.loading && <Skeleton className="mt-2 h-5 w-1/2" />}
+          {skills.error && <p className="mt-2 text-sm text-red-600">{skills.error}</p>}
+          <div className="mt-2 flex flex-wrap gap-2">
+            {skills.data?.map((skill) => {
+              const checked = values.skillIds.includes(skill.id)
+              return (
+                <label
+                  key={skill.id}
+                  className={`cursor-pointer rounded-full border px-3 py-1 text-sm transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-indigo-200 ${
+                    checked ? 'border-primary-600 bg-primary-50 text-primary-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <input type="checkbox" className="sr-only" checked={checked} onChange={() => toggleSkill(skill.id)} />
+                  {skill.name}
+                </label>
+              )
+            })}
+          </div>
+        </fieldset>
+
+        {serverError && (
+          <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+            {serverError}
+          </p>
+        )}
+
+        <Button type="submit" loading={saving} className="w-full sm:w-auto">
+          {saving ? 'Guardando...' : submitLabel}
+        </Button>
+      </form>
+    </Card>
   )
 }
