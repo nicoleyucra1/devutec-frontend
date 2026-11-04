@@ -4,6 +4,7 @@ import AuthLayout from '../components/auth/AuthLayout'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import { useAuth } from '../hooks/useAuth'
+import { useToast } from '../hooks/useToast'
 import { errorMessage } from '../utils/errorMessage'
 import { validateRegister } from '../utils/validation'
 
@@ -17,6 +18,7 @@ const INITIAL_VALUES = { nombre: '', email: '', password: '', confirmPassword: '
 export default function Register() {
   const { user, register } = useAuth()
   const navigate = useNavigate()
+  const toast = useToast()
 
   const [values, setValues] = useState(INITIAL_VALUES)
   const [errors, setErrors] = useState({})
@@ -50,6 +52,7 @@ export default function Register() {
         password: values.password,
         rol: values.rol,
       })
+      toast.success('Tu cuenta se creó correctamente')
       navigate('/', { replace: true })
     } catch (error) {
       setSubmitError(
