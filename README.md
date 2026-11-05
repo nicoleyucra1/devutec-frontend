@@ -2,6 +2,8 @@
 
 Frontend web de DevUTEC, hecho con React y Vite.
 
+**En vivo:** https://devutec.vercel.app · **API:** https://devutec.duckdns.org/api/v1 ([repositorio del backend](https://github.com/alissonbrena-dotcom/devutec-backend))
+
 ## Cómo correrlo
 
 ```bash
@@ -115,3 +117,22 @@ toast.error(errorMessage(error))
 ## Error boundary
 
 Si un componente lanza un error al renderizar, `components/ErrorBoundary.jsx` muestra una pantalla de "Algo salió mal" con botones para recargar o volver al inicio, en lugar de dejar la página en blanco.
+
+## Deploy
+
+La web está publicada en **Vercel**, conectada a este repositorio:
+
+- **Producción:** cada merge a `main` se compila y se publica solo en https://devutec.vercel.app (también responde https://devutec-frontend.vercel.app).
+- **Vista previa por PR:** cada pull request recibe un link propio para ver los cambios antes de unirlos. Esas vistas previas tienen otra dirección y el backend no las acepta por CORS, así que sirven para revisar la interfaz; para probar con datos se usa producción o `localhost`.
+- **Configuración en Vercel:** preset Vite (`npm run build`, carpeta `dist`) y la variable `VITE_API_URL=https://devutec.duckdns.org/api/v1` para Production y Preview.
+- **Rutas:** `vercel.json` redirige todas las rutas a `index.html`, para que al recargar o abrir un link directo (por ejemplo `/projects/5`) cargue la app en vez de dar 404.
+
+### Conexión con el backend
+
+La API corre en **AWS EC2** con base de datos en **RDS**, detrás de **Caddy** con HTTPS (certificado de Let's Encrypt y dominio de DuckDNS), y se despliega sola cuando cambia el backend. Por seguridad solo acepta peticiones de los orígenes listados en `CORS_ALLOWED_ORIGINS` del servidor:
+
+```
+https://devutec.vercel.app, https://devutec-frontend.vercel.app, http://localhost:5173
+```
+
+Si la web cambia de dominio, hay que agregarlo a esa variable y reiniciar la API (detalle en [`deploy/README.md`](https://github.com/alissonbrena-dotcom/devutec-backend/blob/main/deploy/README.md) del backend).
