@@ -1,42 +1,57 @@
-import { Link } from 'react-router-dom'
+import ButtonLink from '../components/projects/ButtonLink'
 import { useAuth } from '../hooks/useAuth'
+import AdminDashboard from './dashboard/AdminDashboard'
+import ClientDashboard from './dashboard/ClientDashboard'
+import FreelancerDashboard from './dashboard/FreelancerDashboard'
+
+const ROLE_LABELS = {
+  CLIENT: 'Cuenta de cliente',
+  FREELANCER: 'Cuenta de freelancer',
+  ADMIN: 'Administrador',
+}
+
+// Accesos rápidos que cambian según el rol
+function QuickActions({ user }) {
+  if (user.rol === 'CLIENT') {
+    return (
+      <>
+        <ButtonLink to="/projects/new">+ Publicar proyecto</ButtonLink>
+        <ButtonLink to="/my-projects" variant="secondary">Mis proyectos</ButtonLink>
+      </>
+    )
+  }
+  if (user.rol === 'FREELANCER') {
+    return (
+      <>
+        <ButtonLink to="/projects">Explorar proyectos</ButtonLink>
+        <ButtonLink to="/profile/edit" variant="secondary">Editar mi perfil</ButtonLink>
+        {user.id && (
+          <ButtonLink to={`/freelancers/${user.id}`} variant="secondary">Ver mi perfil público</ButtonLink>
+        )}
+      </>
+    )
+  }
+  return <ButtonLink to="/projects" variant="secondary">Ver proyectos</ButtonLink>
+}
 
 export default function Home() {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Hola, {user.nombre ?? user.email}</h1>
-          <p className="mt-1 text-gray-500">
-            {user.rol === 'CLIENT' ? 'Cuenta de cliente' : user.rol === 'FREELANCER' ? 'Cuenta de freelancer' : 'Administrador'}
-          </p>
-        </div>
-        <button
-          onClick={logout}
-          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          Cerrar sesión
-        </button>
+    <main className="mx-auto max-w-6xl px-4 py-10">
+      {/* Cerrar sesión está en la barra de navegación */}
+      <header>
+        <h1 className="text-2xl font-bold text-gray-900">Hola, {user.nombre ?? user.email}</h1>
+        <p className="mt-1 text-gray-500">{ROLE_LABELS[user.rol] ?? user.rol}</p>
+      </header>
+
+      <div className="mt-6 mb-8 flex flex-wrap gap-2">
+        <QuickActions user={user} />
       </div>
-      <div className="mt-8 flex flex-wrap gap-6">
-        <Link to="/projects" className="font-semibold text-indigo-600 hover:underline">
-          Explorar proyectos →
-        </Link>
-        {user.rol === 'FREELANCER' && (
-          <>
-            <Link to="/profile/edit" className="font-semibold text-indigo-600 hover:underline">
-              Editar mi perfil →
-            </Link>
-            {user.id && (
-              <Link to={`/freelancers/${user.id}`} className="font-semibold text-indigo-600 hover:underline">
-                Ver mi perfil público →
-              </Link>
-            )}
-          </>
-        )}
-      </div>
+
+      {user.rol === 'CLIENT' && <ClientDashboard />}
+      {user.rol === 'FREELANCER' && <FreelancerDashboard />}
+      {user.rol === 'ADMIN' && <AdminDashboard />}
     </main>
   )
 }
