@@ -22,7 +22,7 @@ export default function ProjectFilters({ search, onSearchChange, filters, onFilt
         <label className="block">
           <span className={labelClass}>Estado</span>
           <select className={fieldClass} value={filters.status} onChange={(event) => onFilterChange('status', event.target.value)}>
-            <option value="">Todos</option>
+            <option value="">Cualquier estado</option>
             {Object.entries(STATUS_LABELS).map(([value, label]) => (
               <option key={value} value={value}>
                 {label}
@@ -34,7 +34,7 @@ export default function ProjectFilters({ search, onSearchChange, filters, onFilt
         <label className="block">
           <span className={labelClass}>Habilidad</span>
           <select className={fieldClass} value={filters.skillId} onChange={(event) => onFilterChange('skillId', event.target.value)}>
-            <option value="">Todas</option>
+            <option value="">Cualquier habilidad</option>
             {skills?.map((skill) => (
               <option key={skill.id} value={skill.id}>
                 {skill.name}
