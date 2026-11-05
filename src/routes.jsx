@@ -12,6 +12,11 @@ const ProjectDetail = lazy(() => import('./pages/projects/ProjectDetail'))
 const ProjectCreate = lazy(() => import('./pages/projects/ProjectCreate'))
 const ProjectEdit = lazy(() => import('./pages/projects/ProjectEdit'))
 const MyProjects = lazy(() => import('./pages/projects/MyProjects'))
+const ApplyToProject = lazy(() => import('./pages/applications/ApplyToProject'))
+const MyApplications = lazy(() => import('./pages/applications/MyApplications'))
+const ProjectApplications = lazy(() => import('./pages/applications/ProjectApplications'))
+const MyContracts = lazy(() => import('./pages/contracts/MyContracts'))
+const ContractDetail = lazy(() => import('./pages/contracts/ContractDetail'))
 const EditMyProfile = lazy(() => import('./pages/freelancers/EditMyProfile'))
 const FreelancerProfile = lazy(() => import('./pages/freelancers/FreelancerProfile'))
 
@@ -28,6 +33,8 @@ export default function AppRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<ProjectsExplore />} />
           <Route path="/projects/:id" element={<ProjectDetail />} />
+          <Route path="/contracts" element={<MyContracts />} />
+          <Route path="/contracts/:id" element={<ContractDetail />} />
           <Route path="/freelancers/:userId" element={<FreelancerProfile />} />
         </Route>
 
@@ -35,6 +42,7 @@ export default function AppRoutes() {
         <Route element={<PrivateRoute roles={['CLIENT']} />}>
           <Route path="/projects/new" element={<ProjectCreate />} />
           <Route path="/my-projects" element={<MyProjects />} />
+          <Route path="/projects/:id/applications" element={<ProjectApplications />} />
         </Route>
 
         {/* Dueño del proyecto o admin (el backend valida que sea el dueño) */}
@@ -44,9 +52,10 @@ export default function AppRoutes() {
 
         {/* Solo freelancers */}
         <Route element={<PrivateRoute roles={['FREELANCER']} />}>
+          <Route path="/projects/:id/apply" element={<ApplyToProject />} />
+          <Route path="/my-applications" element={<MyApplications />} />
           <Route path="/profile/edit" element={<EditMyProfile />} />
         </Route>
-
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
