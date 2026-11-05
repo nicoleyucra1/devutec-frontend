@@ -12,6 +12,8 @@ const ProjectDetail = lazy(() => import('./pages/projects/ProjectDetail'))
 const ProjectCreate = lazy(() => import('./pages/projects/ProjectCreate'))
 const ProjectEdit = lazy(() => import('./pages/projects/ProjectEdit'))
 const MyProjects = lazy(() => import('./pages/projects/MyProjects'))
+const EditMyProfile = lazy(() => import('./pages/freelancers/EditMyProfile'))
+const FreelancerProfile = lazy(() => import('./pages/freelancers/FreelancerProfile'))
 
 export default function AppRoutes() {
   return (
@@ -26,6 +28,7 @@ export default function AppRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<ProjectsExplore />} />
           <Route path="/projects/:id" element={<ProjectDetail />} />
+          <Route path="/freelancers/:userId" element={<FreelancerProfile />} />
         </Route>
 
         {/* Solo clientes */}
@@ -41,6 +44,7 @@ export default function AppRoutes() {
 
         {/* Solo freelancers */}
         <Route element={<PrivateRoute roles={['FREELANCER']} />}>
+          <Route path="/profile/edit" element={<EditMyProfile />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
