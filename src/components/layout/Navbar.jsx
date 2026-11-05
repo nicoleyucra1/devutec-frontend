@@ -26,7 +26,7 @@ export default function Navbar() {
           DevUTEC
         </Link>
 
-        <nav aria-label="Principal" className="hidden flex-1 items-center gap-1 md:flex">
+        <nav aria-label="Principal" className="hidden flex-1 items-center gap-1 lg:flex">
           {/* "end" evita que Explorar proyectos quede marcado al estar en /projects/new */}
           {links.map((link) => (
             <NavLink key={link.to} to={link.to} end className={linkClass}>
@@ -35,7 +35,7 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="ml-auto hidden items-center gap-4 md:flex">
+        <div className="ml-auto hidden items-center gap-4 lg:flex">
           <UserInfo user={user} />
           <LogoutButton onClick={logout} />
         </div>
@@ -46,7 +46,7 @@ export default function Navbar() {
           aria-expanded={menuOpen}
           aria-controls="menu-movil"
           aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
-          className="ml-auto rounded-lg p-2 text-gray-600 hover:bg-gray-50 md:hidden"
+          className="ml-auto rounded-lg p-2 text-gray-600 hover:bg-gray-50 lg:hidden"
         >
           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
             {menuOpen ? (
@@ -59,7 +59,7 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div id="menu-movil" className="border-t border-gray-200 px-4 py-3 md:hidden">
+        <div id="menu-movil" className="border-t border-gray-200 px-4 py-3 lg:hidden">
           <nav aria-label="Principal" className="flex flex-col gap-1">
             {links.map((link) => (
               <NavLink key={link.to} to={link.to} end onClick={closeMenu} className={linkClass}>
@@ -79,7 +79,7 @@ export default function Navbar() {
 
 function UserInfo({ user }) {
   return (
-    <div className="text-sm leading-tight md:text-right">
+    <div className="text-sm leading-tight lg:text-right">
       <p className="font-medium text-gray-900">{user.nombre ?? user.email}</p>
       <p className="text-gray-500">{ROLE_LABELS[user.rol] ?? user.rol}</p>
     </div>
