@@ -3,6 +3,8 @@ export const NAV_LINKS = [
   { to: '/projects', label: 'Explorar proyectos' },
   { to: '/my-projects', label: 'Mis proyectos', roles: ['CLIENT'] },
   { to: '/projects/new', label: 'Publicar proyecto', roles: ['CLIENT'] },
+  { to: '/my-applications', label: 'Mis postulaciones', roles: ['FREELANCER'] },
+  { to: '/contracts', label: 'Mis contratos', roles: ['CLIENT', 'FREELANCER'] },
   { to: '/profile/edit', label: 'Editar mi perfil', roles: ['FREELANCER'] },
 ]
 
