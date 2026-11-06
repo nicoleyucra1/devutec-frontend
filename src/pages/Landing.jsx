@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import Cuyi from '../components/brand/Cuyi'
 import EscrowCarousel from '../components/landing/EscrowCarousel'
+import HowItWorks from '../components/landing/HowItWorks'
 import SiteFooter from '../components/landing/SiteFooter'
 import PublicHeader from '../components/layout/PublicHeader'
 import ButtonLink from '../components/projects/ButtonLink'
@@ -9,13 +9,6 @@ import Badge from '../components/ui/Badge'
 
 const shell = 'mx-auto w-full max-w-[1200px] px-6'
 const kicker = 'text-[11px] font-semibold tracking-[0.13em]'
-
-const STEPS = [
-  { title: 'Publica', text: 'Describe el trabajo, presupuesto y fecha de entrega.' },
-  { title: 'Postulan', text: 'Recibe propuestas de estudiantes y egresados UTEC.' },
-  { title: 'Contratas', text: 'Eliges a quién contratar y dejas el pago en garantía.' },
-  { title: 'Apruebas', text: 'Revisas la entrega y recién entonces se libera el pago.' },
-]
 
 const PROOF = [
   { value: '100%', label: 'estudiantes verificados' },
@@ -111,41 +104,6 @@ function Hero() {
       </div>
 
       <EscrowCarousel />
-    </section>
-  )
-}
-
-function HowItWorks() {
-  return (
-    <section id="como-funciona" className="scroll-mt-[72px] bg-ink py-[70px] text-white lg:py-[100px]">
-      <div className={`${shell} grid lg:grid-cols-[1fr_2fr] lg:gap-x-[72px]`}>
-        <p className={`${kicker} text-[#a6a39c]`}>ASÍ FUNCIONA</p>
-        <h2 className="mb-[50px] mt-[25px] text-[39px] font-medium leading-[1.02] tracking-[-0.035em] lg:-mt-2.5 lg:mb-[70px] lg:text-[50px]">
-          De una necesidad concreta <br className="hidden sm:block" />a un trabajo <em className="text-lime">bien pagado.</em>
-        </h2>
-
-        <ol className="grid border-t border-[#3c3c38] lg:col-start-2 lg:grid-cols-4">
-          {STEPS.map((step, i) => (
-            <li
-              key={step.title}
-              className="grid grid-cols-[35px_1fr] border-b border-[#3c3c38] py-[22px] lg:block lg:border-b-0 lg:pb-0 lg:pr-6 lg:pt-[25px]"
-            >
-              <span className="text-xs text-lime">{String(i + 1).padStart(2, '0')}</span>
-              <h3 className="text-[17px] font-medium lg:mb-2.5 lg:mt-[30px]">{step.title}</h3>
-              <p className="col-start-2 mt-1.5 text-sm leading-normal text-[#a9a7a0] lg:mt-0">{step.text}</p>
-            </li>
-          ))}
-        </ol>
-
-        <figure className="mt-12 flex items-center gap-4 lg:col-start-1 lg:row-start-2 lg:mt-0 lg:block lg:self-end">
-          <div className="grid h-[108px] w-[108px] flex-none place-items-center rounded-[22px] bg-lime">
-            <Cuyi anim="escribe" px={5} />
-          </div>
-          <figcaption className="max-w-[170px] text-[11px] leading-normal text-[#a9a7a0] lg:mt-3.5">
-            Mientras tanto, Cuyi ya está trabajando en tu proyecto.
-          </figcaption>
-        </figure>
-      </div>
     </section>
   )
 }
