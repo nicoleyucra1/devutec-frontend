@@ -165,8 +165,8 @@ function SlideCard({ slide, className = '', style, ...props }) {
 }
 
 // Tarjeta del hero con un pago en garantía de ejemplo. Cada 5 s la de adelante se va al fondo de la pila y sube la
-// siguiente, que dibuja su avance. Con el mouse encima se pausa y se inclina un poco hacia el cursor.
-// Si el usuario pidió reducir el movimiento, no rota sola ni se inclina.
+// siguiente, que dibuja su avance. Con el mouse encima se inclina un poco hacia el cursor y sigue rotando; solo se
+// pausa cuando alguien la recorre con el teclado. Si el usuario pidió reducir el movimiento, no rota sola ni se inclina.
 export default function EscrowCarousel() {
   const [state, setState] = useState({ index: 0, leaving: null })
   const [paused, setPaused] = useState(false)
@@ -176,14 +176,15 @@ export default function EscrowCarousel() {
 
   const goTo = (next) => setState((current) => (current.index === next ? current : { index: next, leaving: current.index }))
 
+  // Se programa de nuevo con cada cambio, así al elegir una tarjeta a mano se cuentan 5 s completos desde ahí
   useEffect(() => {
     if (paused || prefersReducedMotion()) return undefined
-    const timer = setInterval(
+    const timer = setTimeout(
       () => setState((current) => ({ index: (current.index + 1) % SLIDES.length, leaving: current.index })),
       INTERVAL_MS,
     )
-    return () => clearInterval(timer)
-  }, [paused])
+    return () => clearTimeout(timer)
+  }, [paused, index])
 
   // Inclinación de hasta 3° y sombra que se corre al lado contrario, como una tarjeta física
   const tilt = (event) => {
@@ -208,12 +209,9 @@ export default function EscrowCarousel() {
     <section
       aria-roledescription="carrusel"
       aria-label="Proyectos en garantía de ejemplo"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => {
-        setPaused(false)
-        resetTilt()
-      }}
-      onFocus={() => setPaused(true)}
+      onMouseLeave={resetTilt}
+      // Solo el foco del teclado pausa; el de un clic en las rayitas no, para que no quede detenida
+      onFocus={(event) => setPaused(event.target.matches(':focus-visible'))}
       onBlur={() => setPaused(false)}
       className="w-full"
     >
