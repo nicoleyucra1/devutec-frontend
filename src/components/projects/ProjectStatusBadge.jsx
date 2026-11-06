@@ -3,7 +3,7 @@ import { STATUS_LABELS } from '../../utils/format'
 
 const STATUS_COLORS = {
   OPEN: 'green',
-  IN_PROGRESS: 'yellow',
+  IN_PROGRESS: 'blue',
   DONE: 'gray',
 }
 
