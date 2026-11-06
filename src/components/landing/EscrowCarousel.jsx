@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { prefersReducedMotion } from '../../utils/motion'
 
 const STEPS = ['Retenido', 'Entregado', 'Liberado']
 
@@ -58,14 +59,7 @@ const SLIDES = [
 
 const INTERVAL_MS = 5000
 const pad = (n) => String(n).padStart(2, '0')
-
-function prefersReducedMotion() {
-  try {
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  } catch {
-    return false
-  }
-}
+const ease = 'var(--ease-brand)'
 
 function Person({ initials, label, name }) {
   return (
@@ -81,14 +75,21 @@ function Person({ initials, label, name }) {
   )
 }
 
+// Cada paso hecho aparece con un saltito, uno tras otro; el actual llega después de la línea y late en lima
 function StepDot({ index, step }) {
   const done = index < step
   const current = index === step
+  const animation = done
+    ? `pop .4s ${ease} ${0.15 + index * 0.12}s both`
+    : current
+      ? `pop .4s ${ease} .75s both, ring 2.4s ease-out 1.3s infinite`
+      : undefined
   return (
     <span
       className={`z-[1] flex flex-col items-center gap-[7px] text-[11px] ${current ? 'font-semibold text-ink' : 'text-muted'}`}
     >
       <i
+        style={{ animation }}
         className={`grid h-6 w-6 place-items-center rounded-full border not-italic ${
           done ? 'border-escrow bg-escrow text-white' : current ? 'border-ink bg-lime text-ink' : 'border-line bg-paper'
         }`}
@@ -106,30 +107,121 @@ function StepDot({ index, step }) {
   )
 }
 
-// Tarjeta del hero con un pago en garantía de ejemplo. Rota sola cada 5 s, se pausa al pasar el mouse o con el
-// foco, y se queda quieta si el usuario pidió reducir el movimiento.
+function SlideCard({ slide, className = '', style, ...props }) {
+  // La línea verde avanza hasta el paso actual: 0 % retenido, 50 % entregado, 100 % liberado
+  const fill = Math.min(slide.step, 2) / 2
+  return (
+    <article
+      style={style}
+      className={`rounded-[20px] border border-line bg-surface p-5 shadow-[var(--sx,0px)_var(--sy,24px)_60px_rgba(14,14,12,0.08)] sm:p-7 lg:rotate-1 ${className}`}
+      {...props}
+    >
+      <div className="flex items-center justify-between">
+        <p className="text-[10px] font-semibold tracking-[0.13em] text-muted">PAGO EN GARANTÍA</p>
+        <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-escrow">
+          <span className="h-1.5 w-1.5 rounded-full bg-lime shadow-[0_0_0_3px_rgba(215,242,92,0.25)]" />
+          {slide.status}
+        </span>
+      </div>
+
+      <p className="mb-[5px] mt-[30px] text-[47px] font-semibold tracking-[-0.055em] tabular-nums sm:mt-10 sm:text-[58px]">
+        S/ <span className="text-[#9e9b94]">{slide.amount}</span>
+      </p>
+      <p className="text-muted">{slide.title}</p>
+
+      <div className="my-7 border-t border-line" />
+
+      <div className="flex items-start justify-between sm:items-center">
+        <Person initials={slide.client.initials} label="Cliente" name={slide.client.name} />
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true" className="hidden text-[#aaa79f] sm:block">
+          <path d="M5 12h14m-5-5 5 5-5 5" />
+        </svg>
+        <Person initials={slide.freelancer.initials} label={slide.freelancer.role} name={slide.freelancer.name} />
+      </div>
+
+      <div className="relative mb-[26px] mt-[34px] grid grid-cols-3 before:absolute before:left-[14%] before:right-[14%] before:top-3 before:h-px before:bg-line">
+        <span
+          aria-hidden="true"
+          className="absolute left-[14%] top-3 h-px origin-left bg-escrow"
+          style={{ width: `${72 * fill}%`, animation: `draw-x .7s ${ease} .2s both` }}
+        />
+        {STEPS.map((label, i) => (
+          <StepDot key={label} index={i} step={slide.step} />
+        ))}
+      </div>
+
+      <div className="flex gap-3 rounded-xl bg-[#f0f5f1] p-[15px] text-xs leading-normal text-escrow">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="flex-none">
+          <path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6L12 3Z" />
+          <path d="m8.8 12 2.2 2.2 4.2-4.4" />
+        </svg>
+        <p>
+          <strong className="block font-semibold">{slide.note}</strong>
+          <span className="text-[#365242]">{slide.detail}</span>
+        </p>
+      </div>
+    </article>
+  )
+}
+
+// Tarjeta del hero con un pago en garantía de ejemplo. Cada 5 s la de adelante se va al fondo de la pila y sube la
+// siguiente, que dibuja su avance. Con el mouse encima se pausa y se inclina un poco hacia el cursor.
+// Si el usuario pidió reducir el movimiento, no rota sola ni se inclina.
 export default function EscrowCarousel() {
-  const [index, setIndex] = useState(0)
+  const [state, setState] = useState({ index: 0, leaving: null })
   const [paused, setPaused] = useState(false)
+  const stackRef = useRef(null)
+  const { index, leaving } = state
   const slide = SLIDES[index]
+
+  const goTo = (next) => setState((current) => (current.index === next ? current : { index: next, leaving: current.index }))
 
   useEffect(() => {
     if (paused || prefersReducedMotion()) return undefined
-    const timer = setInterval(() => setIndex((current) => (current + 1) % SLIDES.length), INTERVAL_MS)
+    const timer = setInterval(
+      () => setState((current) => ({ index: (current.index + 1) % SLIDES.length, leaving: current.index })),
+      INTERVAL_MS,
+    )
     return () => clearInterval(timer)
   }, [paused])
+
+  // Inclinación de hasta 3° y sombra que se corre al lado contrario, como una tarjeta física
+  const tilt = (event) => {
+    const node = stackRef.current
+    if (!node || event.pointerType !== 'mouse' || prefersReducedMotion()) return
+    const rect = node.getBoundingClientRect()
+    const x = (event.clientX - rect.left) / rect.width - 0.5
+    const y = (event.clientY - rect.top) / rect.height - 0.5
+    node.style.setProperty('--rx', `${(-y * 6).toFixed(2)}deg`)
+    node.style.setProperty('--ry', `${(x * 6).toFixed(2)}deg`)
+    node.style.setProperty('--sx', `${(-x * 24).toFixed(1)}px`)
+    node.style.setProperty('--sy', `${(24 - y * 16).toFixed(1)}px`)
+  }
+
+  const resetTilt = () => {
+    const node = stackRef.current
+    if (!node) return
+    ;['--rx', '--ry', '--sx', '--sy'].forEach((name) => node.style.removeProperty(name))
+  }
 
   return (
     <section
       aria-roledescription="carrusel"
       aria-label="Proyectos en garantía de ejemplo"
       onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      onMouseLeave={() => {
+        setPaused(false)
+        resetTilt()
+      }}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
       className="w-full"
     >
-      <div className="relative">
+      <div
+        ref={stackRef}
+        onPointerMove={tilt}
+        className="relative transition-transform duration-500 ease-[var(--ease-brand)] [transform:perspective(1000px)_rotateX(var(--rx,0deg))_rotateY(var(--ry,0deg))]"
+      >
         {/* Las otras tarjetas asoman detrás, como una pila */}
         <div
           aria-hidden="true"
@@ -140,54 +232,28 @@ export default function EscrowCarousel() {
           className="absolute inset-0 hidden translate-x-1.5 -translate-y-2.5 rotate-2 rounded-[20px] border border-line bg-surface sm:block"
         />
 
-        <article
+        <SlideCard
           key={index}
+          slide={slide}
           aria-roledescription="diapositiva"
           aria-label={`${index + 1} de ${SLIDES.length}: ${slide.title}`}
-          className="relative rounded-[20px] border border-line bg-surface p-5 shadow-[0_24px_60px_rgba(14,14,12,0.07)] sm:p-7 lg:rotate-1"
-        >
-          <div className="flex items-center justify-between motion-safe:animate-[ledger-in_.45s_ease-out]">
-            <p className="text-[10px] font-semibold tracking-[0.13em] text-muted">PAGO EN GARANTÍA</p>
-            <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-escrow">
-              <span className="h-1.5 w-1.5 rounded-full bg-lime shadow-[0_0_0_3px_rgba(215,242,92,0.25)]" />
-              {slide.status}
-            </span>
-          </div>
+          className="relative"
+          style={leaving === null ? undefined : { animation: `card-in .6s ${ease} both` }}
+        />
 
-          <div className="motion-safe:animate-[ledger-in_.45s_ease-out]">
-            <p className="mb-[5px] mt-[30px] text-[47px] font-semibold tracking-[-0.055em] tabular-nums sm:mt-10 sm:text-[58px]">
-              S/ <span className="text-[#9e9b94]">{slide.amount}</span>
-            </p>
-            <p className="text-muted">{slide.title}</p>
-
-            <div className="my-7 border-t border-line" />
-
-            <div className="flex items-start justify-between sm:items-center">
-              <Person initials={slide.client.initials} label="Cliente" name={slide.client.name} />
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true" className="hidden text-[#aaa79f] sm:block">
-                <path d="M5 12h14m-5-5 5 5-5 5" />
-              </svg>
-              <Person initials={slide.freelancer.initials} label={slide.freelancer.role} name={slide.freelancer.name} />
-            </div>
-
-            <div className="relative mb-[26px] mt-[34px] grid grid-cols-3 before:absolute before:left-[14%] before:right-[14%] before:top-3 before:h-px before:bg-line">
-              {STEPS.map((label, i) => (
-                <StepDot key={label} index={i} step={slide.step} />
-              ))}
-            </div>
-
-            <div className="flex gap-3 rounded-xl bg-[#f0f5f1] p-[15px] text-xs leading-normal text-escrow">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="flex-none">
-                <path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6L12 3Z" />
-                <path d="m8.8 12 2.2 2.2 4.2-4.4" />
-              </svg>
-              <p>
-                <strong className="block font-semibold">{slide.note}</strong>
-                <span className="text-[#365242]">{slide.detail}</span>
-              </p>
-            </div>
-          </div>
-        </article>
+        {/* La tarjeta anterior se va al fondo de la pila y desaparece */}
+        {leaving !== null && (
+          <SlideCard
+            key={`leaving-${leaving}`}
+            slide={SLIDES[leaving]}
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-0 z-10"
+            style={{ animation: `card-out .55s ${ease} both` }}
+            onAnimationEnd={(event) => {
+              if (event.target === event.currentTarget) setState((current) => ({ ...current, leaving: null }))
+            }}
+          />
+        )}
       </div>
 
       <div className="mt-5 flex items-center justify-between text-[11px] text-muted">
@@ -201,10 +267,12 @@ export default function EscrowCarousel() {
               type="button"
               aria-label={`Ver ejemplo ${i + 1}: ${item.title}`}
               aria-current={i === index}
-              onClick={() => setIndex(i)}
+              onClick={() => goTo(i)}
               className="grid h-5 place-items-center"
             >
-              <span className={`block h-[3px] rounded-full transition-all ${i === index ? 'w-8 bg-ink' : 'w-4 bg-line hover:bg-[#cbc7be]'}`} />
+              <span
+                className={`block h-[3px] rounded-full transition-all duration-500 ease-[var(--ease-brand)] ${i === index ? 'w-8 bg-ink' : 'w-4 bg-line hover:bg-[#cbc7be]'}`}
+              />
             </button>
           ))}
         </div>
