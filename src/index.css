@@ -9,12 +9,89 @@
 body {
   margin: 0;
   font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-paper);
+  font-synthesis: none;
 }
 
+/* Sistema de diseño DevUTEC (UI 1.0): Ink, Paper, Surface, Line, Escrow, Lime, Pending, Error y Progress */
 @theme {
-  --color-primary-50: #eef2ff;
-  --color-primary-100: #e0e7ff;
-  --color-primary-600: #4f46e5;
-  --color-primary-700: #4338ca;
-  --font-sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --color-ink: #0e0e0c;
+  --color-paper: #f5f3ee;
+  --color-surface: #ffffff;
+  --color-line: #e4e0d8;
+  --color-soft: #eeece6;
+  --color-muted: #6f6d67;
+  --color-escrow: #1f6f4a;
+  --color-escrow-light: #eaf3ed;
+  --color-lime: #d7f25c;
+  --color-pending: #b7791f;
+  --color-pending-light: #fbf2e4;
+  --color-error: #b42318;
+  --color-error-light: #fbeceb;
+  --color-progress: #2e5bda;
+  --color-progress-light: #edf1ff;
+
+  /* Acento de links y estados activos: el verde de garantía */
+  --color-primary-50: #eaf3ed;
+  --color-primary-100: #dcebe1;
+  --color-primary-600: #1f6f4a;
+  --color-primary-700: #17573a;
+
+  /* Las páginas usan las escalas de Tailwind: se reemplazan por los tonos cálidos y los colores de estado
+     del sistema, así todo el sitio toma la paleta nueva sin cambiar cada página */
+  --color-gray-50: #f5f3ee;
+  --color-gray-100: #eeece6;
+  --color-gray-200: #e4e0d8;
+  --color-gray-300: #cbc7be;
+  --color-gray-400: #aaa79f;
+  --color-gray-500: #6f6d67;
+  --color-gray-600: #55534e;
+  --color-gray-700: #454440;
+  --color-gray-800: #292925;
+  --color-gray-900: #0e0e0c;
+
+  --color-indigo-50: #eaf3ed;
+  --color-indigo-200: #b8d2c1;
+  --color-indigo-600: #1f6f4a;
+  --color-indigo-700: #17573a;
+
+  --color-green-50: #eaf3ed;
+  --color-green-100: #eaf3ed;
+  --color-green-200: #b8d2c1;
+  --color-green-800: #1f6f4a;
+
+  --color-red-50: #fbeceb;
+  --color-red-100: #fbeceb;
+  --color-red-200: #f1c9c5;
+  --color-red-400: #d9776d;
+  --color-red-600: #b42318;
+  --color-red-700: #b42318;
+  --color-red-800: #8f1c13;
+
+  --color-yellow-100: #fbf2e4;
+  --color-yellow-400: #b7791f;
+  --color-yellow-500: #b7791f;
+  --color-yellow-800: #b7791f;
+  --color-amber-500: #b7791f;
+
+  --font-sans: 'Geist', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+}
+
+/* Palabras destacadas en cursiva, como "Pago *protegido*." */
+em {
+  font-family: var(--font-serif);
+  font-weight: 400;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-progress);
+  outline-offset: 2px;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -100% 0;
+  }
 }
