@@ -53,7 +53,30 @@ function Hero() {
       <div>
         <p className={kicker}>TALENTO UTEC · PAGOS PROTEGIDOS</p>
         <h1 className="my-[22px] max-w-[360px] text-[53px] font-semibold leading-[0.94] tracking-[-0.052em] sm:max-w-[650px] lg:mb-[30px] lg:mt-7 lg:text-[clamp(58px,5.25vw,72px)]">
-          Contrata talento junior de UTEC. <em className="block text-escrow">Paga solo cuando apruebes.</em>
+          Contrata talento junior de UTEC.{' '}
+          <em className="block text-escrow">
+            Paga solo cuando{' '}
+            {/* Trazo lima a mano que se dibuja una vez al cargar, como un resaltador */}
+            <span className="relative isolate inline-block">
+              apruebes.
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 200 16"
+                preserveAspectRatio="none"
+                className="absolute bottom-[0.02em] left-[-3%] -z-10 h-[0.3em] w-[106%]"
+              >
+                <path
+                  d="M4 11C46 5 112 3 196 8"
+                  pathLength="1"
+                  fill="none"
+                  stroke="#d7f25c"
+                  strokeWidth="9"
+                  strokeLinecap="round"
+                  style={{ strokeDasharray: 1, strokeDashoffset: 1, animation: 'draw-stroke .8s var(--ease-brand) .5s forwards' }}
+                />
+              </svg>
+            </span>
+          </em>
         </h1>
         <p className="max-w-[530px] text-base leading-normal text-[#4c4b47] lg:text-lg lg:leading-[1.55]">
           Publica lo que necesitas, recibe propuestas de estudiantes verificados y mantén tu dinero protegido hasta revisar
