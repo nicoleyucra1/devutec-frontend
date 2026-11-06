@@ -1,11 +1,13 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import EscrowCarousel from '../components/landing/EscrowCarousel'
+import CountUp from '../components/landing/CountUp'
 import HowItWorks from '../components/landing/HowItWorks'
 import SiteFooter from '../components/landing/SiteFooter'
 import PublicHeader from '../components/layout/PublicHeader'
 import ButtonLink from '../components/projects/ButtonLink'
 import Badge from '../components/ui/Badge'
+import { useInView } from '../hooks/useInView'
 
 const shell = 'mx-auto w-full max-w-[1200px] px-6'
 const kicker = 'text-[11px] font-semibold tracking-[0.13em]'
@@ -22,13 +24,37 @@ const IMPACT = [
   { value: '4.8/5', label: 'satisfacción promedio' },
 ]
 
-function Avatar({ children, className = 'bg-ink text-white' }) {
+function Avatar({ children, className = 'bg-ink text-white', style }) {
   return (
     <span
+      style={style}
       className={`grid h-[34px] w-[34px] flex-none place-items-center rounded-full text-[11px] font-semibold tracking-[0.03em] ${className}`}
     >
       {children}
     </span>
+  )
+}
+
+// Las propuestas llegan una tras otra cuando la tarjeta entra en pantalla, y el contador sube hasta 6
+function ProposalsRow() {
+  const [ref, inView] = useInView({ threshold: 0.8 })
+  return (
+    <div ref={ref} className="mt-9 flex items-center gap-3 border-t border-line pt-5 text-[11px] text-muted">
+      <span className="flex items-center">
+        {['CR', 'DQ', '+4'].map((label, i) => (
+          <Avatar
+            key={label}
+            className={`bg-lime text-ink ${i > 0 ? '-ml-[9px] border-2 border-white' : ''} ${inView ? '' : 'opacity-0'}`}
+            style={inView ? { animation: `avatar-in .45s var(--ease-brand) ${i * 0.14}s both` } : undefined}
+          >
+            {label}
+          </Avatar>
+        ))}
+      </span>
+      <span>
+        <CountUp value={6} duration={700} /> propuestas recibidas
+      </span>
+    </div>
   )
 }
 
@@ -172,16 +198,7 @@ function ForBusinesses() {
             ))}
           </div>
 
-          <div className="mt-9 flex items-center gap-3 border-t border-line pt-5 text-[11px] text-muted">
-            <span className="flex items-center">
-              {['CR', 'DQ', '+4'].map((label, i) => (
-                <Avatar key={label} className={`bg-lime text-ink ${i > 0 ? '-ml-[9px] border-2 border-white' : ''}`}>
-                  {label}
-                </Avatar>
-              ))}
-            </span>
-            6 propuestas recibidas
-          </div>
+          <ProposalsRow />
         </article>
       </div>
     </section>
@@ -261,7 +278,7 @@ function Impact() {
         <span className="mr-2 inline-grid h-[42px] w-[42px] place-items-center rounded-full bg-lime align-middle text-base tracking-normal lg:h-[55px] lg:w-[55px] lg:text-[22px]">
           S/
         </span>
-        12,400 <em className="mt-2 block text-escrow lg:mt-0 lg:inline">protegidos en garantía.</em>
+        <CountUp value={12400} duration={1200} className="text-left" /> <em className="mt-2 block text-escrow lg:mt-0 lg:inline">protegidos en garantía.</em>
       </p>
 
       <dl className="grid border-t border-line lg:ml-[40%] lg:grid-cols-3">
