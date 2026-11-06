@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import AuthLayout from '../components/auth/AuthLayout'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
@@ -19,8 +19,11 @@ export default function Register() {
   const { user, register } = useAuth()
   const navigate = useNavigate()
   const toast = useToast()
+  // La landing enlaza a /register?rol=CLIENT o ?rol=FREELANCER para dejar el rol ya marcado
+  const [searchParams] = useSearchParams()
+  const presetRole = ROLES.some((role) => role.value === searchParams.get('rol')) ? searchParams.get('rol') : ''
 
-  const [values, setValues] = useState(INITIAL_VALUES)
+  const [values, setValues] = useState({ ...INITIAL_VALUES, rol: presetRole })
   const [errors, setErrors] = useState({})
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState(null)
