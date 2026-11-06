@@ -4,11 +4,15 @@ import Button from '../../components/ui/Button'
 import Card from '../../components/ui/Card'
 import Input from '../../components/ui/Input'
 import Skeleton from '../../components/ui/Skeleton'
+import { fieldClass, labelClass } from '../../components/projects/fieldStyles'
 import { useAuth } from '../../hooks/useAuth'
 import { useMyFreelancerProfile } from '../../hooks/useMyFreelancerProfile'
 import { freelancerService } from '../../services/freelancerService'
 import { errorMessage } from '../../utils/errorMessage'
 import { validateFreelancerProfile } from '../../utils/validation'
+
+// Los ciclos de pregrado en UTEC van del 1 al 10
+const CICLOS = Array.from({ length: 10 }, (_, index) => index + 1)
 
 function toFormValues(profile) {
   return {
@@ -82,18 +86,23 @@ function ProfileForm({ profile, onSaved }) {
       />
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <Input
-          label="Ciclo"
-          name="ciclo"
-          type="number"
-          min="1"
-          max="10"
-          placeholder={values.egresado ? 'No aplica' : 'Entre 1 y 10'}
-          value={values.egresado ? '' : values.ciclo}
-          onChange={handleChange}
-          disabled={values.egresado}
-          error={errors.ciclo}
-        />
+        <label className="block">
+          <span className={labelClass}>Ciclo</span>
+          <select
+            name="ciclo"
+            value={values.egresado ? '' : values.ciclo}
+            onChange={handleChange}
+            disabled={values.egresado}
+            className={`${fieldClass} disabled:bg-gray-100 disabled:text-gray-500`}
+          >
+            <option value="">{values.egresado ? 'No aplica' : 'Elige tu ciclo'}</option>
+            {CICLOS.map((ciclo) => (
+              <option key={ciclo} value={ciclo}>
+                Ciclo {ciclo}
+              </option>
+            ))}
+          </select>
+        </label>
         <label className="flex items-center gap-2 self-start text-sm font-medium sm:mt-9 text-gray-700">
           <input
             type="checkbox"
