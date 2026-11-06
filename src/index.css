@@ -95,3 +95,18 @@ em {
     background-position: -100% 0;
   }
 }
+
+/* Al cambiar de tarjeta en el carrusel de la landing */
+@keyframes ledger-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* Los links a secciones (#como-funciona) bajan suave, salvo con "reducir movimiento" */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
