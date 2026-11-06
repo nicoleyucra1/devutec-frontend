@@ -60,7 +60,16 @@ function ProposalsRow() {
 
 function ArrowIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      aria-hidden="true"
+      className="transition-transform duration-200 ease-[var(--ease-brand)] group-hover:translate-x-0.5"
+    >
       <path d="M5 12h14m-5-5 5 5-5 5" />
     </svg>
   )
@@ -112,7 +121,7 @@ function Hero() {
           </ButtonLink>
           <a
             href="#como-funciona"
-            className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-[11px] px-3 text-sm font-semibold transition hover:bg-soft"
+            className="group inline-flex min-h-[46px] items-center justify-center gap-2 rounded-[11px] px-3 text-sm font-semibold transition hover:bg-soft"
           >
             <ArrowIcon />
             Ver cómo funciona
@@ -209,8 +218,8 @@ function ForStudents() {
   return (
     <section id="estudiantes" className="scroll-mt-[72px] bg-[#ece9e1] py-[75px] lg:py-[105px]">
       <div className={`${shell} flex flex-col-reverse gap-[50px] lg:grid lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:gap-[130px]`}>
-        {/* Perfil de ejemplo de una freelancer */}
-        <article className="rounded-[18px] border border-line bg-surface p-6 shadow-[0_24px_60px_rgba(14,14,12,0.06)] lg:-rotate-1">
+        {/* Perfil de ejemplo de una freelancer: al pasar el mouse se endereza y se levanta */}
+        <article className="rounded-[18px] border border-line bg-surface p-6 shadow-[0_24px_60px_rgba(14,14,12,0.06)] transition duration-500 ease-[var(--ease-brand)] hover:-translate-y-1 hover:shadow-[0_32px_70px_rgba(14,14,12,0.1)] lg:-rotate-1 lg:hover:rotate-0">
           <div className="flex items-center gap-3">
             <span className="grid h-[52px] w-[52px] flex-none place-items-center rounded-full bg-escrow text-sm font-semibold text-white">
               CR

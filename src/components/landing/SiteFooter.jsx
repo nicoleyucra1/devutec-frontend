@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom'
 import Logo from '../brand/Logo'
 
 const titleClass = 'mb-2 text-[10px] font-semibold tracking-[0.12em] text-[#87857f]'
-const linkClass = 'text-xs text-white hover:underline'
+// Al pasar el mouse, la línea de abajo se dibuja de izquierda a derecha
+const linkClass =
+  'bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-left-bottom bg-no-repeat pb-0.5 text-xs text-white transition-[background-size] duration-300 ease-[var(--ease-brand)] hover:bg-[length:100%_1px]'
 
 // Pie de la landing: marca, enlaces de la plataforma, confianza y contacto
 export default function SiteFooter() {
