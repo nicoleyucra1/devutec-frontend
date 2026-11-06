@@ -1,8 +1,4 @@
-const variants = {
-  primary: 'bg-primary-600 text-white hover:bg-primary-700',
-  secondary: 'bg-white text-gray-800 border border-gray-300 hover:bg-gray-50',
-  danger: 'bg-red-600 text-white hover:bg-red-700',
-}
+import { buttonClass } from './buttonClass'
 
 export default function Button({
   children,
@@ -14,12 +10,13 @@ export default function Button({
   ...props
 }) {
   return (
-    <button
-      type={type}
-      disabled={disabled || loading}
-      className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${className}`}
-      {...props}
-    >
+    <button type={type} disabled={disabled || loading} className={buttonClass(variant, className)} {...props}>
+      {loading && (
+        <span
+          aria-hidden="true"
+          className="h-4 w-4 animate-spin rounded-full border-[1.5px] border-current border-t-transparent opacity-70"
+        />
+      )}
       {children}
     </button>
   )
