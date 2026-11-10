@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import ErrorBox from '../../components/projects/ErrorBox'
 import Breadcrumbs from '../../components/ui/Breadcrumbs'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import ButtonLink from '../../components/projects/ButtonLink'
 import Button from '../../components/ui/Button'
 import Card from '../../components/ui/Card'
 import Input from '../../components/ui/Input'
@@ -23,7 +25,7 @@ function validate({ message, proposedPrice }) {
 export default function ApplyToProject() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { data: project, loading, error } = useProject(id)
+  const { data: project, loading, error, status, reload } = useProject(id)
 
   const [values, setValues] = useState({ message: '', proposedPrice: '' })
   const [errors, setErrors] = useState({})
@@ -68,10 +70,11 @@ export default function ApplyToProject() {
   if (error) {
     return (
       <main className="mx-auto max-w-2xl px-4 py-10">
-        <p className="text-red-700">{error}</p>
-        <Link to="/projects" className="mt-4 inline-block text-primary-600 hover:underline">
-          Volver a proyectos
-        </Link>
+        <ErrorBox message={error} status={status} onRetry={reload}>
+          <ButtonLink to="/projects" variant={status === 404 ? 'primary' : 'secondary'}>
+            Volver a proyectos
+          </ButtonLink>
+        </ErrorBox>
       </main>
     )
   }

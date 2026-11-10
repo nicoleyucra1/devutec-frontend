@@ -12,7 +12,7 @@ export default function ProjectEdit() {
   const { id } = useParams()
   const navigate = useNavigate()
   const toast = useToast()
-  const { data: project, loading, error, reload } = useProject(id)
+  const { data: project, loading, error, status, reload } = useProject(id)
   const actions = useProjectActions()
 
   const handleSubmit = async (changes) => {
@@ -43,7 +43,7 @@ export default function ProjectEdit() {
           <Skeleton className="h-10 w-1/2" />
         </Card>
       )}
-      {!loading && error && <ErrorBox message={error} onRetry={reload} />}
+      {!loading && error && <ErrorBox message={error} status={status} onRetry={reload} />}
       {!loading && !error && (
         <ProjectForm
           key={project.id}

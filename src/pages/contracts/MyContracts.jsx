@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import LoadingNotice from '../../components/ui/LoadingNotice'
+import TableSkeleton from '../../components/ui/TableSkeleton'
 import Cuyi from '../../components/brand/Cuyi'
 import ButtonLink from '../../components/projects/ButtonLink'
 import ErrorBox from '../../components/projects/ErrorBox'
@@ -77,7 +79,7 @@ function ContractRow({ contract, counterpart }) {
 // El filtro y la búsqueda quedan en la URL (?estado=&q=).
 export default function MyContracts() {
   const { user } = useAuth()
-  const { data: contracts, loading, error, reload } = useMyContracts()
+  const { data: contracts, loading, error, status, reload } = useMyContracts()
   const list = useListParams()
   const isClient = user?.rol === 'CLIENT'
 
@@ -94,6 +96,7 @@ export default function MyContracts() {
 
   return (
     <main className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10 lg:px-6 lg:pt-14">
+      <LoadingNotice loading={loading} what="tus contratos" />
       <header className="mb-8">
         <p className="text-[11px] font-semibold tracking-[0.13em]">{isClient ? 'ESPACIO DE CLIENTE' : 'ESPACIO FREELANCER'}</p>
         <h1 className="my-3 text-[46px] leading-none tracking-[-0.045em] lg:text-[60px]">Contratos</h1>
@@ -139,14 +142,14 @@ export default function MyContracts() {
         />
       </div>
 
-      {error && <ErrorBox message={error} onRetry={reload} />}
+      {error && <ErrorBox message={error} status={status} onRetry={reload} />}
 
       {loading && (
-        <div className="grid gap-2 rounded-2xl border border-line bg-surface p-5">
-          {[1, 2, 3].map((n) => (
-            <Skeleton key={n} className="h-12 w-full" />
-          ))}
-        </div>
+        <TableSkeleton
+          columns={COLUMNS}
+          cells={['project', 'person', 'pill', 'pill', 'line', 'line']}
+          label="Cargando contratos…"
+        />
       )}
 
       {contracts?.length === 0 && (

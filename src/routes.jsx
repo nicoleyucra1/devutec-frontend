@@ -1,12 +1,14 @@
 import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
+import PageLoader from './components/ui/PageLoader'
 
 // Cada página se carga solo cuando se visita
 const Login = lazy(() => import('./pages/Login'))
 const Register = lazy(() => import('./pages/Register'))
 const Home = lazy(() => import('./pages/Home'))
 const NotFound = lazy(() => import('./pages/NotFound'))
+const SessionExpired = lazy(() => import('./pages/SessionExpired'))
 const ProjectsExplore = lazy(() => import('./pages/projects/ProjectsExplore'))
 const ProjectDetail = lazy(() => import('./pages/projects/ProjectDetail'))
 const ProjectCreate = lazy(() => import('./pages/projects/ProjectCreate'))
@@ -23,11 +25,12 @@ const AdminPayments = lazy(() => import('./pages/admin/AdminPayments'))
 
 export default function AppRoutes() {
   return (
-    <Suspense fallback={<p>Cargando...</p>}>
+    <Suspense fallback={<PageLoader />}>
       <Routes>
         {/* Públicas */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/session-expired" element={<SessionExpired />} />
 
         {/* Requieren sesión */}
         <Route element={<PrivateRoute />}>

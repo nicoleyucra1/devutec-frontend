@@ -1,18 +1,41 @@
 import Button from '../ui/Button'
+import ButtonLink from './ButtonLink'
+import ErrorState from '../ui/ErrorState'
+import { ERROR_ICONS } from '../ui/errorIcons'
+import SupportButton from '../ui/SupportButton'
+import { errorVariant } from '../../utils/errorVariant'
 
-// Mensaje de error con botón para volver a intentar
-export default function ErrorBox({ message, onRetry, children }) {
+// Error al cargar una página o una sección. Con status (el código HTTP que da useAsync) elige la pantalla del
+// diseño que corresponde; children son botones extra que van junto a Reintentar. compact es para secciones.
+export default function ErrorBox({ message, status, onRetry, children, compact, className }) {
+  const variant = errorVariant(status)
+  const serverSide = ['500', 'offline'].includes(variant)
+  // Reintentar no cambia nada sin sesión, sin permiso o si ya no existe: ahí se ofrece el camino que sí sirve
+  const final = ['401', '403', '404'].includes(variant)
   return (
-    <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-6 py-8 text-center">
-      <p className="text-red-700">{message}</p>
-      <div className="mt-4 flex justify-center gap-2">
-        {onRetry && (
-          <Button variant="secondary" onClick={onRetry}>
-            Reintentar
-          </Button>
-        )}
-        {children}
-      </div>
-    </div>
+    <ErrorState
+      status={status}
+      message={message}
+      compact={compact}
+      className={className}
+      actions={
+        <>
+          {onRetry && !final && (
+            <Button onClick={onRetry}>
+              {ERROR_ICONS.retry}
+              Reintentar
+            </Button>
+          )}
+          {children}
+          {final && !children && (
+            <ButtonLink to={variant === '401' ? '/login' : '/'}>
+              {variant === '401' ? ERROR_ICONS.login : ERROR_ICONS.home}
+              {variant === '401' ? 'Ingresar de nuevo' : 'Volver al inicio'}
+            </ButtonLink>
+          )}
+          {serverSide && <SupportButton />}
+        </>
+      }
+    />
   )
 }
