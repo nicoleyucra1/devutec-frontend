@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
+import PageLoader from './components/ui/PageLoader'
 
 // Cada página se carga solo cuando se visita
 const Login = lazy(() => import('./pages/Login'))
@@ -24,7 +25,7 @@ const AdminPayments = lazy(() => import('./pages/admin/AdminPayments'))
 
 export default function AppRoutes() {
   return (
-    <Suspense fallback={<p>Cargando...</p>}>
+    <Suspense fallback={<PageLoader />}>
       <Routes>
         {/* Públicas */}
         <Route path="/login" element={<Login />} />
