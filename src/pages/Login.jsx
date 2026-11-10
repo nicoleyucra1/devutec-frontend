@@ -2,22 +2,13 @@ import { useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import AuthEditorial from '../components/auth/AuthEditorial'
 import AuthField from '../components/auth/AuthField'
+import PasswordToggle from '../components/auth/PasswordToggle'
 import Cuyi from '../components/brand/Cuyi'
 import PublicHeader from '../components/layout/PublicHeader'
 import Button from '../components/ui/Button'
 import { useAuth } from '../hooks/useAuth'
 import { errorMessage } from '../utils/errorMessage'
 import { validateLogin } from '../utils/validation'
-
-function EyeIcon({ open }) {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" />
-      <circle cx="12" cy="12" r="2.5" />
-      {!open && <path d="m4 4 16 16" />}
-    </svg>
-  )
-}
 
 // Página Ingresar del diseño: a la izquierda la cita editorial en negro, a la derecha el formulario con Cuyi.
 // Cuyi saluda al llegar, escribe mientras se inicia sesión y se confunde si algo falla.
@@ -102,17 +93,7 @@ export default function Login() {
                 value={values.password}
                 onChange={handleChange}
                 error={errors.password}
-                trailing={
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((shown) => !shown)}
-                    aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                    aria-pressed={showPassword}
-                    className="grid h-full w-12 flex-none place-items-center text-muted transition-colors hover:text-ink"
-                  >
-                    <EyeIcon open={!showPassword} />
-                  </button>
-                }
+                trailing={<PasswordToggle shown={showPassword} onToggle={() => setShowPassword((shown) => !shown)} />}
               />
 
               <label className="flex w-fit items-center gap-2 text-xs">
