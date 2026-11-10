@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import ButtonLink from '../../components/projects/ButtonLink'
+import ErrorState from '../../components/ui/ErrorState'
+import { ERROR_ICONS } from '../../components/ui/errorIcons'
 import ErrorBox from '../../components/projects/ErrorBox'
 import { Link, useLocation } from 'react-router-dom'
 import Badge from '../../components/ui/Badge'
@@ -13,6 +16,59 @@ import { APPLICATION_STATUS } from '../../utils/applicationStatus'
 import { errorMessage } from '../../utils/errorMessage'
 import { formatBudget, formatDate } from '../../utils/format'
 
+// Pantalla 409 del diseño: la postulación ya no se puede retirar porque el cliente la respondió
+function WithdrawConflict({ conflict, current, onBack }) {
+  const project = `«${conflict.projectTitle}»`
+  const back = (
+    <Button variant="secondary" onClick={onBack}>
+      {ERROR_ICONS.back}
+      Volver a postulaciones
+    </Button>
+  )
+
+  if (current?.status === 'ACCEPTED') {
+    return (
+      <ErrorState
+        status={409}
+        anim="celebra"
+        title={['Tu propuesta ya', 'fue aceptada.']}
+        text={`El cliente aceptó tu postulación a ${project}, así que ya no se puede retirar.`}
+        seal={{ strong: 'El pago ya está en garantía.', text: 'Puedes empezar cuando quieras.' }}
+        actions={
+          <>
+            <ButtonLink to="/contracts">
+              {ERROR_ICONS.document}
+              Ver mis contratos
+            </ButtonLink>
+            {back}
+          </>
+        }
+      />
+    )
+  }
+
+  if (current?.status === 'REJECTED') {
+    return (
+      <ErrorState
+        status={409}
+        title={['Tu propuesta ya', 'fue revisada.']}
+        text={`El cliente ya respondió tu postulación a ${project}, así que ya no se puede retirar.`}
+        actions={
+          <>
+            <ButtonLink to="/projects">
+              {ERROR_ICONS.search}
+              Explorar proyectos
+            </ButtonLink>
+            {back}
+          </>
+        }
+      />
+    )
+  }
+
+  return <ErrorState status={409} message={conflict.message} actions={back} />
+}
+
 export default function MyApplications() {
   const location = useLocation()
   const { data: applications, loading, error, status, reload } = useMyApplications()
@@ -21,6 +77,8 @@ export default function MyApplications() {
   const [toWithdraw, setToWithdraw] = useState(null)
   const [withdrawing, setWithdrawing] = useState(false)
   const [actionError, setActionError] = useState(null)
+  // Postulación que no se pudo retirar porque cambió de estado mientras tanto
+  const [conflict, setConflict] = useState(null)
 
   const handleWithdraw = async () => {
     setWithdrawing(true)
@@ -30,11 +88,29 @@ export default function MyApplications() {
       setToWithdraw(null)
       reload()
     } catch (err) {
-      setActionError(errorMessage(err))
+      // 409: el cliente ya respondió la postulación. Se recarga la lista para saber si la aceptó o la rechazó.
+      if (err.response?.status === 409) {
+        setConflict({ id: toWithdraw.id, projectTitle: toWithdraw.projectTitle, message: errorMessage(err) })
+        reload()
+      } else {
+        setActionError(errorMessage(err))
+      }
       setToWithdraw(null)
     } finally {
       setWithdrawing(false)
     }
+  }
+
+  if (conflict && !loading) {
+    return (
+      <main className="mx-auto w-full max-w-[1200px] px-5">
+        <WithdrawConflict
+          conflict={conflict}
+          current={applications?.find((application) => application.id === conflict.id)}
+          onBack={() => setConflict(null)}
+        />
+      </main>
+    )
   }
 
   return (
