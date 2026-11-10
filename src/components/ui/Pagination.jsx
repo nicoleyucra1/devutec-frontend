@@ -19,7 +19,7 @@ export default function Pagination({ page, size, totalPages, totalElements, onPa
 
   const from = (page - 1) * size + 1
   const to = Math.min(page * size, totalElements)
-  const buttonClass = 'min-w-9 rounded-lg border px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-40'
+  const buttonClass = 'h-9 min-w-9 rounded-lg border px-3 text-xs transition disabled:cursor-not-allowed disabled:opacity-40'
 
   return (
     <nav aria-label="Paginación" className="mt-6 flex flex-wrap items-center justify-between gap-4">
@@ -30,7 +30,7 @@ export default function Pagination({ page, size, totalPages, totalElements, onPa
       <div className="flex items-center gap-1">
         <button
           type="button"
-          className={`${buttonClass} border-gray-300 hover:bg-gray-50`}
+          className={`${buttonClass} border-line hover:bg-white`}
           onClick={() => onPageChange(page - 1)}
           disabled={page <= 1}
         >
@@ -46,7 +46,7 @@ export default function Pagination({ page, size, totalPages, totalElements, onPa
               key={n}
               type="button"
               aria-current={n === page ? 'page' : undefined}
-              className={`${buttonClass} ${n === page ? 'border-primary-600 bg-primary-600 text-white' : 'border-gray-300 hover:bg-gray-50'}`}
+              className={`${buttonClass} ${n === page ? 'border-ink bg-ink text-white' : 'border-line hover:bg-white'}`}
               onClick={() => onPageChange(n)}
             >
               {n}
@@ -55,7 +55,7 @@ export default function Pagination({ page, size, totalPages, totalElements, onPa
         )}
         <button
           type="button"
-          className={`${buttonClass} border-gray-300 hover:bg-gray-50`}
+          className={`${buttonClass} border-line hover:bg-white`}
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages}
         >
@@ -68,7 +68,7 @@ export default function Pagination({ page, size, totalPages, totalElements, onPa
         <select
           value={size}
           onChange={(event) => onSizeChange(Number(event.target.value))}
-          className="rounded-lg border border-gray-300 px-2 py-1.5"
+          className="rounded-lg border border-line bg-white px-2 py-1.5"
         >
           {SIZES.map((option) => (
             <option key={option} value={option}>

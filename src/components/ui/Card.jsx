@@ -1,4 +1,4 @@
-//Contenedor blanco con borde y esquinas redondeadas
+//Contenedor blanco con borde fino y esquinas redondeadas
 export default function Card({ children, className = '' }) {
-  return <div className={`rounded-xl border border-gray-200 bg-white p-5 shadow-sm ${className}`}>{children}</div>
+  return <div className={`rounded-2xl border border-line bg-surface p-6 ${className}`}>{children}</div>
 }
