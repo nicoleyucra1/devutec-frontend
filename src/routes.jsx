@@ -1,12 +1,14 @@
 import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
+import { useAuth } from './hooks/useAuth'
 import PageLoader from './components/ui/PageLoader'
 
 // Cada página se carga solo cuando se visita
 const Login = lazy(() => import('./pages/Login'))
 const Register = lazy(() => import('./pages/Register'))
 const Home = lazy(() => import('./pages/Home'))
+const Landing = lazy(() => import('./pages/Landing'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 const SessionExpired = lazy(() => import('./pages/SessionExpired'))
 const ProjectsExplore = lazy(() => import('./pages/projects/ProjectsExplore'))
@@ -23,6 +25,12 @@ const EditMyProfile = lazy(() => import('./pages/freelancers/EditMyProfile'))
 const FreelancerProfile = lazy(() => import('./pages/freelancers/FreelancerProfile'))
 const AdminPayments = lazy(() => import('./pages/admin/AdminPayments'))
 
+// En "/" quien no inició sesión ve la landing; con sesión, su resumen
+function Start() {
+  const { user } = useAuth()
+  return user ? <Home /> : <Landing />
+}
+
 export default function AppRoutes() {
   return (
     <Suspense fallback={<PageLoader />}>
@@ -30,11 +38,11 @@ export default function AppRoutes() {
         {/* Públicas */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Start />} />
         <Route path="/session-expired" element={<SessionExpired />} />
 
         {/* Requieren sesión */}
         <Route element={<PrivateRoute />}>
-          <Route path="/" element={<Home />} />
           <Route path="/projects" element={<ProjectsExplore />} />
           <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/contracts" element={<MyContracts />} />

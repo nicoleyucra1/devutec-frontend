@@ -9,7 +9,8 @@ const variants = {
   inverse: 'border-white/30 bg-transparent text-white hover:border-white hover:bg-white/10',
 }
 
-// Clases compartidas con ButtonLink, para que un link se vea igual que un botón
+// Clases compartidas con ButtonLink, para que un link se vea igual que un botón.
+// group permite que el ícono de adentro reaccione al pasar el mouse por el botón.
 export function buttonClass(variant = 'primary', className = '') {
-  return `inline-flex min-h-[46px] items-center justify-center gap-2 whitespace-nowrap rounded-[11px] border px-5 text-sm font-semibold transition duration-200 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-40 ${variants[variant] ?? variants.primary} ${className}`
+  return `group inline-flex min-h-[46px] items-center justify-center gap-2 whitespace-nowrap rounded-[11px] border px-5 text-sm font-semibold transition duration-200 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-40 ${variants[variant] ?? variants.primary} ${className}`
 }
