@@ -58,7 +58,7 @@ export default function FreelancerDashboard() {
 
       <DashboardSection title="Contratos activos" linkTo="/contracts" linkLabel="Ver todos →">
         {contracts.loading && <ItemList loading />}
-        {contracts.error && <ErrorBox message={contracts.error} status={contracts.status} onRetry={contracts.reload} />}
+        {contracts.error && <ErrorBox message={contracts.error} status={contracts.status} onRetry={contracts.reload} compact />}
         {contracts.data && active.length === 0 && (
           <EmptyState
             title="No tienes contratos activos"
@@ -81,7 +81,7 @@ export default function FreelancerDashboard() {
 
       <DashboardSection title="Postulaciones recientes" linkTo="/my-applications" linkLabel="Ver todas →">
         {applications.loading && <ItemList loading />}
-        {applications.error && <ErrorBox message={applications.error} status={applications.status} onRetry={applications.reload} />}
+        {applications.error && <ErrorBox message={applications.error} status={applications.status} onRetry={applications.reload} compact />}
         {applications.data?.length === 0 && (
           <EmptyState
             title="Todavía no te has postulado"

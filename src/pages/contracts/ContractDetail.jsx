@@ -9,6 +9,7 @@ import TermsDialog from '../../components/contracts/TermsDialog'
 import Cuyi from '../../components/brand/Cuyi'
 import ErrorBox from '../../components/projects/ErrorBox'
 import ErrorState from '../../components/ui/ErrorState'
+import { ERROR_ICONS } from '../../components/ui/errorIcons'
 import ButtonLink from '../../components/projects/ButtonLink'
 import Badge from '../../components/ui/Badge'
 import Breadcrumbs from '../../components/ui/Breadcrumbs'
@@ -202,31 +203,31 @@ export default function ContractDetail() {
           {crumbs}
           <ErrorState
             status={403}
-            className="max-w-2xl"
+            className="min-h-[65vh]"
             title={['Este contrato', 'no es tuyo.']}
-            text={`Solo el cliente y la persona contratada pueden ver ${contractCode(id)}. Si crees que deberías tener acceso, revisa con qué cuenta ingresaste.`}
+            text="Solo el cliente y la persona contratada pueden verlo. Revisa con qué cuenta ingresaste."
             actions={
               <>
-                <ButtonLink to="/contracts">Ver mis contratos</ButtonLink>
-                <Button variant="ghost" onClick={switchAccount}>
+                <ButtonLink to="/contracts">
+                  {ERROR_ICONS.document}
+                  Ver mis contratos
+                </ButtonLink>
+                <Button variant="secondary" onClick={switchAccount}>
+                  {ERROR_ICONS.switch}
                   Cambiar de cuenta
                 </Button>
               </>
             }
-          >
-            <div className="mt-5 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-line px-4 py-3.5 text-xs">
-              <span className="text-muted">Ingresaste como</span>
-              <strong className="break-all">{user?.email}</strong>
-            </div>
-          </ErrorState>
+          />
         </>,
       )
     }
     return shell(
       <>
         {crumbs}
-        <ErrorBox message={error} status={errorStatus} onRetry={errorStatus === 404 ? undefined : reload} className="max-w-2xl">
+        <ErrorBox message={error} status={errorStatus} onRetry={reload} className="min-h-[65vh]">
           <ButtonLink to="/contracts" variant={errorStatus === 404 ? 'primary' : 'secondary'}>
+            {ERROR_ICONS.back}
             Volver a contratos
           </ButtonLink>
         </ErrorBox>

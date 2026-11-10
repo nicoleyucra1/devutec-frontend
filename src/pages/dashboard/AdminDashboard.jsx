@@ -35,7 +35,7 @@ export default function AdminDashboard() {
 
       <DashboardSection title="Últimos pagos" linkTo="/admin/payments" linkLabel="Ver todos los pagos →">
         {payments.loading && <ItemList loading />}
-        {payments.error && <ErrorBox message={payments.error} status={payments.status} onRetry={payments.reload} />}
+        {payments.error && <ErrorBox message={payments.error} status={payments.status} onRetry={payments.reload} compact />}
         {payments.data?.length === 0 && <EmptyState title="Todavía no hay pagos" />}
         {payments.data?.length > 0 && (
           <ItemList

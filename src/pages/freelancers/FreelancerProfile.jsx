@@ -135,7 +135,7 @@ function ReviewList({ userId }) {
       <div className="mt-4 space-y-3">
         {loading && [1, 2, 3].map((n) => <Skeleton key={n} className="h-24 w-full rounded-xl" />)}
 
-        {error && <ErrorBox message={error} status={status} onRetry={reload} />}
+        {error && <ErrorBox message={error} status={status} onRetry={reload} compact />}
 
         {data?.content.length === 0 && (
           <EmptyState

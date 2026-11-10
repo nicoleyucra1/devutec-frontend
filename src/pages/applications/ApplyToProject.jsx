@@ -70,7 +70,7 @@ export default function ApplyToProject() {
   if (error) {
     return (
       <main className="mx-auto max-w-2xl px-4 py-10">
-        <ErrorBox message={error} status={status} onRetry={status === 404 ? undefined : reload}>
+        <ErrorBox message={error} status={status} onRetry={reload}>
           <ButtonLink to="/projects" variant={status === 404 ? 'primary' : 'secondary'}>
             Volver a proyectos
           </ButtonLink>
