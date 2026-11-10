@@ -19,6 +19,7 @@ const MyContracts = lazy(() => import('./pages/contracts/MyContracts'))
 const ContractDetail = lazy(() => import('./pages/contracts/ContractDetail'))
 const EditMyProfile = lazy(() => import('./pages/freelancers/EditMyProfile'))
 const FreelancerProfile = lazy(() => import('./pages/freelancers/FreelancerProfile'))
+const AdminPayments = lazy(() => import('./pages/admin/AdminPayments'))
 
 export default function AppRoutes() {
   return (
@@ -55,6 +56,11 @@ export default function AppRoutes() {
           <Route path="/projects/:id/apply" element={<ApplyToProject />} />
           <Route path="/my-applications" element={<MyApplications />} />
           <Route path="/profile/edit" element={<EditMyProfile />} />
+        </Route>
+
+        {/* Solo administradores */}
+        <Route element={<PrivateRoute roles={['ADMIN']} />}>
+          <Route path="/admin/payments" element={<AdminPayments />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
