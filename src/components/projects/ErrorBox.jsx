@@ -1,18 +1,24 @@
 import Button from '../ui/Button'
+import ErrorState from '../ui/ErrorState'
+import SupportButton from '../ui/SupportButton'
+import { errorVariant } from '../../utils/errorVariant'
 
-// Mensaje de error con botón para volver a intentar
-export default function ErrorBox({ message, onRetry, children }) {
+// Error al cargar una página o una sección. Con status (el código HTTP que da useAsync) elige la tarjeta del
+// diseño que corresponde; children son botones extra que van junto a Reintentar.
+export default function ErrorBox({ message, status, onRetry, children, className }) {
+  const serverSide = ['500', 'offline'].includes(errorVariant(status))
   return (
-    <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-6 py-8 text-center">
-      <p className="text-red-700">{message}</p>
-      <div className="mt-4 flex justify-center gap-2">
-        {onRetry && (
-          <Button variant="secondary" onClick={onRetry}>
-            Reintentar
-          </Button>
-        )}
-        {children}
-      </div>
-    </div>
+    <ErrorState
+      status={status}
+      message={message}
+      className={className}
+      actions={
+        <>
+          {onRetry && <Button onClick={onRetry}>Reintentar</Button>}
+          {children}
+          {serverSide && <SupportButton />}
+        </>
+      }
+    />
   )
 }
