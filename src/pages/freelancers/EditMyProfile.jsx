@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import { Link } from 'react-router-dom'
 import Button from '../../components/ui/Button'
 import Card from '../../components/ui/Card'
@@ -171,10 +172,14 @@ export default function EditMyProfile() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10">
-      <Link to="/" className="text-sm text-gray-500 hover:text-gray-800">
-        ← Volver al inicio
-      </Link>
-      <div className="mt-4 flex flex-wrap items-end justify-between gap-3">
+      <Breadcrumbs
+        items={[
+          { label: 'Resumen', to: '/' },
+          { label: 'Mi perfil', to: `/freelancers/${user?.id}` },
+          { label: 'Editar' },
+        ]}
+      />
+      <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Mi perfil de freelancer</h1>
           <p className="mt-1 text-sm text-gray-500">Esto es lo que verán los clientes cuando revisen tu postulación.</p>

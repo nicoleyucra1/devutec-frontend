@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Button from '../../components/ui/Button'
 import Card from '../../components/ui/Card'
+import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import ConfirmDialog from '../../components/ui/ConfirmDialog'
 import Skeleton from '../../components/ui/Skeleton'
 import ButtonLink from '../../components/projects/ButtonLink'
@@ -15,11 +16,12 @@ import { useAuth } from '../../hooks/useAuth'
 import { useToast } from '../../hooks/useToast'
 import { formatBudget, formatDate } from '../../utils/format'
 
-function BackLink() {
+// El dueño llega desde Mis proyectos; el resto, desde Explorar
+function ProjectBreadcrumbs({ title, mine }) {
   return (
-    <Link to="/projects" className="mb-4 inline-block text-sm font-semibold text-indigo-600 hover:underline">
-      ← Volver a proyectos
-    </Link>
+    <Breadcrumbs
+      items={[mine ? { label: 'Mis proyectos', to: '/my-projects' } : { label: 'Explorar', to: '/projects' }, { label: title }]}
+    />
   )
 }
 
@@ -49,7 +51,7 @@ export default function ProjectDetail() {
   if (loading) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-10" aria-busy="true">
-        <BackLink />
+        <ProjectBreadcrumbs />
         <Card className="space-y-4">
           <Skeleton className="h-7 w-2/3" />
           <Skeleton className="h-4 w-1/2" />
@@ -62,7 +64,7 @@ export default function ProjectDetail() {
   if (error) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-10">
-        <BackLink />
+        <ProjectBreadcrumbs title="Proyecto" />
         <ErrorBox message={error} onRetry={reload} />
       </main>
     )
@@ -70,7 +72,7 @@ export default function ProjectDetail() {
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
-      <BackLink />
+      <ProjectBreadcrumbs title={project.title} mine={isOwner} />
 
       <Card className="space-y-6">
         <header className="flex items-start justify-between gap-4">
