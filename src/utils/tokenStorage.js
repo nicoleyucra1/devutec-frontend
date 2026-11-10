@@ -1,29 +1,42 @@
-// Guarda la sesión en localStorage. En mobile se reemplaza por expo-secure-store.
+// Guarda la sesión del navegador. En mobile se reemplaza por expo-secure-store.
+// Con "Recordarme" va a localStorage y sobrevive a cerrar el navegador; sin él va a sessionStorage y se borra al
+// cerrar la pestaña.
 const ACCESS_KEY = 'devutec.accessToken'
 const REFRESH_KEY = 'devutec.refreshToken'
 const USER_KEY = 'devutec.user'
+const KEYS = [ACCESS_KEY, REFRESH_KEY, USER_KEY]
+
+// Al cargar la página se sigue usando el almacenamiento donde quedó la sesión anterior
+let store = sessionStorage.getItem(ACCESS_KEY) ? sessionStorage : localStorage
 
 export const tokenStorage = {
-  getAccessToken: () => localStorage.getItem(ACCESS_KEY),
-  getRefreshToken: () => localStorage.getItem(REFRESH_KEY),
+  getAccessToken: () => store.getItem(ACCESS_KEY),
+  getRefreshToken: () => store.getItem(REFRESH_KEY),
+
+  // Se llama al iniciar sesión, antes de guardar los tokens
+  setRemember(remember) {
+    tokenStorage.clear()
+    store = remember ? localStorage : sessionStorage
+  },
 
   setTokens(accessToken, refreshToken) {
-    localStorage.setItem(ACCESS_KEY, accessToken)
-    localStorage.setItem(REFRESH_KEY, refreshToken)
+    store.setItem(ACCESS_KEY, accessToken)
+    store.setItem(REFRESH_KEY, refreshToken)
   },
 
   getUser() {
-    const user = localStorage.getItem(USER_KEY)
+    const user = store.getItem(USER_KEY)
     return user ? JSON.parse(user) : null
   },
 
   setUser(user) {
-    localStorage.setItem(USER_KEY, JSON.stringify(user))
+    store.setItem(USER_KEY, JSON.stringify(user))
   },
 
   clear() {
-    localStorage.removeItem(ACCESS_KEY)
-    localStorage.removeItem(REFRESH_KEY)
-    localStorage.removeItem(USER_KEY)
+    KEYS.forEach((key) => {
+      localStorage.removeItem(key)
+      sessionStorage.removeItem(key)
+    })
   },
 }
