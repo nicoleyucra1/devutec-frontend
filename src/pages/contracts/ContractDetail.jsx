@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import ContractDetailSkeleton from '../../components/contracts/ContractDetailSkeleton'
 import ContractReviews from '../../components/contracts/ContractReviews'
 import ContractTimeline from '../../components/contracts/ContractTimeline'
 import MoneyAmount from '../../components/contracts/MoneyAmount'
@@ -12,8 +13,8 @@ import ButtonLink from '../../components/projects/ButtonLink'
 import Badge from '../../components/ui/Badge'
 import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import Button from '../../components/ui/Button'
+import LoadingNotice from '../../components/ui/LoadingNotice'
 import Modal from '../../components/ui/Modal'
-import Skeleton from '../../components/ui/Skeleton'
 import { useAuth } from '../../hooks/useAuth'
 import { useContract } from '../../hooks/useContracts'
 import { useToast } from '../../hooks/useToast'
@@ -146,19 +147,6 @@ function nextStep(contract, isClient) {
   }
 }
 
-function DetailSkeleton() {
-  return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_340px]" aria-busy="true">
-      <Skeleton className="h-[420px] w-full rounded-2xl" />
-      <div className="grid content-start gap-3">
-        <Skeleton className="h-52 w-full rounded-2xl" />
-        <Skeleton className="h-20 w-full rounded-2xl" />
-        <Skeleton className="h-20 w-full rounded-2xl" />
-      </div>
-    </div>
-  )
-}
-
 // Página Detalle de contrato del diseño: el monto en garantía con su línea de tiempo, la entrega, las reseñas
 // y a la derecha el siguiente paso, las dos partes y los términos.
 export default function ContractDetail() {
@@ -198,9 +186,9 @@ export default function ContractDetail() {
   if (loading) {
     return shell(
       <>
+        <LoadingNotice loading={loading} what="el contrato" />
         <Breadcrumbs items={[{ label: 'Contratos', to: '/contracts' }, { label: '' }]} />
-        <Skeleton className="mb-8 h-12 w-2/3 max-w-lg" />
-        <DetailSkeleton />
+        <ContractDetailSkeleton />
       </>,
     )
   }
