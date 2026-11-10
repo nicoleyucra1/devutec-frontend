@@ -6,6 +6,7 @@ export const NAV_LINKS = [
   { to: '/my-projects', label: 'Mis proyectos', roles: ['CLIENT'] },
   { to: '/my-applications', label: 'Postulaciones', roles: ['FREELANCER'] },
   { to: '/contracts', label: 'Contratos', roles: ['CLIENT', 'FREELANCER'] },
+  { to: '/admin/payments', label: 'Pagos', roles: ['ADMIN'] },
 ]
 
 export const ROLE_LABELS = {
