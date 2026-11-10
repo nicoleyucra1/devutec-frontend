@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import Breadcrumbs from '../../components/ui/Breadcrumbs'
+import { useParams } from 'react-router-dom'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import Card from '../../components/ui/Card'
@@ -63,10 +64,14 @@ export default function ProjectApplications() {
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
-      <Link to={`/projects/${id}`} className="text-sm text-primary-600 hover:underline">
-        ← Volver al proyecto
-      </Link>
-      <h1 className="mt-4 text-2xl font-bold text-gray-900">Postulantes</h1>
+      <Breadcrumbs
+        items={[
+          { label: 'Mis proyectos', to: '/my-projects' },
+          { label: project?.title, to: `/projects/${id}` },
+          { label: 'Postulantes' },
+        ]}
+      />
+      <h1 className=" text-2xl font-bold text-gray-900">Postulantes</h1>
       {project && <p className="mt-1 text-gray-500">{project.title}</p>}
 
       <div className="mt-6 space-y-4">

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Button from '../../components/ui/Button'
 import Card from '../../components/ui/Card'
@@ -77,11 +78,15 @@ export default function ApplyToProject() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10">
-      <Link to={`/projects/${id}`} className="text-sm text-primary-600 hover:underline">
-        ← Volver al proyecto
-      </Link>
+      <Breadcrumbs
+        items={[
+          { label: 'Explorar', to: '/projects' },
+          { label: project.title, to: `/projects/${id}` },
+          { label: 'Postular' },
+        ]}
+      />
 
-      <h1 className="mt-4 text-2xl font-bold text-gray-900">Postular a “{project.title}”</h1>
+      <h1 className=" text-2xl font-bold text-gray-900">Postular a “{project.title}”</h1>
       <p className="mt-1 text-gray-500">Presupuesto del cliente: {formatBudget(project.budget)}</p>
 
       <Card className="mt-6">

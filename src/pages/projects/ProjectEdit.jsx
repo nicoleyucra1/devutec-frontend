@@ -1,5 +1,6 @@
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Card from '../../components/ui/Card'
+import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import Skeleton from '../../components/ui/Skeleton'
 import ErrorBox from '../../components/projects/ErrorBox'
 import ProjectForm from '../../components/projects/ProjectForm'
@@ -26,9 +27,13 @@ export default function ProjectEdit() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10">
-      <Link to={`/projects/${id}`} className="mb-4 inline-block text-sm font-semibold text-indigo-600 hover:underline">
-        ← Volver al proyecto
-      </Link>
+      <Breadcrumbs
+        items={[
+          { label: 'Mis proyectos', to: '/my-projects' },
+          { label: project?.title, to: `/projects/${id}` },
+          { label: 'Editar' },
+        ]}
+      />
       <h1 className="mb-6 text-2xl font-bold text-gray-900">Editar proyecto</h1>
 
       {loading && (

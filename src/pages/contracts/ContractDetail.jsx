@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import { Link, useParams } from 'react-router-dom'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
@@ -102,11 +103,9 @@ export default function ContractDetail() {
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
-      <Link to="/contracts" className="text-sm text-primary-600 hover:underline">
-        ← Volver a mis contratos
-      </Link>
+      <Breadcrumbs items={[{ label: 'Contratos', to: '/contracts' }, { label: contract.projectTitle }]} />
 
-      <Card className="mt-4 space-y-6">
+      <Card className="space-y-6">
         <header className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">{contract.projectTitle}</h1>
