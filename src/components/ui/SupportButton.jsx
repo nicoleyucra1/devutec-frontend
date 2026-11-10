@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import Button from './Button'
 import Modal from './Modal'
+import { ERROR_ICONS } from './errorIcons'
 
 // Botón "Contactar soporte" de los estados de error. El equipo todavía está definiendo el canal de soporte;
 // cuando exista (correo, WhatsApp o formulario), se cambia solo aquí y todas las pantallas lo usan.
-export default function SupportButton({ variant = 'ghost', className = '' }) {
+export default function SupportButton({ variant = 'secondary', className = '' }) {
   const [open, setOpen] = useState(false)
   return (
     <>
       <Button variant={variant} onClick={() => setOpen(true)} className={className}>
+        {ERROR_ICONS.chat}
         Contactar soporte
       </Button>
       <Modal open={open} title="Soporte en preparación" kicker="SOPORTE" onClose={() => setOpen(false)}>

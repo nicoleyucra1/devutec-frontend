@@ -1,127 +1,175 @@
+import Cuyi from '../brand/Cuyi'
+import { initials } from '../layout/navLinks'
 import Button from './Button'
 import SupportButton from './SupportButton'
+import { useAuth } from '../../hooks/useAuth'
 import { errorVariant } from '../../utils/errorVariant'
+import { ERROR_ICONS } from './errorIcons'
 
-const icon = (children) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    {children}
-  </svg>
-)
+const MONEY_SEAL = { strong: 'Tu dinero en garantía no se movió.', text: 'Ningún pago avanza sin una confirmación.' }
 
-const MONEY_SAFE = 'Tu dinero en garantía no se ve afectado: ningún pago se mueve sin una confirmación.'
-
-// Cada tipo de error del diseño: código grande, color, kicker, título (la segunda parte va en cursiva) y texto.
-// Siempre dice qué pasó, qué pasa con el dinero y cuál es el siguiente paso.
+// Lo que cambia en cada error: animación de Cuyi, título (la segunda parte va en cursiva verde), texto y píldora.
+// No se promete nada que el backend no haga (ni tiempos de inactividad ni borradores guardados).
 const VARIANTS = {
   401: {
-    tone: 'bg-pending-light text-pending',
-    kicker: 'SESIÓN EXPIRADA',
+    anim: 'duerme',
     title: ['Tu sesión se cerró', 'por seguridad.'],
-    text: 'Tu sesión venció y no se pudo renovar. Vuelve a ingresar para seguir donde estabas.',
-    icon: icon(
-      <>
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l3 2" />
-      </>,
-    ),
+    text: 'Tu sesión venció y no se pudo renovar. Ingresa de nuevo para seguir donde te quedaste.',
+    seal: { strong: 'Tus pagos en garantía están intactos.', text: 'Nada se movió mientras no estabas.' },
   },
   403: {
-    tone: 'bg-[#efede8] text-[#686660]',
-    kicker: 'SIN PERMISO',
+    anim: 'confundido',
     title: ['No tienes acceso', 'a esta página.'],
-    text: 'Esta información es solo para las personas que participan en ella. Si crees que deberías verla, revisa con qué cuenta ingresaste.',
-    icon: icon(
-      <>
-        <rect x="4" y="10" width="16" height="11" rx="2" />
-        <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-      </>,
-    ),
+    text: 'Solo las personas que participan pueden verla. Revisa con qué cuenta ingresaste.',
+    seal: 'account',
   },
   404: {
-    tone: 'bg-[#efede8] text-[#686660]',
-    kicker: 'NO ENCONTRADO',
+    anim: 'confundido',
     title: ['Esto ya no', 'está aquí.'],
     text: 'Puede que el enlace esté mal o que lo hayan eliminado.',
-    icon: icon(
-      <>
-        <circle cx="11" cy="11" r="7" />
-        <path d="m20 20-4-4" />
-      </>,
-    ),
+    seal: { strong: 'Tus pagos en garantía están intactos.', text: 'Nada se movió.' },
   },
   409: {
-    tone: 'bg-progress-light text-progress',
-    kicker: 'CONFLICTO',
+    anim: 'confundido',
     title: ['Alguien llegó', 'antes que tú.'],
     text: 'Los datos cambiaron mientras los mirabas. Recarga para ver la versión actual.',
-    icon: icon(
-      <>
-        <rect x="8" y="8" width="11" height="11" rx="2" />
-        <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" />
-      </>,
-    ),
   },
   500: {
-    tone: 'bg-error-light text-error',
-    kicker: 'ERROR DEL SERVIDOR',
+    anim: 'escribe',
     title: ['Algo falló', 'de nuestro lado.'],
-    text: `No pudimos cargar esta información. ${MONEY_SAFE}`,
+    text: 'No pudimos cargar esta información. Vuelve a intentarlo en unos segundos.',
+    seal: MONEY_SEAL,
     support: true,
-    icon: <span className="text-[22px] font-semibold">!</span>,
   },
   offline: {
-    tone: 'bg-error-light text-error',
-    kicker: 'SIN CONEXIÓN',
+    anim: 'duerme',
     title: ['No pudimos', 'conectarnos.'],
-    text: `Revisa tu internet o vuelve a intentarlo en unos segundos. ${MONEY_SAFE}`,
+    text: 'El servidor no respondió. Revisa tu internet o vuelve a intentarlo en unos segundos.',
+    seal: MONEY_SEAL,
     support: true,
-    icon: icon(
-      <>
-        <path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0" />
-        <path d="M12 20h.01M3 3l18 18" />
-      </>,
-    ),
   },
   generic: {
-    tone: 'bg-error-light text-error',
-    kicker: 'ALGO SALIÓ MAL',
+    anim: 'confundido',
     title: ['No pudimos', 'completar esto.'],
     text: 'Vuelve a intentarlo en unos segundos.',
-    icon: <span className="text-[22px] font-semibold">!</span>,
   },
 }
 
-// Tarjeta de error del diseño. Se puede cambiar el título, el texto o los botones para cada página;
-// por defecto muestra Reintentar (si hay onRetry) y, en errores del servidor, Contactar soporte.
-// message es el texto que mandó el backend: se usa en los errores que lo explican mejor (400 y 409).
-export default function ErrorState({ status, message, title, text, onRetry, actions, children, className = '' }) {
+// El número gigante con Cuyi dentro del círculo lima en lugar del dígito del medio (4 · 0 · 4, 5 · 0 · 0).
+// Sin código (sin conexión o error genérico) queda solo el círculo.
+export function CodeHero({ code, anim, compact = false }) {
+  const digits = code ? String(code).split('') : []
+  return (
+    <div
+      role="img"
+      aria-label={code ? `Error ${code}` : 'Error'}
+      className={`flex items-center justify-center font-semibold leading-[0.8] tracking-[-0.07em] tabular-nums ${
+        compact ? 'gap-1.5 text-[clamp(84px,10vw,128px)]' : 'gap-1.5 text-[clamp(132px,18vw,248px)] sm:gap-3.5'
+      }`}
+    >
+      {digits[0] && (
+        <span aria-hidden="true" className="tracking-normal">
+          {digits[0]}
+        </span>
+      )}
+      <span aria-hidden="true" className="grid h-[0.8em] w-[0.8em] flex-none place-items-center rounded-full bg-lime">
+        {compact ? (
+          <Cuyi anim={anim} px={4} />
+        ) : (
+          <span className="-m-6 grid h-32 w-32 scale-[0.62] place-items-center sm:m-0 sm:scale-100">
+            <Cuyi anim={anim} px={8} />
+          </span>
+        )}
+      </span>
+      {digits[2] && (
+        <span aria-hidden="true" className="tracking-normal">
+          {digits[2]}
+        </span>
+      )}
+    </div>
+  )
+}
+
+// Píldora bajo el texto: verde con el escudo para avisos sobre el dinero, gris con las iniciales para la cuenta
+export function ErrorSeal({ strong, text, avatar }) {
+  return (
+    <p
+      className={`mt-[22px] inline-flex items-center gap-2.5 rounded-full py-2 pl-2 pr-4 text-left text-sm leading-[1.3] ${
+        avatar ? 'bg-soft text-muted' : 'bg-[#e7efe9] text-escrow'
+      }`}
+    >
+      <span
+        aria-hidden="true"
+        className={`grid h-7 w-7 flex-none place-items-center rounded-full text-paper ${
+          avatar ? 'bg-ink text-[10px] font-semibold tracking-[0.02em]' : 'bg-escrow'
+        }`}
+      >
+        {avatar ?? ERROR_ICONS.shield}
+      </span>
+      <span>
+        {avatar ? (
+          <>
+            {text} <strong className="break-all font-semibold text-ink">{strong}</strong>
+          </>
+        ) : (
+          <>
+            <strong className="font-semibold">{strong}</strong> {text}
+          </>
+        )}
+      </span>
+    </p>
+  )
+}
+
+// Pantalla de error del diseño (v2), con la misma forma que la 404: número con Cuyi, título, texto, píldora y botones.
+// Por defecto ocupa la página; compact es para cuando falla solo una sección (por ejemplo, en el Resumen).
+// title, text, seal, anim y actions cambian lo que trae cada código. message es el texto que mandó el backend:
+// se usa en los errores que lo explican mejor (409 y los que no tienen variante propia).
+export default function ErrorState({ status, message, title, text, seal, anim, onRetry, actions, compact = false, className = '' }) {
+  const { user } = useAuth()
   const key = errorVariant(status)
   const variant = VARIANTS[key]
   const [lead, emphasis] = title ?? variant.title
   const detail = text ?? (key === '409' || key === 'generic' ? (message ?? variant.text) : variant.text)
-  const code = key === 'offline' || key === 'generic' ? null : String(status)
+  const code = key === 'offline' || key === 'generic' ? null : status
+
+  // seal={null} quita la píldora; sin seal se usa la del código
+  let pill = seal === undefined ? variant.seal : seal
+  if (pill === 'account') {
+    pill = user?.email ? { avatar: initials(user.nombre), text: 'Ingresaste como', strong: user.email } : null
+  }
+
+  const Heading = compact ? 'h2' : 'h1'
 
   return (
     <section
       role="alert"
-      className={`flex flex-col rounded-[18px] border border-line bg-surface p-7 text-left sm:p-9 ${className}`}
+      className={`mx-auto flex w-full flex-col items-center text-center ${
+        compact ? 'rounded-2xl border border-line bg-surface px-6 py-10' : 'min-h-[calc(100vh_-_73px)] justify-center px-2 pb-[72px] pt-14'
+      } ${className}`}
     >
-      <div className="flex items-start justify-between gap-4">
-        <span className="font-mono text-[56px] leading-none tracking-[-0.05em] sm:text-[64px]">{code ?? ' '}</span>
-        <span className={`grid h-[52px] w-[52px] shrink-0 place-items-center rounded-full ${variant.tone}`}>{variant.icon}</span>
-      </div>
-      <p className={`mt-8 text-[10px] font-semibold tracking-[0.13em] ${variant.tone.split(' ').find((c) => c.startsWith('text-'))}`}>
-        {variant.kicker}
-      </p>
-      <h2 className="my-3 text-[28px] font-semibold leading-[1.05] tracking-[-0.03em] sm:text-[30px]">
-        {lead} <em>{emphasis}</em>
-      </h2>
-      <p className="max-w-[560px] text-[13px] leading-relaxed text-muted">{detail}</p>
-      {children}
-      <div className="mt-7 flex flex-wrap gap-2.5">
+      <CodeHero code={code} anim={anim ?? variant.anim} compact={compact} />
+
+      <Heading
+        className={`mb-3.5 font-semibold leading-[1.02] tracking-[-0.04em] ${
+          compact ? 'mt-7 text-[clamp(26px,3vw,34px)]' : 'mt-11 text-[clamp(34px,4.2vw,56px)]'
+        }`}
+      >
+        {lead} <em className="text-[1.1em] tracking-[-0.01em] text-escrow">{emphasis}</em>
+      </Heading>
+      <p className={`m-0 max-w-[460px] leading-relaxed text-muted ${compact ? 'text-sm' : 'text-base'}`}>{detail}</p>
+
+      {pill && <ErrorSeal {...pill} />}
+
+      <div className={`flex flex-wrap justify-center gap-2.5 ${compact ? 'mt-7' : 'mt-10'}`}>
         {actions ?? (
           <>
-            {onRetry && <Button onClick={onRetry}>Reintentar</Button>}
+            {onRetry && (
+              <Button onClick={onRetry}>
+                {ERROR_ICONS.retry}
+                Reintentar
+              </Button>
+            )}
             {variant.support && <SupportButton />}
           </>
         )}
