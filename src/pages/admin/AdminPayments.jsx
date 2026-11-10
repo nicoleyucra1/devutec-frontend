@@ -1,4 +1,6 @@
 import ErrorBox from '../../components/projects/ErrorBox'
+import LoadingNotice from '../../components/ui/LoadingNotice'
+import TableSkeleton from '../../components/ui/TableSkeleton'
 import MoneyAmount from '../../components/contracts/MoneyAmount'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
@@ -65,7 +67,7 @@ function StatCard({ label, value, hint, loading, dark = false, children }) {
 // Página Admin · Pagos del diseño: totales del dinero en garantía y la tabla de todos los pagos con filtro,
 // búsqueda, orden, paginación y exportación. Todo queda en la URL (?estado=&q=&orden=&page=&size=).
 export default function AdminPayments() {
-  const { data: payments, loading, error, reload } = usePayments()
+  const { data: payments, loading, error, status, reload } = usePayments()
   const list = useListParams({ orden: 'recientes' })
 
   const all = payments ?? []
@@ -84,6 +86,7 @@ export default function AdminPayments() {
 
   return (
     <main className="mx-auto w-full max-w-[1200px] px-5 pb-20 pt-10 lg:px-6 lg:pt-14">
+      <LoadingNotice loading={loading} what="los pagos" />
       <header className="mb-9 flex flex-wrap items-end justify-between gap-5">
         <div>
           <p className="text-[11px] font-semibold tracking-[0.13em]">
@@ -163,14 +166,14 @@ export default function AdminPayments() {
         </div>
       </div>
 
-      {error && <ErrorBox message={error} onRetry={reload} />}
+      {error && <ErrorBox message={error} status={status} onRetry={reload} />}
 
       {loading && (
-        <div className="grid gap-2 rounded-2xl border border-line bg-surface p-5">
-          {[1, 2, 3, 4].map((n) => (
-            <Skeleton key={n} className="h-12 w-full" />
-          ))}
-        </div>
+        <TableSkeleton
+          columns={COLUMNS}
+          cells={['project', 'line', 'person', 'line', 'pill', 'line']}
+          label="Cargando pagos…"
+        />
       )}
 
       {payments && (

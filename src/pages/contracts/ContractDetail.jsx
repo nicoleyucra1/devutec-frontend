@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import ContractDetailSkeleton from '../../components/contracts/ContractDetailSkeleton'
 import ContractReviews from '../../components/contracts/ContractReviews'
 import ContractTimeline from '../../components/contracts/ContractTimeline'
 import MoneyAmount from '../../components/contracts/MoneyAmount'
@@ -7,12 +8,14 @@ import PersonCard from '../../components/contracts/PersonCard'
 import TermsDialog from '../../components/contracts/TermsDialog'
 import Cuyi from '../../components/brand/Cuyi'
 import ErrorBox from '../../components/projects/ErrorBox'
+import ErrorState from '../../components/ui/ErrorState'
+import { ERROR_ICONS } from '../../components/ui/errorIcons'
 import ButtonLink from '../../components/projects/ButtonLink'
 import Badge from '../../components/ui/Badge'
 import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import Button from '../../components/ui/Button'
+import LoadingNotice from '../../components/ui/LoadingNotice'
 import Modal from '../../components/ui/Modal'
-import Skeleton from '../../components/ui/Skeleton'
 import { useAuth } from '../../hooks/useAuth'
 import { useContract } from '../../hooks/useContracts'
 import { useToast } from '../../hooks/useToast'
@@ -145,31 +148,25 @@ function nextStep(contract, isClient) {
   }
 }
 
-function DetailSkeleton() {
-  return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_340px]" aria-busy="true">
-      <Skeleton className="h-[420px] w-full rounded-2xl" />
-      <div className="grid content-start gap-3">
-        <Skeleton className="h-52 w-full rounded-2xl" />
-        <Skeleton className="h-20 w-full rounded-2xl" />
-        <Skeleton className="h-20 w-full rounded-2xl" />
-      </div>
-    </div>
-  )
-}
-
 // Página Detalle de contrato del diseño: el monto en garantía con su línea de tiempo, la entrega, las reseñas
 // y a la derecha el siguiente paso, las dos partes y los términos.
 export default function ContractDetail() {
   const { id } = useParams()
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
   const toast = useToast()
-  const { data: contract, loading, error, reload } = useContract(id)
+  const { data: contract, loading, error, status: errorStatus, reload } = useContract(id)
 
   const [busy, setBusy] = useState(false)
   // Acción que espera confirmación en la ventana: 'deliver', 'confirm' o 'cancel'
   const [pending, setPending] = useState(null)
   const [termsOpen, setTermsOpen] = useState(false)
+
+  // Cierra la sesión y vuelve a este contrato después de ingresar con otra cuenta
+  const switchAccount = () => {
+    logout()
+    navigate('/login', { replace: true, state: { from: { pathname: `/contracts/${id}` } } })
+  }
 
   const runAction = async () => {
     setBusy(true)
@@ -190,19 +187,47 @@ export default function ContractDetail() {
   if (loading) {
     return shell(
       <>
+        <LoadingNotice loading={loading} what="el contrato" />
         <Breadcrumbs items={[{ label: 'Contratos', to: '/contracts' }, { label: '' }]} />
-        <Skeleton className="mb-8 h-12 w-2/3 max-w-lg" />
-        <DetailSkeleton />
+        <ContractDetailSkeleton />
       </>,
     )
   }
 
   if (error) {
+    const crumbs = <Breadcrumbs items={[{ label: 'Contratos', to: '/contracts' }, { label: contractCode(id) }]} />
+    // 403: el contrato existe pero la persona no es parte de él (el backend solo lo muestra a sus participantes)
+    if (errorStatus === 403) {
+      return shell(
+        <>
+          {crumbs}
+          <ErrorState
+            status={403}
+            className="min-h-[65vh]"
+            title={['Este contrato', 'no es tuyo.']}
+            text="Solo el cliente y la persona contratada pueden verlo. Revisa con qué cuenta ingresaste."
+            actions={
+              <>
+                <ButtonLink to="/contracts">
+                  {ERROR_ICONS.document}
+                  Ver mis contratos
+                </ButtonLink>
+                <Button variant="secondary" onClick={switchAccount}>
+                  {ERROR_ICONS.switch}
+                  Cambiar de cuenta
+                </Button>
+              </>
+            }
+          />
+        </>,
+      )
+    }
     return shell(
       <>
-        <Breadcrumbs items={[{ label: 'Contratos', to: '/contracts' }, { label: 'Contrato' }]} />
-        <ErrorBox message={error} onRetry={reload}>
-          <ButtonLink to="/contracts" variant="secondary">
+        {crumbs}
+        <ErrorBox message={error} status={errorStatus} onRetry={reload} className="min-h-[65vh]">
+          <ButtonLink to="/contracts" variant={errorStatus === 404 ? 'primary' : 'secondary'}>
+            {ERROR_ICONS.back}
             Volver a contratos
           </ButtonLink>
         </ErrorBox>

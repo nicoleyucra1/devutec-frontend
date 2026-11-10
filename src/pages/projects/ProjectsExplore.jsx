@@ -57,7 +57,7 @@ export default function ProjectsExplore() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch])
 
-  const { data, loading, error, reload } = useProjects({ ...filters, search: urlSearch, page, size })
+  const { data, loading, error, status, reload } = useProjects({ ...filters, search: urlSearch, page, size })
   const skills = useSkills()
 
   const handleFilterChange = (key, value) => updateParams({ [key]: value, page: null })
@@ -101,7 +101,7 @@ export default function ProjectsExplore() {
 
       {loading && <ProjectGrid loading />}
 
-      {!loading && error && <ErrorBox message={error} onRetry={reload} />}
+      {!loading && error && <ErrorBox message={error} status={status} onRetry={reload} />}
 
       {!loading && !error && data?.content.length === 0 && (
         <EmptyState

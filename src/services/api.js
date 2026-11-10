@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { sessionExpiry } from '../utils/sessionExpiry'
 import { tokenStorage } from '../utils/tokenStorage'
 
 export const API_URL = import.meta.env.VITE_API_URL
@@ -61,6 +62,7 @@ api.interceptors.response.use(
       return api(original)
     } catch {
       tokenStorage.clear()
+      sessionExpiry.mark()
       onSessionExpired()
       return Promise.reject(error)
     }
