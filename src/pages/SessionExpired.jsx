@@ -3,6 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom'
 import PublicHeader from '../components/layout/PublicHeader'
 import ButtonLink from '../components/projects/ButtonLink'
 import ErrorState from '../components/ui/ErrorState'
+import { ERROR_ICONS } from '../components/ui/errorIcons'
 import { useAuth } from '../hooks/useAuth'
 import { sessionExpiry } from '../utils/sessionExpiry'
 
@@ -21,16 +22,17 @@ export default function SessionExpired() {
   return (
     <>
       <PublicHeader />
-      <main className="mx-auto grid min-h-[calc(100vh_-_73px)] w-full max-w-[1200px] place-items-center px-5 py-14">
+      <main className="mx-auto w-full max-w-[1200px] px-5">
         <ErrorState
           status={401}
-          className="w-full max-w-[560px]"
           actions={
             <>
               <ButtonLink to="/login" state={{ from }}>
+                {ERROR_ICONS.login}
                 Ingresar de nuevo
               </ButtonLink>
-              <ButtonLink to="/" variant="ghost">
+              <ButtonLink to="/" variant="secondary">
+                {ERROR_ICONS.home}
                 Ir al inicio
               </ButtonLink>
             </>
