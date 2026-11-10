@@ -7,6 +7,7 @@ const Login = lazy(() => import('./pages/Login'))
 const Register = lazy(() => import('./pages/Register'))
 const Home = lazy(() => import('./pages/Home'))
 const NotFound = lazy(() => import('./pages/NotFound'))
+const SessionExpired = lazy(() => import('./pages/SessionExpired'))
 const ProjectsExplore = lazy(() => import('./pages/projects/ProjectsExplore'))
 const ProjectDetail = lazy(() => import('./pages/projects/ProjectDetail'))
 const ProjectCreate = lazy(() => import('./pages/projects/ProjectCreate'))
@@ -28,6 +29,7 @@ export default function AppRoutes() {
         {/* Públicas */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/session-expired" element={<SessionExpired />} />
 
         {/* Requieren sesión */}
         <Route element={<PrivateRoute />}>
