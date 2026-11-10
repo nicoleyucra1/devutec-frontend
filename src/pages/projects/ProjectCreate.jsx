@@ -1,4 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import ProjectForm from '../../components/projects/ProjectForm'
 import { useProjectActions } from '../../hooks/useProjectActions'
 import { useToast } from '../../hooks/useToast'
@@ -20,9 +21,7 @@ export default function ProjectCreate() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10">
-      <Link to="/my-projects" className="mb-4 inline-block text-sm font-semibold text-indigo-600 hover:underline">
-        ← Mis proyectos
-      </Link>
+      <Breadcrumbs items={[{ label: 'Mis proyectos', to: '/my-projects' }, { label: 'Publicar proyecto' }]} />
       <h1 className="mb-6 text-2xl font-bold text-gray-900">Publicar proyecto</h1>
       <ProjectForm submitLabel="Publicar" saving={actions.saving} serverError={actions.error} onSubmit={handleSubmit} />
     </main>

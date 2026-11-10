@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import ErrorBox from '../../components/projects/ErrorBox'
+import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import { Link } from 'react-router-dom'
 import Button from '../../components/ui/Button'
 import Card from '../../components/ui/Card'
@@ -165,16 +167,20 @@ function ProfileForm({ profile, onSaved }) {
 
 export default function EditMyProfile() {
   const { user } = useAuth()
-  const { data: profile, loading, error, reload } = useMyFreelancerProfile()
+  const { data: profile, loading, error, status, reload } = useMyFreelancerProfile()
   const [current, setCurrent] = useState(null)
   const shown = current ?? profile
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10">
-      <Link to="/" className="text-sm text-gray-500 hover:text-gray-800">
-        ← Volver al inicio
-      </Link>
-      <div className="mt-4 flex flex-wrap items-end justify-between gap-3">
+      <Breadcrumbs
+        items={[
+          { label: 'Resumen', to: '/' },
+          { label: 'Mi perfil', to: `/freelancers/${user?.id}` },
+          { label: 'Editar' },
+        ]}
+      />
+      <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Mi perfil de freelancer</h1>
           <p className="mt-1 text-sm text-gray-500">Esto es lo que verán los clientes cuando revisen tu postulación.</p>
@@ -194,14 +200,7 @@ export default function EditMyProfile() {
             ))}
           </div>
         )}
-        {error && (
-          <div className="text-center">
-            <p className="text-sm text-red-700">{error}</p>
-            <Button variant="secondary" className="mt-4" onClick={reload}>
-              Reintentar
-            </Button>
-          </div>
-        )}
+        {error && <ErrorBox message={error} status={status} onRetry={reload} />}
         {shown && !loading && <ProfileForm key={shown.userId} profile={shown} onSaved={setCurrent} />}
       </Card>
     </main>

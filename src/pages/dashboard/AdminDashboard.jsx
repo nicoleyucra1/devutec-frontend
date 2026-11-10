@@ -6,7 +6,7 @@ import StatCard from '../../components/dashboard/StatCard'
 import StatGrid from '../../components/dashboard/StatGrid'
 import { usePayments } from '../../hooks/usePayments'
 import { useProjects } from '../../hooks/useProjects'
-import { PAYMENT_STATUS } from '../../utils/contractStatus'
+import { PAYMENT_STATUS, paymentCode } from '../../utils/contractStatus'
 import { formatBudget, formatDate } from '../../utils/format'
 import { countBy, latest, sumBy } from '../../utils/stats'
 
@@ -33,16 +33,16 @@ export default function AdminDashboard() {
         />
       </StatGrid>
 
-      <DashboardSection title="Últimos pagos" linkTo="/projects" linkLabel="Ver proyectos →">
+      <DashboardSection title="Últimos pagos" linkTo="/admin/payments" linkLabel="Ver todos los pagos →">
         {payments.loading && <ItemList loading />}
-        {payments.error && <ErrorBox message={payments.error} onRetry={payments.reload} />}
+        {payments.error && <ErrorBox message={payments.error} status={payments.status} onRetry={payments.reload} compact />}
         {payments.data?.length === 0 && <EmptyState title="Todavía no hay pagos" />}
         {payments.data?.length > 0 && (
           <ItemList
             items={latest(payments.data, 'createdAt', 10).map((payment) => ({
               key: payment.id,
-              title: `Pago #${payment.id}`,
-              subtitle: formatDate(payment.createdAt),
+              title: payment.projectTitle ?? paymentCode(payment.id),
+              subtitle: `${paymentCode(payment.id)} · ${formatDate(payment.createdAt)}`,
               detail: formatBudget(payment.amount),
               status: PAYMENT_STATUS[payment.status]?.label ?? payment.status,
               statusColor: PAYMENT_STATUS[payment.status]?.color,

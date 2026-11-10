@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import ErrorBox from '../../components/projects/ErrorBox'
+import Breadcrumbs from '../../components/ui/Breadcrumbs'
+import { useParams } from 'react-router-dom'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import Card from '../../components/ui/Card'
@@ -33,7 +35,7 @@ export default function ProjectApplications() {
   const { id } = useParams()
   const toast = useToast()
   const { data: project } = useProject(id)
-  const { data: applications, loading, error, reload } = useProjectApplications(id)
+  const { data: applications, loading, error, status, reload } = useProjectApplications(id)
 
   // Acción pendiente de confirmar: { type: 'accept' | 'reject', application }
   const [pending, setPending] = useState(null)
@@ -63,10 +65,14 @@ export default function ProjectApplications() {
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
-      <Link to={`/projects/${id}`} className="text-sm text-primary-600 hover:underline">
-        ← Volver al proyecto
-      </Link>
-      <h1 className="mt-4 text-2xl font-bold text-gray-900">Postulantes</h1>
+      <Breadcrumbs
+        items={[
+          { label: 'Mis proyectos', to: '/my-projects' },
+          { label: project?.title, to: `/projects/${id}` },
+          { label: 'Postulantes' },
+        ]}
+      />
+      <h1 className=" text-2xl font-bold text-gray-900">Postulantes</h1>
       {project && <p className="mt-1 text-gray-500">{project.title}</p>}
 
       <div className="mt-6 space-y-4">
@@ -78,14 +84,7 @@ export default function ProjectApplications() {
             </Card>
           ))}
 
-        {error && (
-          <div className="text-red-700">
-            <p>{error}</p>
-            <Button variant="secondary" className="mt-3" onClick={reload}>
-              Reintentar
-            </Button>
-          </div>
-        )}
+        {error && <ErrorBox message={error} status={status} onRetry={reload} />}
 
         {applications?.length === 0 && (
           <EmptyState

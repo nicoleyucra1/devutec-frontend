@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
 import { useAuth } from './hooks/useAuth'
+import PageLoader from './components/ui/PageLoader'
 
 // Cada página se carga solo cuando se visita
 const Login = lazy(() => import('./pages/Login'))
@@ -9,6 +10,7 @@ const Register = lazy(() => import('./pages/Register'))
 const Home = lazy(() => import('./pages/Home'))
 const Landing = lazy(() => import('./pages/Landing'))
 const NotFound = lazy(() => import('./pages/NotFound'))
+const SessionExpired = lazy(() => import('./pages/SessionExpired'))
 const ProjectsExplore = lazy(() => import('./pages/projects/ProjectsExplore'))
 const ProjectDetail = lazy(() => import('./pages/projects/ProjectDetail'))
 const ProjectCreate = lazy(() => import('./pages/projects/ProjectCreate'))
@@ -21,6 +23,7 @@ const MyContracts = lazy(() => import('./pages/contracts/MyContracts'))
 const ContractDetail = lazy(() => import('./pages/contracts/ContractDetail'))
 const EditMyProfile = lazy(() => import('./pages/freelancers/EditMyProfile'))
 const FreelancerProfile = lazy(() => import('./pages/freelancers/FreelancerProfile'))
+const AdminPayments = lazy(() => import('./pages/admin/AdminPayments'))
 
 // En "/" quien no inició sesión ve la landing; con sesión, su resumen
 function Start() {
@@ -30,12 +33,13 @@ function Start() {
 
 export default function AppRoutes() {
   return (
-    <Suspense fallback={<p>Cargando...</p>}>
+    <Suspense fallback={<PageLoader />}>
       <Routes>
         {/* Públicas */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Start />} />
+        <Route path="/session-expired" element={<SessionExpired />} />
 
         {/* Requieren sesión */}
         <Route element={<PrivateRoute />}>
@@ -63,6 +67,11 @@ export default function AppRoutes() {
           <Route path="/projects/:id/apply" element={<ApplyToProject />} />
           <Route path="/my-applications" element={<MyApplications />} />
           <Route path="/profile/edit" element={<EditMyProfile />} />
+        </Route>
+
+        {/* Solo administradores */}
+        <Route element={<PrivateRoute roles={['ADMIN']} />}>
+          <Route path="/admin/payments" element={<AdminPayments />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

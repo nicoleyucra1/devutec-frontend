@@ -25,8 +25,10 @@ export function AuthProvider({ children }) {
     })
   }, [logout, toast])
 
-  // Guarda los tokens y pide los datos completos del usuario (id y nombre) a GET /users/me
-  const startSession = async (data) => {
+  // Guarda los tokens y pide los datos completos del usuario (id y nombre) a GET /users/me.
+  // remember decide si la sesión sobrevive a cerrar el navegador (ver tokenStorage).
+  const startSession = async (data, remember = true) => {
+    tokenStorage.setRemember(remember)
     tokenStorage.setTokens(data.accessToken, data.refreshToken)
     try {
       const me = await userService.getMe()
@@ -39,7 +41,9 @@ export function AuthProvider({ children }) {
     }
   }
 
-  const login = async (credentials) => startSession(await authService.login(credentials))
+  // remember viene del check "Recordarme" del login; no se manda al backend
+  const login = async ({ remember = true, ...credentials }) =>
+    startSession(await authService.login(credentials), remember)
 
   // El registro también devuelve tokens, así que el usuario queda logueado
   const register = async (data) => startSession(await authService.register(data))

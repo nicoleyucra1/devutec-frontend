@@ -1,12 +1,17 @@
 import { useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
-import AuthLayout from '../components/auth/AuthLayout'
+import AuthEditorial from '../components/auth/AuthEditorial'
+import AuthField from '../components/auth/AuthField'
+import PasswordToggle from '../components/auth/PasswordToggle'
+import Cuyi from '../components/brand/Cuyi'
+import PublicHeader from '../components/layout/PublicHeader'
 import Button from '../components/ui/Button'
-import Input from '../components/ui/Input'
 import { useAuth } from '../hooks/useAuth'
 import { errorMessage } from '../utils/errorMessage'
 import { validateLogin } from '../utils/validation'
 
+// Página Ingresar del diseño: a la izquierda la cita editorial en negro, a la derecha el formulario con Cuyi.
+// Cuyi saluda al llegar, escribe mientras se inicia sesión y se confunde si algo falla.
 export default function Login() {
   const { user, login } = useAuth()
   const navigate = useNavigate()
@@ -14,7 +19,8 @@ export default function Login() {
   // Página que se quería abrir antes de que PrivateRoute mandara al login
   const redirectTo = location.state?.from?.pathname ?? '/'
 
-  const [values, setValues] = useState({ email: '', password: '' })
+  const [values, setValues] = useState({ email: '', password: '', remember: true })
+  const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState({})
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState(null)
@@ -24,7 +30,8 @@ export default function Login() {
   if (user) return <Navigate to={redirectTo} replace />
 
   const handleChange = (event) => {
-    const next = { ...values, [event.target.name]: event.target.value }
+    const { name, type, checked, value } = event.target
+    const next = { ...values, [name]: type === 'checkbox' ? checked : value }
     setValues(next)
     // Después del primer intento, los errores se actualizan mientras se escribe
     if (submitted) setErrors(validateLogin(next))
@@ -41,57 +48,85 @@ export default function Login() {
 
     setSubmitting(true)
     try {
-      await login({ email: values.email.trim(), password: values.password })
+      await login({ email: values.email.trim(), password: values.password, remember: values.remember })
       navigate(redirectTo, { replace: true })
     } catch (error) {
-      setSubmitError(
-        error.response?.status === 401 ? 'Correo o contraseña incorrectos' : errorMessage(error),
-      )
+      setSubmitError(error.response?.status === 401 ? 'Correo o contraseña incorrectos.' : errorMessage(error))
       setSubmitting(false)
     }
   }
 
+  const cuyiAnim = submitting ? 'escribe' : submitError ? 'confundido' : 'saluda'
+
   return (
-    <AuthLayout title="Iniciar sesión" subtitle="Entra para ver proyectos y postulaciones">
-      <form onSubmit={handleSubmit} noValidate className="space-y-4">
-        <Input
-          label="Correo"
-          name="email"
-          type="email"
-          autoComplete="email"
-          value={values.email}
-          onChange={handleChange}
-          error={errors.email}
-        />
-        <Input
-          label="Contraseña"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          value={values.password}
-          onChange={handleChange}
-          error={errors.password}
-        />
+    <>
+      <PublicHeader />
+      <main className="grid min-h-[calc(100vh_-_73px)] lg:grid-cols-2">
+        <AuthEditorial />
 
-        {submitError && (
-          <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
-            {submitError}
-          </p>
-        )}
+        <section className="flex items-start justify-center bg-paper px-5 pb-[70px] pt-[45px] lg:items-center lg:p-[55px]">
+          <div className="w-full max-w-[430px]">
+            <span className="mb-5 grid h-[76px] w-[76px] place-items-center rounded-[18px] bg-lime">
+              <Cuyi anim={cuyiAnim} px={4} />
+            </span>
+            <p className="text-[11px] font-semibold tracking-[0.13em]">BIENVENIDO DE VUELTA</p>
+            <h1 className="mb-2.5 mt-3.5 text-[37px] tracking-[-0.04em] lg:text-[42px]">Ingresa a tu cuenta.</h1>
+            <p className="mb-[35px] text-sm leading-normal text-muted">Revisa tus propuestas, entregas y pagos protegidos.</p>
 
-        <Button
-          type="submit" loading={submitting} className="w-full"
-        >
-          {submitting ? 'Entrando...' : 'Entrar'}
-        </Button>
-      </form>
+            <form onSubmit={handleSubmit} noValidate className="grid gap-5">
+              <AuthField
+                label="Correo electrónico"
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder="tu@correo.com"
+                value={values.email}
+                onChange={handleChange}
+                error={errors.email}
+              />
+              <AuthField
+                label="Contraseña"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                placeholder="Tu contraseña"
+                value={values.password}
+                onChange={handleChange}
+                error={errors.password}
+                trailing={<PasswordToggle shown={showPassword} onToggle={() => setShowPassword((shown) => !shown)} />}
+              />
 
-      <p className="mt-6 text-center text-sm text-gray-600">
-        ¿No tienes cuenta?{' '}
-        <Link to="/register" className="font-semibold text-indigo-600 hover:underline">
-          Regístrate
-        </Link>
-      </p>
-    </AuthLayout>
+              <label className="flex w-fit items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  name="remember"
+                  checked={values.remember}
+                  onChange={handleChange}
+                  className="h-4 w-4 accent-escrow"
+                />
+                Recordarme en este navegador
+              </label>
+
+              {submitError && (
+                <p role="alert" className="rounded-[10px] bg-error-light px-3.5 py-3 text-sm text-error">
+                  {submitError}
+                </p>
+              )}
+
+              <Button type="submit" loading={submitting} className="w-full">
+                {submitting ? 'Ingresando...' : 'Ingresar'}
+              </Button>
+            </form>
+
+            <p className="mt-7 text-center text-xs text-muted">
+              ¿Aún no tienes cuenta?{' '}
+              <Link to="/register" className="font-semibold text-ink underline underline-offset-2">
+                Crea una gratis
+              </Link>
+            </p>
+          </div>
+        </section>
+      </main>
+    </>
   )
 }

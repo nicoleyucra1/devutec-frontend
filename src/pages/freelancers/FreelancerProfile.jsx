@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import ErrorBox from '../../components/projects/ErrorBox'
+import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import { Link, useParams } from 'react-router-dom'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
@@ -100,7 +102,7 @@ function ReviewList({ userId }) {
   const [minRating, setMinRating] = useState('')
   const [page, setPage] = useState(1)
   const [size, setSize] = useState(10)
-  const { data, loading, error, reload } = useUserReviews(userId, { page, size, minRating })
+  const { data, loading, error, status, reload } = useUserReviews(userId, { page, size, minRating })
 
   const changeFilter = (event) => {
     setMinRating(event.target.value)
@@ -133,14 +135,7 @@ function ReviewList({ userId }) {
       <div className="mt-4 space-y-3">
         {loading && [1, 2, 3].map((n) => <Skeleton key={n} className="h-24 w-full rounded-xl" />)}
 
-        {error && (
-          <Card className="text-center">
-            <p className="text-sm text-red-700">{error}</p>
-            <Button variant="secondary" className="mt-4" onClick={reload}>
-              Reintentar
-            </Button>
-          </Card>
-        )}
+        {error && <ErrorBox message={error} status={status} onRetry={reload} compact />}
 
         {data?.content.length === 0 && (
           <EmptyState
@@ -190,11 +185,11 @@ export default function FreelancerProfile() {
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
-      <Link to="/" className="text-sm text-gray-500 hover:text-gray-800">
-        ← Volver al inicio
-      </Link>
+      <Breadcrumbs
+        items={[{ label: 'Resumen', to: '/' }, { label: isOwner ? 'Mi perfil' : error ? 'Perfil' : profile?.nombre }]}
+      />
 
-      <div className="mt-4">
+      <div>
         {loading && <Skeleton className="h-48 w-full rounded-xl" />}
 
         {error && (

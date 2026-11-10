@@ -2,6 +2,13 @@
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d).+$/
 
+// Reglas de la contraseña, para mostrarlas en vivo mientras se escribe en Crear cuenta
+export const PASSWORD_RULES = [
+  { label: '8 caracteres como mínimo', test: (password) => password.length >= 8 },
+  { label: 'Una letra', test: (password) => /[A-Za-z]/.test(password) },
+  { label: 'Un número', test: (password) => /\d/.test(password) },
+]
+
 export function validateEmail(email) {
   if (!email.trim()) return 'El correo es obligatorio'
   if (!EMAIL_REGEX.test(email.trim())) return 'El correo no tiene un formato válido'
@@ -23,14 +30,13 @@ export function validateLogin({ email, password }) {
   return errors
 }
 
-export function validateRegister({ nombre, email, password, confirmPassword, rol }) {
+export function validateRegister({ nombre, email, password, rol }) {
   const errors = {}
-  if (!nombre.trim()) errors.nombre = 'El nombre es obligatorio'
+  if (!nombre.trim()) errors.nombre = rol === 'CLIENT' ? 'El nombre del negocio es obligatorio' : 'Tu nombre es obligatorio'
   const emailError = validateEmail(email)
   if (emailError) errors.email = emailError
   const passwordError = validatePassword(password)
   if (passwordError) errors.password = passwordError
-  if (confirmPassword !== password) errors.confirmPassword = 'Las contraseñas no coinciden'
   if (!rol) errors.rol = 'Elige si quieres contratar o trabajar'
   return errors
 }
