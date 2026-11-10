@@ -30,7 +30,7 @@ export default function ProjectDetail() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const toast = useToast()
-  const { data: project, loading, error, reload } = useProject(id)
+  const { data: project, loading, error, status, reload } = useProject(id)
   const actions = useProjectActions()
   const [confirmOpen, setConfirmOpen] = useState(false)
 
@@ -65,7 +65,7 @@ export default function ProjectDetail() {
     return (
       <main className="mx-auto max-w-3xl px-4 py-10">
         <ProjectBreadcrumbs title="Proyecto" />
-        <ErrorBox message={error} onRetry={reload} />
+        <ErrorBox message={error} status={status} onRetry={reload} />
       </main>
     )
   }

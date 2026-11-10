@@ -53,7 +53,7 @@ export default function ClientDashboard() {
 
       {contracts.error && (
         <div className="mt-8">
-          <ErrorBox message={contracts.error} onRetry={contracts.reload} />
+          <ErrorBox message={contracts.error} status={contracts.status} onRetry={contracts.reload} />
         </div>
       )}
 
@@ -78,7 +78,7 @@ export default function ClientDashboard() {
 
       <DashboardSection title="Tus proyectos recientes" linkTo="/my-projects" linkLabel="Ver todos →">
         {projects.loading && <ProjectGrid loading />}
-        {projects.error && <ErrorBox message={projects.error} onRetry={projects.reload} />}
+        {projects.error && <ErrorBox message={projects.error} status={projects.status} onRetry={projects.reload} />}
         {projects.data?.content.length === 0 && (
           <EmptyState
             title="Todavía no has publicado proyectos"

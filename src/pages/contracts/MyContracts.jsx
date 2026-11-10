@@ -77,7 +77,7 @@ function ContractRow({ contract, counterpart }) {
 // El filtro y la búsqueda quedan en la URL (?estado=&q=).
 export default function MyContracts() {
   const { user } = useAuth()
-  const { data: contracts, loading, error, reload } = useMyContracts()
+  const { data: contracts, loading, error, status, reload } = useMyContracts()
   const list = useListParams()
   const isClient = user?.rol === 'CLIENT'
 
@@ -139,7 +139,7 @@ export default function MyContracts() {
         />
       </div>
 
-      {error && <ErrorBox message={error} onRetry={reload} />}
+      {error && <ErrorBox message={error} status={status} onRetry={reload} />}
 
       {loading && (
         <div className="grid gap-2 rounded-2xl border border-line bg-surface p-5">

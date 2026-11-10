@@ -65,7 +65,7 @@ function StatCard({ label, value, hint, loading, dark = false, children }) {
 // Página Admin · Pagos del diseño: totales del dinero en garantía y la tabla de todos los pagos con filtro,
 // búsqueda, orden, paginación y exportación. Todo queda en la URL (?estado=&q=&orden=&page=&size=).
 export default function AdminPayments() {
-  const { data: payments, loading, error, reload } = usePayments()
+  const { data: payments, loading, error, status, reload } = usePayments()
   const list = useListParams({ orden: 'recientes' })
 
   const all = payments ?? []
@@ -163,7 +163,7 @@ export default function AdminPayments() {
         </div>
       </div>
 
-      {error && <ErrorBox message={error} onRetry={reload} />}
+      {error && <ErrorBox message={error} status={status} onRetry={reload} />}
 
       {loading && (
         <div className="grid gap-2 rounded-2xl border border-line bg-surface p-5">

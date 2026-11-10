@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import ErrorBox from '../../components/projects/ErrorBox'
 import { Link, useLocation } from 'react-router-dom'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
@@ -14,7 +15,7 @@ import { formatBudget, formatDate } from '../../utils/format'
 
 export default function MyApplications() {
   const location = useLocation()
-  const { data: applications, loading, error, reload } = useMyApplications()
+  const { data: applications, loading, error, status, reload } = useMyApplications()
 
   // Postulación que se quiere retirar; mientras sea null, la ventana de confirmación está cerrada
   const [toWithdraw, setToWithdraw] = useState(null)
@@ -60,14 +61,7 @@ export default function MyApplications() {
             </Card>
           ))}
 
-        {error && (
-          <div className="text-red-700">
-            <p>{error}</p>
-            <Button variant="secondary" className="mt-3" onClick={reload}>
-              Reintentar
-            </Button>
-          </div>
-        )}
+        {error && <ErrorBox message={error} status={status} onRetry={reload} />}
 
         {applications?.length === 0 && (
           <EmptyState

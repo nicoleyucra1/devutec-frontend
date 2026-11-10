@@ -10,7 +10,7 @@ import { readPageParams } from '../../utils/pageParams'
 export default function MyProjects() {
   const [searchParams, setSearchParams] = useSearchParams()
   const { page, size } = readPageParams(searchParams)
-  const { data, loading, error, reload } = useMyProjects({ page, size })
+  const { data, loading, error, status, reload } = useMyProjects({ page, size })
 
   const setPageParams = (nextPage, nextSize) => {
     const params = {}
@@ -31,7 +31,7 @@ export default function MyProjects() {
 
       {loading && <ProjectGrid loading />}
 
-      {!loading && error && <ErrorBox message={error} onRetry={reload} />}
+      {!loading && error && <ErrorBox message={error} status={status} onRetry={reload} />}
 
       {!loading && !error && data?.content.length === 0 && (
         <EmptyState

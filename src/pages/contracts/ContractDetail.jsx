@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import ContractReviews from '../../components/contracts/ContractReviews'
 import ContractTimeline from '../../components/contracts/ContractTimeline'
 import MoneyAmount from '../../components/contracts/MoneyAmount'
@@ -7,6 +7,7 @@ import PersonCard from '../../components/contracts/PersonCard'
 import TermsDialog from '../../components/contracts/TermsDialog'
 import Cuyi from '../../components/brand/Cuyi'
 import ErrorBox from '../../components/projects/ErrorBox'
+import ErrorState from '../../components/ui/ErrorState'
 import ButtonLink from '../../components/projects/ButtonLink'
 import Badge from '../../components/ui/Badge'
 import Breadcrumbs from '../../components/ui/Breadcrumbs'
@@ -162,14 +163,21 @@ function DetailSkeleton() {
 // y a la derecha el siguiente paso, las dos partes y los términos.
 export default function ContractDetail() {
   const { id } = useParams()
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
   const toast = useToast()
-  const { data: contract, loading, error, reload } = useContract(id)
+  const { data: contract, loading, error, status: errorStatus, reload } = useContract(id)
 
   const [busy, setBusy] = useState(false)
   // Acción que espera confirmación en la ventana: 'deliver', 'confirm' o 'cancel'
   const [pending, setPending] = useState(null)
   const [termsOpen, setTermsOpen] = useState(false)
+
+  // Cierra la sesión y vuelve a este contrato después de ingresar con otra cuenta
+  const switchAccount = () => {
+    logout()
+    navigate('/login', { replace: true, state: { from: { pathname: `/contracts/${id}` } } })
+  }
 
   const runAction = async () => {
     setBusy(true)
@@ -198,11 +206,39 @@ export default function ContractDetail() {
   }
 
   if (error) {
+    const crumbs = <Breadcrumbs items={[{ label: 'Contratos', to: '/contracts' }, { label: contractCode(id) }]} />
+    // 403: el contrato existe pero la persona no es parte de él (el backend solo lo muestra a sus participantes)
+    if (errorStatus === 403) {
+      return shell(
+        <>
+          {crumbs}
+          <ErrorState
+            status={403}
+            className="max-w-2xl"
+            title={['Este contrato', 'no es tuyo.']}
+            text={`Solo el cliente y la persona contratada pueden ver ${contractCode(id)}. Si crees que deberías tener acceso, revisa con qué cuenta ingresaste.`}
+            actions={
+              <>
+                <ButtonLink to="/contracts">Ver mis contratos</ButtonLink>
+                <Button variant="ghost" onClick={switchAccount}>
+                  Cambiar de cuenta
+                </Button>
+              </>
+            }
+          >
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-line px-4 py-3.5 text-xs">
+              <span className="text-muted">Ingresaste como</span>
+              <strong className="break-all">{user?.email}</strong>
+            </div>
+          </ErrorState>
+        </>,
+      )
+    }
     return shell(
       <>
-        <Breadcrumbs items={[{ label: 'Contratos', to: '/contracts' }, { label: 'Contrato' }]} />
-        <ErrorBox message={error} onRetry={reload}>
-          <ButtonLink to="/contracts" variant="secondary">
+        {crumbs}
+        <ErrorBox message={error} status={errorStatus} onRetry={errorStatus === 404 ? undefined : reload} className="max-w-2xl">
+          <ButtonLink to="/contracts" variant={errorStatus === 404 ? 'primary' : 'secondary'}>
             Volver a contratos
           </ButtonLink>
         </ErrorBox>

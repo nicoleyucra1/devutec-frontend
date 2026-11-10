@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import ErrorBox from '../../components/projects/ErrorBox'
 import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import { useParams } from 'react-router-dom'
 import Badge from '../../components/ui/Badge'
@@ -34,7 +35,7 @@ export default function ProjectApplications() {
   const { id } = useParams()
   const toast = useToast()
   const { data: project } = useProject(id)
-  const { data: applications, loading, error, reload } = useProjectApplications(id)
+  const { data: applications, loading, error, status, reload } = useProjectApplications(id)
 
   // Acción pendiente de confirmar: { type: 'accept' | 'reject', application }
   const [pending, setPending] = useState(null)
@@ -83,14 +84,7 @@ export default function ProjectApplications() {
             </Card>
           ))}
 
-        {error && (
-          <div className="text-red-700">
-            <p>{error}</p>
-            <Button variant="secondary" className="mt-3" onClick={reload}>
-              Reintentar
-            </Button>
-          </div>
-        )}
+        {error && <ErrorBox message={error} status={status} onRetry={reload} />}
 
         {applications?.length === 0 && (
           <EmptyState
