@@ -20,3 +20,18 @@ export const STATUS_LABELS = {
   IN_PROGRESS: 'En progreso',
   DONE: 'Terminado',
 }
+
+// Fecha y hora cercana para avisos: "hoy, 16:20", "ayer, 09:05" o "8 nov 2026, 16:20"
+export function formatWhen(value) {
+  if (!value) return ''
+  const date = new Date(value)
+  const time = date.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', hour12: false })
+  const days = Math.round((startOfDay(new Date()) - startOfDay(date)) / 86_400_000)
+  if (days === 0) return `hoy, ${time}`
+  if (days === 1) return `ayer, ${time}`
+  return `${formatDate(value)}, ${time}`
+}
+
+function startOfDay(date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+}
