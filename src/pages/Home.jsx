@@ -5,21 +5,12 @@ import ClientDashboard from './dashboard/ClientDashboard'
 import FreelancerDashboard from './dashboard/FreelancerDashboard'
 
 const ROLE_LABELS = {
-  CLIENT: 'Cuenta de cliente',
   FREELANCER: 'Cuenta de freelancer',
   ADMIN: 'Administrador',
 }
 
 // Accesos rápidos que cambian según el rol
 function QuickActions({ user }) {
-  if (user.rol === 'CLIENT') {
-    return (
-      <>
-        <ButtonLink to="/projects/new">+ Publicar proyecto</ButtonLink>
-        <ButtonLink to="/my-projects" variant="secondary">Mis proyectos</ButtonLink>
-      </>
-    )
-  }
   if (user.rol === 'FREELANCER') {
     return (
       <>
@@ -37,6 +28,9 @@ function QuickActions({ user }) {
 export default function Home() {
   const { user } = useAuth()
 
+  // El cliente tiene su propio resumen con el diseño nuevo, a pantalla completa
+  if (user.rol === 'CLIENT') return <ClientDashboard />
+
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
       {/* Cerrar sesión está en la barra de navegación */}
@@ -49,7 +43,6 @@ export default function Home() {
         <QuickActions user={user} />
       </div>
 
-      {user.rol === 'CLIENT' && <ClientDashboard />}
       {user.rol === 'FREELANCER' && <FreelancerDashboard />}
       {user.rol === 'ADMIN' && <AdminDashboard />}
     </main>
