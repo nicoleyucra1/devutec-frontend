@@ -12,9 +12,10 @@ export const PAYMENT_STATUS = {
   REFUNDED: { label: 'Reembolsado', color: 'gray' },
 }
 
-// Códigos cortos para buscar y nombrar: el contrato 42 es #CT-0042 y el pago 7 es #PG-0007
+// Códigos cortos para buscar y nombrar: el contrato 42 es #CT-0042, el pago 7 es #PG-0007 y el proyecto 5 es #PR-0005
 export const contractCode = (id) => `#CT-${String(id).padStart(4, '0')}`
 export const paymentCode = (id) => `#PG-${String(id).padStart(4, '0')}`
+export const projectCode = (id) => `#PR-${String(id).padStart(4, '0')}`
 
 // Dos letras del proyecto para el cuadrito de la tabla: "Web para pizzería" → "WP"
 export function projectInitials(title) {
