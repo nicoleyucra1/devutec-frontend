@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { errorMessage } from '../../utils/errorMessage'
 
@@ -97,6 +98,19 @@ export default function GoogleSignIn({ onSuccess, rol: presetRol, text = 'contin
       </div>
 
       <div ref={buttonRef} className={`flex min-h-[44px] justify-center ${pendingToken ? 'hidden' : ''}`} />
+
+      {/* Con Google nadie marca la casilla de términos, así que se avisa aquí */}
+      <p className="text-center text-[11px] leading-normal text-muted">
+        Al continuar con Google aceptas los{' '}
+        <Link to="/terminos" className="underline underline-offset-2 hover:text-ink">
+          Términos y condiciones
+        </Link>{' '}
+        y la{' '}
+        <Link to="/privacidad" className="underline underline-offset-2 hover:text-ink">
+          Política de privacidad
+        </Link>
+        .
+      </p>
 
       {pendingToken && (
         <div className="rounded-[14px] border border-line bg-surface p-4">
