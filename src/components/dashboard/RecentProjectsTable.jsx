@@ -4,6 +4,8 @@ import Avatar from '../ui/Avatar'
 import Skeleton from '../ui/Skeleton'
 import { projectInitials } from '../../utils/contractStatus'
 import { formatBudget, formatDate } from '../../utils/format'
+import PropTypes from 'prop-types'
+import { idType, projectShape } from '../../utils/propShapes'
 
 // Misma grilla en la cabecera, las filas y el esqueleto. En celular la tabla se desliza de lado.
 const ROW = 'grid min-w-[800px] grid-cols-[2.2fr_0.8fr_1fr_0.8fr_1fr_24px] items-center gap-4 px-[18px]'
@@ -111,4 +113,21 @@ export function RecentProjectsSkeleton({ rows = 3 }) {
       </Frame>
     </div>
   )
+}
+
+Applicants.propTypes = {
+  applications: PropTypes.arrayOf(PropTypes.shape({ id: idType.isRequired, freelancerName: PropTypes.string })),
+}
+
+Frame.propTypes = {
+  children: PropTypes.node,
+  label: PropTypes.string,
+}
+
+RecentProjectsTable.propTypes = {
+  projects: PropTypes.arrayOf(projectShape).isRequired,
+}
+
+RecentProjectsSkeleton.propTypes = {
+  rows: PropTypes.number,
 }

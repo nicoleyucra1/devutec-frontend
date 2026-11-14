@@ -1,4 +1,5 @@
 import Skeleton from './Skeleton'
+import PropTypes from 'prop-types'
 
 // Cómo se ve cada tipo de celda mientras carga: proyecto (cuadrito + dos líneas), persona (avatar + línea),
 // píldora (un Badge) y línea (texto corto)
@@ -54,4 +55,16 @@ export default function TableSkeleton({ columns, cells, rows = 5, label }) {
       ))}
     </div>
   )
+}
+
+Cell.propTypes = {
+  type: PropTypes.oneOf(['project', 'person', 'pill', 'line']).isRequired,
+  row: PropTypes.number.isRequired,
+}
+
+TableSkeleton.propTypes = {
+  columns: PropTypes.string.isRequired,
+  cells: PropTypes.arrayOf(PropTypes.oneOf(['project', 'person', 'pill', 'line'])).isRequired,
+  rows: PropTypes.number,
+  label: PropTypes.string,
 }

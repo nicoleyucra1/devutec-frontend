@@ -5,6 +5,7 @@ import { userService } from '../services/userService'
 import { useToast } from '../hooks/useToast'
 import { setSessionExpiredHandler } from '../services/api'
 import { tokenStorage } from '../utils/tokenStorage'
+import PropTypes from 'prop-types'
 
 export function AuthProvider({ children }) {
   // Se recupera la sesión guardada para no perderla al recargar la página
@@ -61,4 +62,8 @@ export function AuthProvider({ children }) {
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+
+AuthProvider.propTypes = {
+  children: PropTypes.node,
 }

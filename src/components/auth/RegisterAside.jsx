@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 // Tarjeta negra de Crear cuenta: cambia su mensaje según el rol elegido. En pantallas chicas va arriba del formulario.
 const CONTENT = {
   CLIENT: {
@@ -54,4 +56,8 @@ export default function RegisterAside({ role }) {
       </div>
     </aside>
   )
+}
+
+RegisterAside.propTypes = {
+  role: PropTypes.oneOf(['CLIENT', 'FREELANCER']),
 }

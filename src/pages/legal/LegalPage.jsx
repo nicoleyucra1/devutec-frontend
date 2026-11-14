@@ -3,6 +3,7 @@ import PublicHeader from '../../components/layout/PublicHeader'
 import SiteFooter from '../../components/landing/SiteFooter'
 import { useAuth } from '../../hooks/useAuth'
 import { LEGAL_DOCS } from './legalContent'
+import PropTypes from 'prop-types'
 
 export default function LegalPage({ doc }) {
   const { user } = useAuth()
@@ -44,4 +45,8 @@ export default function LegalPage({ doc }) {
       <SiteFooter />
     </>
   )
+}
+
+LegalPage.propTypes = {
+  doc: PropTypes.oneOf(Object.keys(LEGAL_DOCS)).isRequired,
 }

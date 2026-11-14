@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import Badge from '../ui/Badge'
 import Card from '../ui/Card'
 import Skeleton from '../ui/Skeleton'
+import PropTypes from 'prop-types'
+import { idType, linkTo } from '../../utils/propShapes'
 
 // Lista corta de contratos o postulaciones: título (con link si tiene "to"), detalle a la derecha y un estado
 export default function ItemList({ items, loading = false }) {
@@ -39,4 +41,19 @@ export default function ItemList({ items, loading = false }) {
       </ul>
     </Card>
   )
+}
+
+ItemList.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: idType.isRequired,
+      to: linkTo,
+      title: PropTypes.node.isRequired,
+      subtitle: PropTypes.node,
+      detail: PropTypes.node,
+      status: PropTypes.node,
+      statusColor: PropTypes.string,
+    }),
+  ),
+  loading: PropTypes.bool,
 }

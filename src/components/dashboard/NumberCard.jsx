@@ -1,4 +1,5 @@
 import Skeleton from '../ui/Skeleton'
+import PropTypes from 'prop-types'
 
 // Número grande del resumen con su etiqueta arriba y una nota abajo.
 // tone="dark" es la tarjeta del dinero: fondo tinta, etiqueta lima y número un poco más chico.
@@ -28,4 +29,14 @@ export default function NumberCard({ label, icon, value, note, loading = false, 
       <small className={`text-[10px] ${dark ? 'text-white/60' : 'text-muted'}`}>{loading ? ' ' : note}</small>
     </article>
   )
+}
+
+NumberCard.propTypes = {
+  label: PropTypes.node.isRequired,
+  icon: PropTypes.node,
+  value: PropTypes.node,
+  note: PropTypes.node,
+  loading: PropTypes.bool,
+  tone: PropTypes.oneOf(['light', 'dark']),
+  className: PropTypes.string,
 }

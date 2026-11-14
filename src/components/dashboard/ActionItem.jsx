@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { linkTo } from '../../utils/propShapes'
 
 const ICONS = {
   clock: (
@@ -38,4 +40,12 @@ export default function ActionItem({ to, icon = 'clock', title, text, meta }) {
       </svg>
     </Link>
   )
+}
+
+ActionItem.propTypes = {
+  to: linkTo.isRequired,
+  icon: PropTypes.oneOf(Object.keys(ICONS)),
+  title: PropTypes.node.isRequired,
+  text: PropTypes.node,
+  meta: PropTypes.node,
 }

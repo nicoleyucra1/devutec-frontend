@@ -10,6 +10,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useToast } from '../hooks/useToast'
 import { errorMessage } from '../utils/errorMessage'
 import { PASSWORD_RULES, validateRegister } from '../utils/validation'
+import PropTypes from 'prop-types'
 
 const briefcase = (
   <>
@@ -265,4 +266,29 @@ export default function Register() {
       </main>
     </>
   )
+}
+
+Check.propTypes = {
+  size: PropTypes.number.isRequired,
+}
+
+Step.propTypes = {
+  number: PropTypes.string.isRequired,
+  children: PropTypes.node,
+  className: PropTypes.string,
+}
+
+RoleCard.propTypes = {
+  role: PropTypes.shape({
+    value: PropTypes.oneOf(['CLIENT', 'FREELANCER']).isRequired,
+    icon: PropTypes.node,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+  }).isRequired,
+  selected: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+}
+
+PasswordRules.propTypes = {
+  password: PropTypes.string.isRequired,
 }

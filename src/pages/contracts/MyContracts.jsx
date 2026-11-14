@@ -16,6 +16,8 @@ import { useListParams } from '../../hooks/useListParams'
 import { CONTRACT_STATUS, contractCode, PAYMENT_STATUS, projectInitials } from '../../utils/contractStatus'
 import { formatBudget, formatDate } from '../../utils/format'
 import { sumBy } from '../../utils/stats'
+import PropTypes from 'prop-types'
+import { contractShape } from '../../utils/propShapes'
 
 const FILTERS = ['ALL', 'IN_PROGRESS', 'DELIVERED', 'CONFIRMED', 'CANCELLED']
 const COLUMNS = 'lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)]'
@@ -204,4 +206,9 @@ export default function MyContracts() {
       )}
     </main>
   )
+}
+
+ContractRow.propTypes = {
+  contract: contractShape.isRequired,
+  counterpart: PropTypes.string,
 }

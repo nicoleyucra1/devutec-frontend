@@ -4,6 +4,7 @@ import ProjectStatusBadge from './ProjectStatusBadge'
 import ProjectMeta from './ProjectMeta'
 import SkillList from './SkillList'
 import { formatBudget, formatDate } from '../../utils/format'
+import { projectShape } from '../../utils/propShapes'
 
 export default function ProjectCard({ project }) {
   return (
@@ -26,4 +27,8 @@ export default function ProjectCard({ project }) {
       <SkillList skills={project.skills} />
     </Card>
   )
+}
+
+ProjectCard.propTypes = {
+  project: projectShape.isRequired,
 }

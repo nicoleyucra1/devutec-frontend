@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 // Buscador chico con lupa para filtrar una lista que ya está en pantalla
 export default function SearchField({ value, onChange, placeholder, label, className = '' }) {
   return (
@@ -18,4 +20,12 @@ export default function SearchField({ value, onChange, placeholder, label, class
       />
     </label>
   )
+}
+
+SearchField.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  label: PropTypes.string,
+  className: PropTypes.string,
 }

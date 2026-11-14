@@ -4,6 +4,8 @@ import { useAuth } from '../../hooks/useAuth'
 import Logo from '../brand/Logo'
 import ButtonLink from '../projects/ButtonLink'
 import { initials, linksForRole, ROLE_LABELS } from './navLinks'
+import PropTypes from 'prop-types'
+import { userShape } from '../../utils/propShapes'
 
 const desktopLinkClass = ({ isActive }) =>
   `relative flex h-full items-center text-sm transition-colors after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 ${
@@ -168,4 +170,10 @@ export default function Navbar() {
       )}
     </header>
   )
+}
+
+UserMenuItems.propTypes = {
+  user: userShape.isRequired,
+  onNavigate: PropTypes.func,
+  onLogout: PropTypes.func.isRequired,
 }

@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { ToastContext } from './toastContext'
+import PropTypes from 'prop-types'
 
 const DURATION_MS = 4000
 
@@ -57,4 +58,8 @@ export function ToastProvider({ children }) {
       </div>
     </ToastContext.Provider>
   )
+}
+
+ToastProvider.propTypes = {
+  children: PropTypes.node,
 }

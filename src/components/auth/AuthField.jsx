@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 // Campo de las páginas de Ingresar y Crear cuenta: etiqueta arriba, caja de 49 px y un espacio opcional a la derecha
 // (trailing) para un botón como "mostrar contraseña". El error aparece debajo con el ícono de "!".
 export default function AuthField({ label, name, error, trailing, ...inputProps }) {
@@ -32,4 +34,11 @@ export default function AuthField({ label, name, error, trailing, ...inputProps 
       )}
     </div>
   )
+}
+
+AuthField.propTypes = {
+  label: PropTypes.node.isRequired,
+  name: PropTypes.string.isRequired,
+  error: PropTypes.node,
+  trailing: PropTypes.node,
 }

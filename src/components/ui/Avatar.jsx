@@ -1,4 +1,5 @@
 import { initials } from '../layout/navLinks'
+import PropTypes from 'prop-types'
 
 const SIZES = {
   sm: 'h-[26px] w-[26px] text-[8px]',
@@ -16,4 +17,10 @@ export default function Avatar({ name, size = 'md', className = '' }) {
       {initials(name)}
     </span>
   )
+}
+
+Avatar.propTypes = {
+  name: PropTypes.string,
+  size: PropTypes.oneOf(Object.keys(SIZES)),
+  className: PropTypes.string,
 }

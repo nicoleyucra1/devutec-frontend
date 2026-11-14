@@ -12,6 +12,8 @@ import { useMyFreelancerProfile } from '../../hooks/useMyFreelancerProfile'
 import { freelancerService } from '../../services/freelancerService'
 import { errorMessage } from '../../utils/errorMessage'
 import { validateFreelancerProfile } from '../../utils/validation'
+import PropTypes from 'prop-types'
+import { freelancerProfileShape } from '../../utils/propShapes'
 
 // Los ciclos de pregrado en UTEC van del 1 al 10
 const CICLOS = Array.from({ length: 10 }, (_, index) => index + 1)
@@ -205,4 +207,9 @@ export default function EditMyProfile() {
       </Card>
     </main>
   )
+}
+
+ProfileForm.propTypes = {
+  profile: freelancerProfileShape.isRequired,
+  onSaved: PropTypes.func.isRequired,
 }

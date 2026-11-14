@@ -4,6 +4,7 @@ import ErrorState from './ui/ErrorState'
 import { ERROR_ICONS } from './ui/errorIcons'
 import { buttonClass } from './ui/buttonClass'
 import SupportButton from './ui/SupportButton'
+import PropTypes from 'prop-types'
 
 // Atrapa los errores de render de toda la app para que una falla no deje la pantalla en blanco.
 // Tiene que ser un componente de clase: React no tiene un hook equivalente.
@@ -56,4 +57,8 @@ export default class ErrorBoundary extends Component {
       </div>
     )
   }
+}
+
+ErrorBoundary.propTypes = {
+  children: PropTypes.node,
 }

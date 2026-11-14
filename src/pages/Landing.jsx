@@ -8,6 +8,7 @@ import PublicHeader from '../components/layout/PublicHeader'
 import ButtonLink from '../components/projects/ButtonLink'
 import Badge from '../components/ui/Badge'
 import { useInView } from '../hooks/useInView'
+import PropTypes from 'prop-types'
 
 const shell = 'mx-auto w-full max-w-[1200px] px-6'
 const kicker = 'text-[11px] font-semibold tracking-[0.13em]'
@@ -329,4 +330,10 @@ export default function Landing() {
       <SiteFooter />
     </>
   )
+}
+
+Avatar.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
+  style: PropTypes.object,
 }

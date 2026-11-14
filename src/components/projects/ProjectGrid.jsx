@@ -1,5 +1,7 @@
 import Skeleton from '../ui/Skeleton'
 import ProjectCard from './ProjectCard'
+import PropTypes from 'prop-types'
+import { projectShape } from '../../utils/propShapes'
 
 const GRID = 'grid gap-4 sm:grid-cols-2 lg:grid-cols-3'
 
@@ -26,4 +28,9 @@ export default function ProjectGrid({ projects, loading }) {
       ))}
     </section>
   )
+}
+
+ProjectGrid.propTypes = {
+  projects: PropTypes.arrayOf(projectShape),
+  loading: PropTypes.bool,
 }

@@ -12,6 +12,8 @@ import { useAuth } from '../../hooks/useAuth'
 import { useFreelancerProfile } from '../../hooks/useFreelancerProfile'
 import { useUserReviews } from '../../hooks/useUserReviews'
 import { formatBudget, formatDate } from '../../utils/format'
+import PropTypes from 'prop-types'
+import { idType, freelancerProfileShape } from '../../utils/propShapes'
 
 const RATING_FILTERS = [
   { value: '', label: 'Todas las calificaciones' },
@@ -215,4 +217,17 @@ export default function FreelancerProfile() {
       </div>
     </main>
   )
+}
+
+Stars.propTypes = {
+  rating: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+}
+
+ProfileHeader.propTypes = {
+  profile: freelancerProfileShape.isRequired,
+  isOwner: PropTypes.bool,
+}
+
+ReviewList.propTypes = {
+  userId: idType.isRequired,
 }
