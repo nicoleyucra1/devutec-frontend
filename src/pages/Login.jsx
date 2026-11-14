@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import AuthEditorial from '../components/auth/AuthEditorial'
 import AuthField from '../components/auth/AuthField'
+import GoogleSignIn from '../components/auth/GoogleSignIn'
 import PasswordToggle from '../components/auth/PasswordToggle'
 import Cuyi from '../components/brand/Cuyi'
 import PublicHeader from '../components/layout/PublicHeader'
@@ -117,6 +118,10 @@ export default function Login() {
                 {submitting ? 'Ingresando...' : 'Ingresar'}
               </Button>
             </form>
+
+            <div className="mt-5">
+              <GoogleSignIn onSuccess={() => navigate(redirectTo, { replace: true })} />
+            </div>
 
             <p className="mt-7 text-center text-xs text-muted">
               ¿Aún no tienes cuenta?{' '}
