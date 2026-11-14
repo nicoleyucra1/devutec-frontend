@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import AuthField from '../components/auth/AuthField'
+import GoogleSignIn from '../components/auth/GoogleSignIn'
 import PasswordToggle from '../components/auth/PasswordToggle'
 import RegisterAside from '../components/auth/RegisterAside'
 import PublicHeader from '../components/layout/PublicHeader'
@@ -246,6 +247,10 @@ export default function Register() {
                 </Button>
               </div>
             </form>
+
+            <div className="mt-5">
+              <GoogleSignIn rol={values.rol} text="signup_with" onSuccess={() => navigate('/', { replace: true })} />
+            </div>
 
             <p className="mt-7 text-center text-xs text-muted lg:text-left">
               ¿Ya tienes cuenta?{' '}
