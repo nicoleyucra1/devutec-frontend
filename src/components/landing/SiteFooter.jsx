@@ -32,7 +32,12 @@ export default function SiteFooter() {
             <a href="#como-funciona" className={linkClass}>
               Cómo funciona el escrow
             </a>
-            <span className="text-xs text-white">Términos y condiciones</span>
+            <Link to="/terminos" className={linkClass}>
+              Términos y condiciones
+            </Link>
+            <Link to="/privacidad" className={linkClass}>
+              Política de privacidad
+            </Link>
           </nav>
 
           <div className="flex flex-col items-start gap-3">
