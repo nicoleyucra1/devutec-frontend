@@ -99,7 +99,7 @@ function RoleCard({ role, selected, onChange }) {
 // Las reglas de la contraseña se marcan en verde apenas se cumplen
 function PasswordRules({ password }) {
   return (
-    <ul aria-label="Requisitos de la contraseña" className="flex flex-col gap-2 sm:col-span-2 sm:flex-row sm:gap-[18px]">
+    <ul aria-label="Requisitos de la contraseña" className="flex flex-col gap-2 sm:col-span-2 sm:flex-row sm:flex-wrap sm:gap-x-[18px] sm:gap-y-2">
       {PASSWORD_RULES.map((rule) => {
         const valid = rule.test(password)
         return (
