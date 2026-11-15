@@ -25,6 +25,7 @@ const EditMyProfile = lazy(() => import('./pages/freelancers/EditMyProfile'))
 const FreelancerProfile = lazy(() => import('./pages/freelancers/FreelancerProfile'))
 const AdminPayments = lazy(() => import('./pages/admin/AdminPayments'))
 const LegalPage = lazy(() => import('./pages/legal/LegalPage'))
+const PaymentReturn = lazy(() => import('./pages/PaymentReturn'))
 
 // En "/" quien no inició sesión ve la landing; con sesión, su resumen
 function Start() {
@@ -43,6 +44,8 @@ export default function AppRoutes() {
         <Route path="/session-expired" element={<SessionExpired />} />
         <Route path="/terminos" element={<LegalPage doc="terms" />} />
         <Route path="/privacidad" element={<LegalPage doc="privacy" />} />
+        {/* Página puente del pago desde la app (pública: en el navegador del celular no hay sesión) */}
+        <Route path="/pago-listo" element={<PaymentReturn />} />
 
         {/* Requieren sesión */}
         <Route element={<PrivateRoute />}>
