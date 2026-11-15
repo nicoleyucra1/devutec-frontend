@@ -46,6 +46,16 @@ body {
      En modo claro valen lo mismo que ink y que el blanco, así nada cambia de cómo se ve. */
   --color-night: #0e0e0c;
   --color-on-ink: #ffffff;
+  /* raised: menús y modales (en claro son blancos como las tarjetas) */
+  --color-raised: #ffffff;
+
+  /* Cabecera de las tablas, borde del botón secundario y las dos piezas del logo (en oscuro, la versión "night") */
+  --color-table-head: #efede7;
+  --color-line-strong: #bab7b0;
+  --color-logo-dev: #0e0e0c;
+  --color-logo-utec: #1f6f4a;
+  /* Trazo de resaltador del titular de la landing ("apruebes.") */
+  --color-highlight: #d7f25c;
 
   /* Acento de links y estados activos: el verde de garantía */
   --color-primary-50: #eaf3ed;
@@ -94,68 +104,84 @@ body {
   --font-serif: 'Instrument Serif', Georgia, serif;
 }
 
-/* Paleta oscura: la misma de la app (theme.js → darkColors), para que la web y el celular se vean iguales.
+/* Paleta oscura del sistema de diseño (Tokens claro y oscuro): cálida como el papel, nunca negro puro,
+   y todos los textos pasan AA. Rojo y azul se calcularon con el mismo criterio (6.8:1 y 7.9:1 sobre las tarjetas).
    Se cambian las variables, así bg-surface, text-ink, border-line, gray-* y el resto se oscurecen solos. */
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --color-ink: #f5f3ee;
-  --color-paper: #0e0e0c;
+  --color-ink: #f2f0ea;
+  --color-paper: #11110f;
   --color-surface: #1a1a17;
-  --color-line: #2c2c27;
+  --color-line: #2f2e2a;
   --color-soft: #26261f;
-  --color-muted: #a3a197;
-  --color-escrow: #5fbf8e;
-  --color-escrow-light: #16301f;
-  --color-pending: #e3a64a;
+  --color-muted: #a3a098;
+  --color-escrow: #6cc79a;
+  --color-escrow-light: #173023;
+  --color-pending: #e3a849;
   --color-pending-light: #33270f;
-  --color-error: #f0705f;
+  --color-error: #f2826f;
   --color-error-light: #3a1a15;
-  --color-progress: #7c9bf0;
+  --color-progress: #93adf4;
   --color-progress-light: #1a2440;
 
   --color-night: #1a1a17;
-  --color-on-ink: #0e0e0c;
+  /* Menús y modales: en oscuro, más claro = más arriba */
+  --color-raised: #23221f;
+  --color-on-ink: #11110f;
 
-  --color-primary-50: #16301f;
+  --color-table-head: #22221e;
+  --color-line-strong: #45443f;
+  --color-logo-dev: #f2f0ea;
+  --color-logo-utec: #d7f25c;
+  /* En oscuro el texto es verde claro: el resaltador pasa a verde profundo para que se lea encima */
+  --color-highlight: #2f5a42;
+
+  --color-primary-50: #173023;
   --color-primary-100: #1d3b28;
-  --color-primary-600: #5fbf8e;
+  --color-primary-600: #6cc79a;
   --color-primary-700: #7fd1a6;
 
-  --color-gray-50: #0e0e0c;
+  --color-gray-50: #11110f;
   --color-gray-100: #26261f;
-  --color-gray-200: #2c2c27;
+  --color-gray-200: #2f2e2a;
   --color-gray-300: #3a3a34;
   --color-gray-400: #6f6d67;
-  --color-gray-500: #a3a197;
+  --color-gray-500: #a3a098;
   --color-gray-600: #c9c6be;
   --color-gray-700: #dedbd3;
   --color-gray-800: #ece9e2;
-  --color-gray-900: #f5f3ee;
+  --color-gray-900: #f2f0ea;
 
-  --color-indigo-50: #16301f;
+  --color-indigo-50: #173023;
   --color-indigo-200: #2f5a42;
-  --color-indigo-600: #5fbf8e;
+  --color-indigo-600: #6cc79a;
   --color-indigo-700: #7fd1a6;
 
-  --color-green-50: #16301f;
-  --color-green-100: #16301f;
+  --color-green-50: #173023;
+  --color-green-100: #173023;
   --color-green-200: #2f5a42;
-  --color-green-800: #5fbf8e;
+  --color-green-800: #6cc79a;
 
   --color-red-50: #3a1a15;
   --color-red-100: #3a1a15;
   --color-red-200: #5c2a22;
-  --color-red-400: #f0705f;
-  --color-red-600: #f0705f;
-  --color-red-700: #f0705f;
+  --color-red-400: #f2826f;
+  --color-red-600: #f2826f;
+  --color-red-700: #f2826f;
   --color-red-800: #f59b8e;
 
   --color-yellow-100: #33270f;
-  --color-yellow-400: #e3a64a;
-  --color-yellow-500: #e3a64a;
-  --color-yellow-800: #e3a64a;
-  --color-amber-500: #e3a64a;
+  --color-yellow-400: #e3a849;
+  --color-yellow-500: #e3a849;
+  --color-yellow-800: #e3a849;
+  --color-amber-500: #e3a849;
+}
+
+/* La lima es clara en los dos modos: en oscuro, el texto que va encima (contadores, sellos, el globo de Cuyi)
+   sería claro y no se leería. Esta regla lo deja oscuro sin tocar cada componente. */
+[data-theme="dark"] .bg-lime {
+  color: var(--color-night);
 }
 
 /* Palabras destacadas en cursiva, como "Pago *protegido*." */
