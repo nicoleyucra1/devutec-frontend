@@ -22,6 +22,13 @@ const CONTENT = {
     text: 'Cancelaste el pago. Vuelve a la app DevUTEC para intentarlo de nuevo cuando quieras.',
     seal: null,
   },
+  // Sin estado (o con uno desconocido) no se sabe cómo terminó: la app es la que revisa el pago al abrirse
+  neutral: {
+    anim: 'saluda',
+    title: ['Vuelve a la app', 'para ver tu pago.'],
+    text: 'La app DevUTEC revisa con Stripe si el pago se completó y te muestra el estado del contrato.',
+    seal: null,
+  },
 }
 
 // Página puente del pago desde la app. Stripe solo puede volver a un link https, así que vuelve aquí
@@ -29,7 +36,8 @@ const CONTENT = {
 // La app es la que confirma el pago con el backend al abrirse.
 export default function PaymentReturn() {
   const [params] = useSearchParams()
-  const content = CONTENT[params.get('estado')] ?? CONTENT.ok
+  const estado = params.get('estado')
+  const content = estado === 'ok' || estado === 'cancelado' ? CONTENT[estado] : CONTENT.neutral
   const back = params.get('volver') ?? ''
   const appLink = APP_LINK.test(back) ? back : null
 
