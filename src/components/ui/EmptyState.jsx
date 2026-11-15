@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 // Mensaje para cuando una lista no tiene elementos, con una acción opcional
 export default function EmptyState({ title, message, action }) {
   return (
@@ -13,4 +15,10 @@ export default function EmptyState({ title, message, action }) {
       {action && <div className="mt-5">{action}</div>}
     </div>
   )
+}
+
+EmptyState.propTypes = {
+  title: PropTypes.node.isRequired,
+  message: PropTypes.node,
+  action: PropTypes.node,
 }

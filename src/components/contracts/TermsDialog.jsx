@@ -1,6 +1,8 @@
 import Button from '../ui/Button'
 import Modal from '../ui/Modal'
 import { formatBudget, formatDate } from '../../utils/format'
+import PropTypes from 'prop-types'
+import { contractShape } from '../../utils/propShapes'
 
 const shield = (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -41,4 +43,10 @@ export default function TermsDialog({ open, contract, onClose }) {
       </div>
     </Modal>
   )
+}
+
+TermsDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  contract: contractShape,
+  onClose: PropTypes.func.isRequired,
 }

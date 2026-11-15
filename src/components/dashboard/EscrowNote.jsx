@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 // Recordatorio del pago en garantía al lado de las acciones del resumen. En celular no se muestra.
 export default function EscrowNote({ active }) {
@@ -19,4 +20,8 @@ export default function EscrowNote({ active }) {
       </Link>
     </aside>
   )
+}
+
+EscrowNote.propTypes = {
+  active: PropTypes.bool,
 }

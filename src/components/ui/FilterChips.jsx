@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 // Fila de filtros tipo píldora. La opción elegida queda en negro y cada una puede mostrar cuántos hay.
 export default function FilterChips({ options, value, onChange, label }) {
   return (
@@ -23,4 +25,11 @@ export default function FilterChips({ options, value, onChange, label }) {
       })}
     </div>
   )
+}
+
+FilterChips.propTypes = {
+  options: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string.isRequired, label: PropTypes.node.isRequired })).isRequired,
+  value: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+  label: PropTypes.string,
 }

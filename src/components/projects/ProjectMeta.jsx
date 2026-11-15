@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 // Datos clave del proyecto: presupuesto, fecha límite y los extras que se pasen
 export default function ProjectMeta({ items }) {
   return (
@@ -10,4 +12,8 @@ export default function ProjectMeta({ items }) {
       ))}
     </dl>
   )
+}
+
+ProjectMeta.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.shape({ label: PropTypes.string.isRequired, value: PropTypes.node })).isRequired,
 }

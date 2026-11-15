@@ -1,4 +1,6 @@
 import { useId, useRef, useState } from 'react'
+import PropTypes from 'prop-types'
+import { idType, skillShape } from '../../utils/propShapes'
 
 // Las que se sugieren antes de escribir, si existen en el catálogo
 const POPULAR = ['React', 'JavaScript', 'Python', 'Java', 'Figma', 'Diseño UX/UI', 'WordPress', 'Excel']
@@ -172,4 +174,17 @@ export default function SkillPicker({ skills = [], value = [], onChange, label =
       )}
     </div>
   )
+}
+
+Highlight.propTypes = {
+  text: PropTypes.string.isRequired,
+  query: PropTypes.string,
+}
+
+SkillPicker.propTypes = {
+  skills: PropTypes.arrayOf(skillShape),
+  value: PropTypes.arrayOf(idType),
+  onChange: PropTypes.func.isRequired,
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
 }

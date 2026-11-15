@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 // Botón del ojo para mostrar u ocultar la contraseña; va dentro de AuthField como trailing
 export default function PasswordToggle({ shown, onToggle }) {
   return (
@@ -15,4 +17,9 @@ export default function PasswordToggle({ shown, onToggle }) {
       </svg>
     </button>
   )
+}
+
+PasswordToggle.propTypes = {
+  shown: PropTypes.bool.isRequired,
+  onToggle: PropTypes.func.isRequired,
 }

@@ -1,3 +1,6 @@
+import PropTypes from 'prop-types'
+import { skillShape } from '../../utils/propShapes'
+
 // Habilidades del proyecto como etiquetas
 export default function SkillList({ skills }) {
   if (!skills?.length) return null
@@ -10,4 +13,8 @@ export default function SkillList({ skills }) {
       ))}
     </ul>
   )
+}
+
+SkillList.propTypes = {
+  skills: PropTypes.arrayOf(skillShape),
 }

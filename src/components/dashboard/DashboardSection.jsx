@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { linkTo } from '../../utils/propShapes'
 
 // Bloque del dashboard con título y un link opcional a la página completa
 export default function DashboardSection({ title, linkTo, linkLabel, children }) {
@@ -15,4 +17,11 @@ export default function DashboardSection({ title, linkTo, linkLabel, children })
       {children}
     </section>
   )
+}
+
+DashboardSection.propTypes = {
+  title: PropTypes.node.isRequired,
+  linkTo: linkTo,
+  linkLabel: PropTypes.node,
+  children: PropTypes.node,
 }

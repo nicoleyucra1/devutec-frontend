@@ -15,6 +15,7 @@ import { useProjectActions } from '../../hooks/useProjectActions'
 import { useAuth } from '../../hooks/useAuth'
 import { useToast } from '../../hooks/useToast'
 import { formatBudget, formatDate } from '../../utils/format'
+import PropTypes from 'prop-types'
 
 // El dueño llega desde Mis proyectos; el resto, desde Explorar
 function ProjectBreadcrumbs({ title, mine }) {
@@ -143,4 +144,9 @@ export default function ProjectDetail() {
       />
     </main>
   )
+}
+
+ProjectBreadcrumbs.propTypes = {
+  title: PropTypes.string,
+  mine: PropTypes.bool,
 }

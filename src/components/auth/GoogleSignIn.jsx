@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { errorMessage } from '../../utils/errorMessage'
+import PropTypes from 'prop-types'
 
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID
 const SCRIPT_SRC = 'https://accounts.google.com/gsi/client'
@@ -144,4 +145,10 @@ export default function GoogleSignIn({ onSuccess, rol: presetRol, text = 'contin
       )}
     </div>
   )
+}
+
+GoogleSignIn.propTypes = {
+  onSuccess: PropTypes.func,
+  rol: PropTypes.oneOf(['CLIENT', 'FREELANCER']),
+  text: PropTypes.oneOf(['signin_with', 'signup_with', 'continue_with', 'signin']),
 }

@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { sessionExpiry } from '../utils/sessionExpiry'
+import PropTypes from 'prop-types'
 
 // Protege las rutas hijas. Con roles, además exige que el usuario tenga uno de ellos.
 export default function PrivateRoute({ roles }) {
@@ -17,4 +18,8 @@ export default function PrivateRoute({ roles }) {
     return <Navigate to="/" replace />
   }
   return <Outlet />
+}
+
+PrivateRoute.propTypes = {
+  roles: PropTypes.arrayOf(PropTypes.oneOf(['CLIENT', 'FREELANCER', 'ADMIN'])),
 }

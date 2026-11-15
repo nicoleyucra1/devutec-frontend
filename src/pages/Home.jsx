@@ -3,6 +3,7 @@ import { useAuth } from '../hooks/useAuth'
 import AdminDashboard from './dashboard/AdminDashboard'
 import ClientDashboard from './dashboard/ClientDashboard'
 import FreelancerDashboard from './dashboard/FreelancerDashboard'
+import { userShape } from '../utils/propShapes'
 
 const ROLE_LABELS = {
   FREELANCER: 'Cuenta de freelancer',
@@ -47,4 +48,8 @@ export default function Home() {
       {user.rol === 'ADMIN' && <AdminDashboard />}
     </main>
   )
+}
+
+QuickActions.propTypes = {
+  user: userShape.isRequired,
 }

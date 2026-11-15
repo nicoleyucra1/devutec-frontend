@@ -4,6 +4,7 @@ import ProjectStatusBadge from './ProjectStatusBadge'
 import ProjectMeta from './ProjectMeta'
 import SkillList from './SkillList'
 import { formatBudget, formatDate } from '../../utils/format'
+import { projectShape } from '../../utils/propShapes'
 
 // Toda la tarjeta lleva al proyecto: el link del título se estira sobre la tarjeta con un ::after
 // (sigue siendo un solo link, así que el lector de pantalla y el Tab lo leen una vez, con el título)
@@ -31,4 +32,8 @@ export default function ProjectCard({ project }) {
       <SkillList skills={project.skills} />
     </Card>
   )
+}
+
+ProjectCard.propTypes = {
+  project: projectShape.isRequired,
 }

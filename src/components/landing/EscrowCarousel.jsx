@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { prefersReducedMotion } from '../../utils/motion'
+import PropTypes from 'prop-types'
 
 const STEPS = ['Retenido', 'Entregado', 'Liberado']
 
@@ -277,4 +278,30 @@ export default function EscrowCarousel() {
       </div>
     </section>
   )
+}
+
+Person.propTypes = {
+  initials: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  name: PropTypes.string.isRequired,
+}
+
+StepDot.propTypes = {
+  index: PropTypes.number.isRequired,
+  step: PropTypes.number.isRequired,
+}
+
+SlideCard.propTypes = {
+  slide: PropTypes.shape({
+    amount: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    status: PropTypes.string,
+    client: PropTypes.shape({ initials: PropTypes.string, name: PropTypes.string }).isRequired,
+    freelancer: PropTypes.shape({ initials: PropTypes.string, name: PropTypes.string, role: PropTypes.string }).isRequired,
+    step: PropTypes.number.isRequired,
+    note: PropTypes.string,
+    detail: PropTypes.string,
+  }).isRequired,
+  className: PropTypes.string,
+  style: PropTypes.object,
 }
