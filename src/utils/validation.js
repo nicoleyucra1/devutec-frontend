@@ -59,7 +59,9 @@ function isHttpUrl(value) {
 
 // Todos los campos son opcionales: solo se valida lo que el freelancer llenó.
 // Si marca egresado, el ciclo no se valida porque no se envía.
-export function validateFreelancerProfile({ universidad, ciclo, egresado, tarifaHora, portafolioUrl, githubUsername }) {
+export const MAX_PRESENTACION = 500
+
+export function validateFreelancerProfile({ universidad, ciclo, egresado, tarifaHora, portafolioUrl, githubUsername, presentacion = '' }) {
   const errors = {}
   if (universidad.trim().length > 255) errors.universidad = 'La universidad no puede tener más de 255 caracteres'
 
@@ -77,6 +79,10 @@ export function validateFreelancerProfile({ universidad, ciclo, egresado, tarifa
   const github = githubUsername.trim()
   if (github && !GITHUB_USERNAME_REGEX.test(github)) {
     errors.githubUsername = 'El usuario de GitHub solo puede tener letras, números y guiones (máx. 39)'
+  }
+
+  if (presentacion.trim().length > MAX_PRESENTACION) {
+    errors.presentacion = `La presentación no puede tener más de ${MAX_PRESENTACION} caracteres`
   }
   return errors
 }
