@@ -3,15 +3,21 @@ import PropTypes from 'prop-types'
 
 // Número grande del resumen con su etiqueta arriba y una nota abajo.
 // tone="dark" es la tarjeta del dinero: fondo tinta, etiqueta lima y número un poco más chico.
+// tone="green" es la del dinero ya liberado (resumen del freelancer): fondo verde y textos verde claro.
+const TONES = {
+  light: { card: 'border-line bg-surface', label: 'text-muted', note: 'text-muted' },
+  dark: { card: 'border-ink bg-ink text-white', label: 'text-lime', note: 'text-white/60' },
+  green: { card: 'border-escrow bg-escrow text-white', label: 'text-[#b9d4c4]', note: 'text-[#b9d4c4]' },
+}
+
 export default function NumberCard({ label, icon, value, note, loading = false, tone = 'light', className = '' }) {
-  const dark = tone === 'dark'
+  const dark = tone !== 'light'
+  const colors = TONES[tone] ?? TONES.light
   return (
     <article
-      className={`flex min-h-[165px] flex-col justify-between rounded-2xl border p-[18px] md:min-h-[215px] md:p-6 ${
-        dark ? 'border-ink bg-ink text-white' : 'border-line bg-surface'
-      } ${className}`}
+      className={`flex min-h-[165px] flex-col justify-between rounded-2xl border p-[18px] md:min-h-[215px] md:p-6 ${colors.card} ${className}`}
     >
-      <span className={`flex items-center gap-[7px] text-[9px] font-semibold tracking-[0.11em] ${dark ? 'text-lime' : 'text-muted'}`}>
+      <span className={`flex items-center gap-[7px] text-[9px] font-semibold tracking-[0.11em] ${colors.label}`}>
         {icon}
         {label}
       </span>
@@ -26,7 +32,7 @@ export default function NumberCard({ label, icon, value, note, loading = false, 
           {value}
         </div>
       )}
-      <small className={`text-[10px] ${dark ? 'text-white/60' : 'text-muted'}`}>{loading ? ' ' : note}</small>
+      <small className={`text-[10px] ${colors.note}`}>{loading ? ' ' : note}</small>
     </article>
   )
 }
@@ -37,6 +43,6 @@ NumberCard.propTypes = {
   value: PropTypes.node,
   note: PropTypes.node,
   loading: PropTypes.bool,
-  tone: PropTypes.oneOf(['light', 'dark']),
+  tone: PropTypes.oneOf(Object.keys(TONES)),
   className: PropTypes.string,
 }
