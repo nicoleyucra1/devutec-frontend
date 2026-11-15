@@ -132,7 +132,7 @@ export default function Register() {
   const [searchParams] = useSearchParams()
   const presetRole = ROLES.some((role) => role.value === searchParams.get('rol')) ? searchParams.get('rol') : 'CLIENT'
 
-  const [values, setValues] = useState({ nombre: '', email: '', password: '', rol: presetRole })
+  const [values, setValues] = useState({ nombre: '', email: '', password: '', rol: presetRole, terms: false })
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState({})
   const [submitted, setSubmitted] = useState(false)
@@ -144,7 +144,9 @@ export default function Register() {
   const role = ROLES.find((item) => item.value === values.rol) ?? ROLES[0]
 
   const handleChange = (event) => {
-    const next = { ...values, [event.target.name]: event.target.value }
+    const { name, type, value, checked } = event.target
+    // La casilla de términos guarda true o false; el resto de campos, su texto
+    const next = { ...values, [name]: type === 'checkbox' ? checked : value }
     setValues(next)
     if (submitted) setErrors(validateRegister(next))
   }
@@ -166,6 +168,7 @@ export default function Register() {
         email: values.email.trim(),
         password: values.password,
         rol: values.rol,
+        acceptedTerms: values.terms,
       })
       toast.success('Tu cuenta se creó correctamente')
       navigate('/', { replace: true })
@@ -236,6 +239,37 @@ export default function Register() {
                   trailing={<PasswordToggle shown={showPassword} onToggle={() => setShowPassword((shown) => !shown)} />}
                 />
                 <PasswordRules password={values.password} />
+
+                {/* El backend guarda la fecha en que se aceptan. Los links abren en otra pestaña para no perder el formulario */}
+                <div className="sm:col-span-2">
+                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-muted">
+                    <input
+                      type="checkbox"
+                      name="terms"
+                      checked={values.terms}
+                      onChange={handleChange}
+                      aria-invalid={Boolean(errors.terms)}
+                      aria-describedby={errors.terms ? 'terms-error' : undefined}
+                      className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-escrow"
+                    />
+                    <span>
+                      Acepto los{' '}
+                      <Link to="/terminos" target="_blank" rel="noreferrer" className="font-semibold text-ink underline underline-offset-2">
+                        Términos y condiciones
+                      </Link>{' '}
+                      y la{' '}
+                      <Link to="/privacidad" target="_blank" rel="noreferrer" className="font-semibold text-ink underline underline-offset-2">
+                        Política de privacidad
+                      </Link>
+                      .
+                    </span>
+                  </label>
+                  {errors.terms && (
+                    <p id="terms-error" className="mt-1.5 text-xs text-error">
+                      {errors.terms}
+                    </p>
+                  )}
+                </div>
 
                 {submitError && (
                   <p role="alert" className="rounded-[10px] bg-error-light px-3.5 py-3 text-sm text-error sm:col-span-2">

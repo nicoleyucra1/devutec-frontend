@@ -33,7 +33,7 @@ export function validateLogin({ email, password }) {
   return errors
 }
 
-export function validateRegister({ nombre, email, password, rol }) {
+export function validateRegister({ nombre, email, password, rol, terms }) {
   const errors = {}
   if (!nombre.trim()) errors.nombre = rol === 'CLIENT' ? 'El nombre del negocio es obligatorio' : 'Tu nombre es obligatorio'
   const emailError = validateEmail(email)
@@ -41,6 +41,7 @@ export function validateRegister({ nombre, email, password, rol }) {
   const passwordError = validatePassword(password)
   if (passwordError) errors.password = passwordError
   if (!rol) errors.rol = 'Elige si quieres contratar o trabajar'
+  if (!terms) errors.terms = 'Acepta los Términos y condiciones y la Política de privacidad para crear tu cuenta'
   return errors
 }
 
