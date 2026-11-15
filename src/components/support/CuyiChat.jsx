@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Cuyi from '../brand/Cuyi'
 import CuyiMessage from './CuyiMessage'
-import { FAQ } from './faq'
+import { FAQ, SUPPORT_EMAIL, SUPPORT_MAILTO } from './faq'
 import { useAuth } from '../../hooks/useAuth'
 import { supportService } from '../../services/supportService'
 
@@ -17,7 +17,10 @@ const HIDDEN_ON = ['/pago-listo', '/session-expired']
 function fallbackFor(status) {
   if (status === 429) return { text: 'Por hoy ya me hiciste muchas preguntas 😅 Mañana sigo. Mientras tanto, mira estas:', anim: 'duerme' }
   if (!status) return { text: 'Parece que no hay conexión con el servidor 😵 Revisa tu internet. Estas te pueden servir:', anim: 'confundido' }
-  return { text: 'Ahora no puedo pensar bien 😵 Pero estas preguntas frecuentes te pueden servir:', anim: 'confundido' }
+  return {
+    text: `Ahora no puedo pensar bien 😵 Mira estas preguntas frecuentes y, si no se resuelve, escríbele al equipo a ${SUPPORT_EMAIL}:`,
+    anim: 'confundido',
+  }
 }
 
 // Chat de ayuda: una burbuja con Cuyi abajo a la derecha que abre una conversación con él (IA de Gemini en el backend).
@@ -185,7 +188,10 @@ function ChatWindow() {
             </div>
             <p className="mt-1.5 text-center text-[10.5px] text-muted">
               Cuyi usa IA y puede equivocarse.
-              {remaining !== null && remaining <= 5 && ` Te quedan ${remaining} preguntas hoy.`}
+              {remaining !== null && remaining <= 5 && ` Te quedan ${remaining} preguntas hoy.`} ¿No se resolvió?{' '}
+              <a href={SUPPORT_MAILTO} className="font-semibold text-ink underline underline-offset-2">
+                Escríbenos
+              </a>
             </p>
           </form>
         </section>

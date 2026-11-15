@@ -1,11 +1,19 @@
 import PropTypes from 'prop-types'
 import Cuyi from '../brand/Cuyi'
+import { SUPPORT_EMAIL, SUPPORT_MAILTO } from './faq'
 
-// Convierte **negrita** en <strong> y respeta los saltos de línea de la respuesta
+// Convierte **negrita** en <strong> y el correo de soporte en un link que abre la app de correo
 function RichText({ text }) {
-  return text.split(/(\*\*[^*]+\*\*)/g).map((part, index) =>
-    part.startsWith('**') && part.endsWith('**') ? <strong key={index}>{part.slice(2, -2)}</strong> : part,
-  )
+  return text.split(/(\*\*[^*]+\*\*|devutec\.notificaciones@gmail\.com)/g).map((part, index) => {
+    if (part === SUPPORT_EMAIL) {
+      return (
+        <a key={index} href={SUPPORT_MAILTO} className="font-semibold text-escrow underline underline-offset-2">
+          {part}
+        </a>
+      )
+    }
+    return part.startsWith('**') && part.endsWith('**') ? <strong key={index}>{part.slice(2, -2)}</strong> : part
+  })
 }
 
 // Un mensaje del chat. Los de Cuyi llevan su carita al lado, como si él respondiera.
