@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 const ICON_TONES = {
   green: 'bg-escrow-light text-escrow',
   red: 'bg-error-light text-error',
+  amber: 'bg-pending-light text-pending',
   ink: 'bg-paper text-ink',
 }
 
