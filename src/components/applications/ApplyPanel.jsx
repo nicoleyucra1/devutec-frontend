@@ -136,9 +136,10 @@ export default function ApplyPanel({ project, application, contract, loading, on
   if (application?.status === 'REJECTED') {
     return (
       <StatusPanel
-        kicker="PROPUESTA NO ELEGIDA"
-        title="El cliente eligió otra propuesta."
-        text="No te desanimes: hay más proyectos esperando una buena propuesta."
+        // Mismo texto que el correo de rechazo: el cliente puede rechazar sin haber elegido a nadie
+        kicker="NOVEDADES SOBRE TU PROPUESTA"
+        title="El cliente decidió seguir con otra opción."
+        text="No te desanimes: hay más proyectos esperándote."
         action={
           <ButtonLink to="/projects" className="w-full">
             Explorar proyectos
