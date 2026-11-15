@@ -18,6 +18,9 @@ export const projectShape = PropTypes.shape({
   status: PropTypes.string,
   budget: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   deadline: PropTypes.string,
+  location: PropTypes.string,
+  clientId: idType,
+  createdAt: PropTypes.string,
   skills: PropTypes.arrayOf(skillShape),
 })
 
