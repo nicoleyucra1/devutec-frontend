@@ -96,7 +96,7 @@ export function ErrorSeal({ strong, text, avatar }) {
   return (
     <p
       className={`mt-[22px] inline-flex items-center gap-2.5 rounded-full py-2 pl-2 pr-4 text-left text-sm leading-[1.3] ${
-        avatar ? 'bg-soft text-muted' : 'bg-[#e7efe9] text-escrow'
+        avatar ? 'bg-soft text-muted' : 'bg-[#e7efe9] text-escrow dark:bg-escrow-light'
       }`}
     >
       <span

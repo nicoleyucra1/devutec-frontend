@@ -29,7 +29,7 @@ export default function Modal({ open, title, onClose, children, icon, iconTone =
     <dialog
       ref={ref}
       onCancel={handleCancel}
-      className="m-auto w-[calc(100%_-_2rem)] max-w-md rounded-[18px] p-8 text-ink shadow-[0_30px_80px_rgba(0,0,0,0.25)] backdrop:bg-night/55"
+      className="m-auto w-[calc(100%_-_2rem)] max-w-md rounded-[18px] bg-raised p-8 text-ink shadow-[0_30px_80px_rgba(0,0,0,0.25)] backdrop:bg-night/55"
     >
       {icon && (
         <span aria-hidden="true" className={`mb-5 grid h-12 w-12 place-items-center rounded-full ${ICON_TONES[iconTone] ?? ICON_TONES.green}`}>

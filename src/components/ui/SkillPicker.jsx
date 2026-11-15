@@ -102,7 +102,7 @@ export default function SkillPicker({
       </label>
       <div
         onClick={() => inputRef.current?.focus()}
-        className={`${hideLabel ? '' : 'mt-2 '}flex min-h-12 w-full cursor-text flex-wrap items-center gap-1.5 rounded-[10px] border ${error ? 'border-error' : 'border-gray-300'} bg-white px-2.5 py-2 transition focus-within:border-ink focus-within:ring-[3px] focus-within:ring-ink/5`}
+        className={`${hideLabel ? '' : 'mt-2 '}flex min-h-12 w-full cursor-text flex-wrap items-center gap-1.5 rounded-[10px] border ${error ? 'border-error' : 'border-gray-300'} bg-surface px-2.5 py-2 transition focus-within:border-ink focus-within:ring-[3px] focus-within:ring-ink/5`}
       >
         {selected.map((skill) => (
           <span key={skill.id} className="inline-flex items-center gap-1 rounded-[7px] border border-escrow bg-escrow-light py-1 pl-2.5 pr-1 text-xs font-semibold text-escrow">
@@ -114,7 +114,7 @@ export default function SkillPicker({
                 remove(skill.id)
               }}
               aria-label={`Quitar ${skill.name}`}
-              className="grid h-5 w-5 cursor-pointer place-items-center rounded-[5px] transition-colors hover:bg-escrow hover:text-white"
+              className="grid h-5 w-5 cursor-pointer place-items-center rounded-[5px] transition-colors hover:bg-escrow hover:text-white dark:hover:text-night"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                 <path d="m6 6 12 12M18 6 6 18" />

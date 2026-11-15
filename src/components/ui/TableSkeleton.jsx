@@ -37,7 +37,7 @@ export default function TableSkeleton({ columns, cells, rows = 5, label }) {
       <p role="status" className="sr-only">
         {label}
       </p>
-      <div aria-hidden="true" className={`hidden gap-x-4 bg-[#efede7] px-5 py-4 lg:grid ${columns}`}>
+      <div aria-hidden="true" className={`hidden gap-x-4 bg-table-head px-5 py-4 lg:grid ${columns}`}>
         {cells.map((cell, index) => (
           <Skeleton key={index} className="h-2 w-14" />
         ))}

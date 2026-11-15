@@ -32,7 +32,7 @@ export default function Pagination({ page, size, totalPages, totalElements, onPa
       <div className="flex items-center gap-1">
         <button
           type="button"
-          className={`${buttonClass} border-line hover:bg-white`}
+          className={`${buttonClass} border-line hover:bg-surface`}
           onClick={() => onPageChange(page - 1)}
           disabled={page <= 1}
         >
@@ -48,7 +48,7 @@ export default function Pagination({ page, size, totalPages, totalElements, onPa
               key={n}
               type="button"
               aria-current={n === page ? 'page' : undefined}
-              className={`${buttonClass} ${n === page ? 'border-ink bg-ink text-on-ink' : 'border-line hover:bg-white'}`}
+              className={`${buttonClass} ${n === page ? 'border-ink bg-ink text-on-ink' : 'border-line hover:bg-surface'}`}
               onClick={() => onPageChange(n)}
             >
               {n}
@@ -57,7 +57,7 @@ export default function Pagination({ page, size, totalPages, totalElements, onPa
         )}
         <button
           type="button"
-          className={`${buttonClass} border-line hover:bg-white`}
+          className={`${buttonClass} border-line hover:bg-surface`}
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages}
         >
@@ -70,7 +70,7 @@ export default function Pagination({ page, size, totalPages, totalElements, onPa
         <select
           value={size}
           onChange={(event) => onSizeChange(Number(event.target.value))}
-          className="rounded-lg border border-line bg-white px-2 py-1.5"
+          className="rounded-lg border border-line bg-surface px-2 py-1.5"
         >
           {SIZES.map((option) => (
             <option key={option} value={option}>

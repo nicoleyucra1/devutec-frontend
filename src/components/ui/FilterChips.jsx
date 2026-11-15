@@ -13,7 +13,7 @@ export default function FilterChips({ options, value, onChange, label }) {
             aria-pressed={active}
             onClick={() => onChange(option.value)}
             className={`inline-flex h-9 items-center gap-1.5 rounded-full border px-4 text-xs font-medium transition-colors duration-200 ${
-              active ? 'border-ink bg-ink text-on-ink' : 'border-line bg-surface text-ink hover:border-[#aaa69d]'
+              active ? 'border-ink bg-ink text-on-ink' : 'border-line bg-surface text-ink hover:border-gray-400'
             }`}
           >
             {option.label}
