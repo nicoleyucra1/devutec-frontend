@@ -1,31 +1,33 @@
-import { lazy, Suspense } from 'react'
+import { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
 import { useAuth } from './hooks/useAuth'
 import PageLoader from './components/ui/PageLoader'
+import { lazyPage } from './utils/lazyPage'
 
-// Cada página se carga solo cuando se visita
-const Login = lazy(() => import('./pages/Login'))
-const Register = lazy(() => import('./pages/Register'))
-const Home = lazy(() => import('./pages/Home'))
-const Landing = lazy(() => import('./pages/Landing'))
-const NotFound = lazy(() => import('./pages/NotFound'))
-const SessionExpired = lazy(() => import('./pages/SessionExpired'))
-const ProjectsExplore = lazy(() => import('./pages/projects/ProjectsExplore'))
-const ProjectDetail = lazy(() => import('./pages/projects/ProjectDetail'))
-const ProjectCreate = lazy(() => import('./pages/projects/ProjectCreate'))
-const ProjectEdit = lazy(() => import('./pages/projects/ProjectEdit'))
-const MyProjects = lazy(() => import('./pages/projects/MyProjects'))
-const ApplyToProject = lazy(() => import('./pages/applications/ApplyToProject'))
-const MyApplications = lazy(() => import('./pages/applications/MyApplications'))
-const ProjectApplications = lazy(() => import('./pages/applications/ProjectApplications'))
-const MyContracts = lazy(() => import('./pages/contracts/MyContracts'))
-const ContractDetail = lazy(() => import('./pages/contracts/ContractDetail'))
-const EditMyProfile = lazy(() => import('./pages/freelancers/EditMyProfile'))
-const FreelancerProfile = lazy(() => import('./pages/freelancers/FreelancerProfile'))
-const AdminPayments = lazy(() => import('./pages/admin/AdminPayments'))
-const LegalPage = lazy(() => import('./pages/legal/LegalPage'))
-const PaymentReturn = lazy(() => import('./pages/PaymentReturn'))
+// Cada página se carga solo cuando se visita. lazyPage recarga sola la web si mientras estaba abierta
+// se publicó una versión nueva y el archivo de la página cambió de nombre.
+const Login = lazyPage(() => import('./pages/Login'))
+const Register = lazyPage(() => import('./pages/Register'))
+const Home = lazyPage(() => import('./pages/Home'))
+const Landing = lazyPage(() => import('./pages/Landing'))
+const NotFound = lazyPage(() => import('./pages/NotFound'))
+const SessionExpired = lazyPage(() => import('./pages/SessionExpired'))
+const ProjectsExplore = lazyPage(() => import('./pages/projects/ProjectsExplore'))
+const ProjectDetail = lazyPage(() => import('./pages/projects/ProjectDetail'))
+const ProjectCreate = lazyPage(() => import('./pages/projects/ProjectCreate'))
+const ProjectEdit = lazyPage(() => import('./pages/projects/ProjectEdit'))
+const MyProjects = lazyPage(() => import('./pages/projects/MyProjects'))
+const ApplyToProject = lazyPage(() => import('./pages/applications/ApplyToProject'))
+const MyApplications = lazyPage(() => import('./pages/applications/MyApplications'))
+const ProjectApplications = lazyPage(() => import('./pages/applications/ProjectApplications'))
+const MyContracts = lazyPage(() => import('./pages/contracts/MyContracts'))
+const ContractDetail = lazyPage(() => import('./pages/contracts/ContractDetail'))
+const EditMyProfile = lazyPage(() => import('./pages/freelancers/EditMyProfile'))
+const FreelancerProfile = lazyPage(() => import('./pages/freelancers/FreelancerProfile'))
+const AdminPayments = lazyPage(() => import('./pages/admin/AdminPayments'))
+const LegalPage = lazyPage(() => import('./pages/legal/LegalPage'))
+const PaymentReturn = lazyPage(() => import('./pages/PaymentReturn'))
 
 // En "/" quien no inició sesión ve la landing; con sesión, su resumen
 function Start() {
