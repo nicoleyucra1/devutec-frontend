@@ -42,7 +42,8 @@ export function ToastProvider({ children }) {
   return (
     <ToastContext.Provider value={toast}>
       {children}
-      <div aria-live="polite" className="fixed right-4 bottom-4 z-50 flex w-80 max-w-[calc(100vw-2rem)] flex-col gap-2">
+      {/* Los avisos van encima de la burbuja de Cuyi (abajo a la derecha) para no taparla */}
+      <div aria-live="polite" className="fixed right-4 bottom-24 z-[60] flex w-80 max-w-[calc(100vw-2rem)] flex-col gap-2">
         {toasts.map((item) => (
           <div
             key={item.id}
