@@ -123,7 +123,7 @@ Si un componente lanza un error al renderizar, `components/ErrorBoundary.jsx` mu
 
 La web está publicada en **Vercel**, conectada a este repositorio:
 
-- **Producción:** cada merge a `main` se compila y se publica solo en https://devutec.vercel.app (también responde https://devutec-frontend.vercel.app).
+- **Producción:** cada merge a `main` se compila y se publica solo en https://devutec.vercel.app.
 - **Vista previa por PR:** cada pull request recibe un link propio para ver los cambios antes de unirlos. Esas vistas previas tienen otra dirección y el backend no las acepta por CORS, así que sirven para revisar la interfaz; para probar con datos se usa producción o `localhost`.
 - **Configuración en Vercel:** preset Vite (`npm run build`, carpeta `dist`) y la variable `VITE_API_URL=https://devutec.duckdns.org/api/v1` para Production y Preview.
 - **Rutas:** `vercel.json` redirige todas las rutas a `index.html`, para que al recargar o abrir un link directo (por ejemplo `/projects/5`) cargue la app en vez de dar 404.
@@ -132,7 +132,7 @@ La web está publicada en **Vercel**, conectada a este repositorio:
 
 El botón "Continuar con Google" de Ingresar y Crear cuenta solo aparece si `VITE_GOOGLE_CLIENT_ID` está configurado. Para activarlo:
 
-1. En **Google Cloud Console → APIs y servicios → Credenciales**, crear un ID de cliente OAuth de tipo **Aplicación web** con estos **orígenes de JavaScript autorizados**: `https://devutec.vercel.app`, `https://devutec-frontend.vercel.app` y `http://localhost:5173`.
+1. En **Google Cloud Console → APIs y servicios → Credenciales**, crear un ID de cliente OAuth de tipo **Aplicación web** con estos **orígenes de JavaScript autorizados**: `https://devutec.vercel.app` y `http://localhost:5173`.
 2. En **Vercel**, agregar `VITE_GOOGLE_CLIENT_ID` con ese ID (Production y Preview) y volver a desplegar.
 3. En el **servidor**, poner el mismo ID en `GOOGLE_CLIENT_IDS` (ver `deploy/README.md` del backend), porque el backend valida que el token de Google sea para esta app.
 
