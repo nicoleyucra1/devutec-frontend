@@ -13,6 +13,7 @@ import { usePayments } from '../../hooks/usePayments'
 import { contractCode, PAYMENT_STATUS, paymentCode, projectInitials } from '../../utils/contractStatus'
 import { formatBudget, formatDate } from '../../utils/format'
 import { countBy, sumBy } from '../../utils/stats'
+import PropTypes from 'prop-types'
 
 const FILTERS = ['ALL', 'HELD', 'RELEASED', 'REFUNDED']
 const SORTS = { recientes: 'Más recientes', monto: 'Mayor monto' }
@@ -250,4 +251,13 @@ export default function AdminPayments() {
       />
     </main>
   )
+}
+
+StatCard.propTypes = {
+  label: PropTypes.node.isRequired,
+  value: PropTypes.node,
+  hint: PropTypes.node,
+  loading: PropTypes.bool,
+  dark: PropTypes.bool,
+  children: PropTypes.node,
 }

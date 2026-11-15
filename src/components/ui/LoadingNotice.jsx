@@ -1,5 +1,6 @@
 import Cuyi from '../brand/Cuyi'
 import { useDelayedFlag } from '../../hooks/useDelayedFlag'
+import PropTypes from 'prop-types'
 
 // Aviso con Cuyi escribiendo para cargas lentas. Antes de 1 segundo basta con el esqueleto, así que no aparece.
 export default function LoadingNotice({ loading, what }) {
@@ -20,4 +21,9 @@ export default function LoadingNotice({ loading, what }) {
       </div>
     </div>
   )
+}
+
+LoadingNotice.propTypes = {
+  loading: PropTypes.bool,
+  what: PropTypes.string,
 }

@@ -19,6 +19,8 @@ import { useToast } from '../../hooks/useToast'
 import { projectCode, projectInitials } from '../../utils/contractStatus'
 import { errorMessage } from '../../utils/errorMessage'
 import { daysUntil, formatBudget, formatDate } from '../../utils/format'
+import PropTypes from 'prop-types'
+import { idType, projectShape } from '../../utils/propShapes'
 
 // Misma grilla en la cabecera, las filas y el esqueleto. En celular la tabla se desliza de lado.
 const ROW = 'grid min-w-[850px] grid-cols-[2fr_0.75fr_1fr_0.85fr_1fr_0.55fr] items-center gap-3.5 px-[18px]'
@@ -363,4 +365,31 @@ export default function MyProjects() {
       />
     </main>
   )
+}
+
+Icon.propTypes = {
+  children: PropTypes.node,
+}
+
+Applicants.propTypes = {
+  project: PropTypes.shape({
+    applications: PropTypes.arrayOf(PropTypes.shape({ id: idType.isRequired, freelancerName: PropTypes.string })),
+  }).isRequired,
+}
+
+ProjectRow.propTypes = {
+  project: projectShape.isRequired,
+  onDelete: PropTypes.func.isRequired,
+}
+
+Table.propTypes = {
+  children: PropTypes.node,
+  label: PropTypes.string,
+}
+
+Empty.propTypes = {
+  kicker: PropTypes.node,
+  title: PropTypes.node.isRequired,
+  text: PropTypes.node,
+  action: PropTypes.node,
 }

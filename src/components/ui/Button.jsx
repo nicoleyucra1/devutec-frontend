@@ -1,4 +1,5 @@
 import { buttonClass } from './buttonClass'
+import PropTypes from 'prop-types'
 
 export default function Button({
   children,
@@ -20,4 +21,13 @@ export default function Button({
       {children}
     </button>
   )
+}
+
+Button.propTypes = {
+  children: PropTypes.node,
+  variant: PropTypes.oneOf(['primary', 'secondary', 'ghost', 'danger', 'lime', 'inverse']),
+  type: PropTypes.oneOf(['button', 'submit', 'reset']),
+  loading: PropTypes.bool,
+  disabled: PropTypes.bool,
+  className: PropTypes.string,
 }

@@ -3,6 +3,8 @@ import Modal from '../ui/Modal'
 import ButtonLink from './ButtonLink'
 import { CONTRACT_STATUS, contractCode, PAYMENT_STATUS } from '../../utils/contractStatus'
 import { formatBudget } from '../../utils/format'
+import PropTypes from 'prop-types'
+import { projectShape, contractShape } from '../../utils/propShapes'
 
 const briefcase = (
   <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -95,4 +97,13 @@ export default function DeleteProjectDialog({ project, contract, busy, conflict,
       </div>
     </Modal>
   )
+}
+
+DeleteProjectDialog.propTypes = {
+  project: projectShape,
+  contract: contractShape,
+  busy: PropTypes.bool,
+  conflict: PropTypes.node,
+  onConfirm: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
 }

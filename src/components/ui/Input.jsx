@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 // Campo de formulario con su etiqueta y el mensaje de error debajo
 export default function Input({ label, name, error, ...inputProps }) {
   return (
@@ -24,4 +26,10 @@ export default function Input({ label, name, error, ...inputProps }) {
       )}
     </label>
   )
+}
+
+Input.propTypes = {
+  label: PropTypes.node.isRequired,
+  name: PropTypes.string.isRequired,
+  error: PropTypes.node,
 }

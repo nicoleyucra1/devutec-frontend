@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 // Logo de DevUTEC (logo 04 · eslabón): la D es Dev y la U es UTEC, cada pieza con el color de su palabra.
 // "day" va sobre fondos claros (Ink y verde) y "night" sobre fondos oscuros (Paper y lima).
 const TONES = {
@@ -31,4 +33,14 @@ export default function Logo({ tone = 'day', className = '' }) {
       </span>
     </span>
   )
+}
+
+LogoMark.propTypes = {
+  tone: PropTypes.oneOf(Object.keys(TONES)),
+  width: PropTypes.number,
+}
+
+Logo.propTypes = {
+  tone: PropTypes.oneOf(Object.keys(TONES)),
+  className: PropTypes.string,
 }

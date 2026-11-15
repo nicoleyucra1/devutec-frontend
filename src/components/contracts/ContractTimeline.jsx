@@ -1,4 +1,5 @@
 import { formatDate } from '../../utils/format'
+import { contractShape } from '../../utils/propShapes'
 
 function CheckIcon() {
   return (
@@ -75,4 +76,8 @@ export default function ContractTimeline({ contract }) {
       ))}
     </ol>
   )
+}
+
+ContractTimeline.propTypes = {
+  contract: contractShape.isRequired,
 }

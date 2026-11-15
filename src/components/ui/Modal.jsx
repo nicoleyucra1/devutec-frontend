@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
 
 const ICON_TONES = {
   green: 'bg-escrow-light text-escrow',
@@ -39,4 +40,14 @@ export default function Modal({ open, title, onClose, children, icon, iconTone =
       <div className="mt-3">{children}</div>
     </dialog>
   )
+}
+
+Modal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  title: PropTypes.node,
+  onClose: PropTypes.func,
+  children: PropTypes.node,
+  icon: PropTypes.node,
+  iconTone: PropTypes.oneOf(Object.keys(ICON_TONES)),
+  kicker: PropTypes.node,
 }
