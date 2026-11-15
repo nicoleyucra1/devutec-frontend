@@ -4,8 +4,10 @@
 // componente le falta declarar una prop (por ejemplo, cuando alguien agrega una nueva).
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const ROOT = new URL('../src', import.meta.url).pathname
+// fileURLToPath entiende carpetas con espacios en el nombre (por ejemplo "DBP Intelli")
+const ROOT = fileURLToPath(new URL('../src', import.meta.url))
 
 function jsxFiles(dir) {
   return readdirSync(dir).flatMap((name) => {

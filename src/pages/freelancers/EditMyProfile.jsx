@@ -4,6 +4,7 @@ import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import { Link } from 'react-router-dom'
 import Button from '../../components/ui/Button'
 import Card from '../../components/ui/Card'
+import AvatarUploader from '../../components/profile/AvatarUploader'
 import Input from '../../components/ui/Input'
 import Skeleton from '../../components/ui/Skeleton'
 import { fieldClass, labelClass } from '../../components/projects/fieldStyles'
@@ -195,6 +196,10 @@ export default function EditMyProfile() {
       </div>
 
       <Card className="mt-6">
+        <AvatarUploader />
+      </Card>
+
+      <Card className="mt-4">
         {loading && (
           <div className="space-y-5">
             {[1, 2, 3, 4].map((n) => (
