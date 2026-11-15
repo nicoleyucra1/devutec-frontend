@@ -5,6 +5,7 @@ import ContractReviews from '../../components/contracts/ContractReviews'
 import ContractTimeline from '../../components/contracts/ContractTimeline'
 import MoneyAmount from '../../components/contracts/MoneyAmount'
 import PersonCard from '../../components/contracts/PersonCard'
+import WhatsAppCard from '../../components/contracts/WhatsAppCard'
 import TermsDialog from '../../components/contracts/TermsDialog'
 import Cuyi from '../../components/brand/Cuyi'
 import ErrorBox from '../../components/projects/ErrorBox'
@@ -441,6 +442,8 @@ export default function ContractDetail() {
             isYou={isFreelancer}
             to={`/freelancers/${contract.freelancerUserId}`}
           />
+
+          {(isClient || isFreelancer) && <WhatsAppCard contract={contract} isClient={isClient} />}
 
           <dl className="rounded-2xl border border-line bg-surface p-5 text-[13px]">
             {[
