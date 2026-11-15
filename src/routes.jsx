@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
 import { useAuth } from './hooks/useAuth'
 import PageLoader from './components/ui/PageLoader'
@@ -18,7 +18,6 @@ const ProjectDetail = lazyPage(() => import('./pages/projects/ProjectDetail'))
 const ProjectCreate = lazyPage(() => import('./pages/projects/ProjectCreate'))
 const ProjectEdit = lazyPage(() => import('./pages/projects/ProjectEdit'))
 const MyProjects = lazyPage(() => import('./pages/projects/MyProjects'))
-const ApplyToProject = lazyPage(() => import('./pages/applications/ApplyToProject'))
 const MyApplications = lazyPage(() => import('./pages/applications/MyApplications'))
 const ProjectApplications = lazyPage(() => import('./pages/applications/ProjectApplications'))
 const MyContracts = lazyPage(() => import('./pages/contracts/MyContracts'))
@@ -30,6 +29,12 @@ const LegalPage = lazyPage(() => import('./pages/legal/LegalPage'))
 const PaymentReturn = lazyPage(() => import('./pages/PaymentReturn'))
 
 // En "/" quien no inició sesión ve la landing; con sesión, su resumen
+// Antes se postulaba en /projects/:id/apply; ahora el formulario está en el detalle del proyecto
+function ApplyRedirect() {
+  const { id } = useParams()
+  return <Navigate to={`/projects/${id}`} replace />
+}
+
 function Start() {
   const { user } = useAuth()
   return user ? <Home /> : <Landing />
@@ -72,7 +77,7 @@ export default function AppRoutes() {
 
         {/* Solo freelancers */}
         <Route element={<PrivateRoute roles={['FREELANCER']} />}>
-          <Route path="/projects/:id/apply" element={<ApplyToProject />} />
+          <Route path="/projects/:id/apply" element={<ApplyRedirect />} />
           <Route path="/my-applications" element={<MyApplications />} />
           <Route path="/profile/edit" element={<EditMyProfile />} />
         </Route>

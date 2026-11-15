@@ -20,6 +20,8 @@ export const projectShape = PropTypes.shape({
   deadline: PropTypes.string,
   location: PropTypes.string,
   clientId: idType,
+  clientName: PropTypes.string,
+  clientSince: PropTypes.string,
   createdAt: PropTypes.string,
   skills: PropTypes.arrayOf(skillShape),
 })

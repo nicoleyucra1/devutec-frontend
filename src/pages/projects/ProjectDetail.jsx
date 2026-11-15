@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import MoneyAmount from '../../components/contracts/MoneyAmount'
+import ApplyPanel from '../../components/applications/ApplyPanel'
 import ButtonLink from '../../components/projects/ButtonLink'
+import ClientCard from '../../components/projects/ClientCard'
 import ErrorBox from '../../components/projects/ErrorBox'
 import OwnerPanel from '../../components/projects/OwnerPanel'
 import ProjectStatusBadge from '../../components/projects/ProjectStatusBadge'
@@ -9,6 +11,7 @@ import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import LoadingNotice from '../../components/ui/LoadingNotice'
 import Skeleton from '../../components/ui/Skeleton'
 import { useAuth } from '../../hooks/useAuth'
+import { useMyProjectApplication } from '../../hooks/useMyProjectApplication'
 import { useProject } from '../../hooks/useProject'
 import { projectCode } from '../../utils/contractStatus'
 import { formatDate, timeAgo } from '../../utils/format'
@@ -68,24 +71,22 @@ ProjectBreadcrumbs.propTypes = {
   mine: PropTypes.bool,
 }
 
-// Panel de quien no es dueño. Por ahora: postular si es freelancer y el proyecto está abierto.
-function VisitorPanel({ project, canApply }) {
+// Panel de quien mira el proyecto sin ser el dueño ni freelancer (por ejemplo, otro cliente)
+function VisitorPanel({ project }) {
   return (
     <aside className="rounded-[17px] border border-line bg-surface p-7 lg:sticky lg:top-24">
-      <p className="text-[11px] font-semibold tracking-[0.13em]">{canApply ? 'POSTULAR' : 'PROYECTO'}</p>
+      <p className="text-[11px] font-semibold tracking-[0.13em]">PROYECTO</p>
       <h2 className="my-3 text-[26px] font-semibold leading-tight tracking-[-0.02em]">
-        {canApply ? '¿Te interesa este proyecto?' : project.status === 'OPEN' ? 'Recibiendo propuestas' : 'Ya no recibe propuestas'}
+        {project.status === 'OPEN' ? 'Recibiendo propuestas' : 'Ya no recibe propuestas'}
       </h2>
       <p className="mb-6 text-[13px] leading-relaxed text-muted">
-        {canApply
-          ? 'Cuéntale al cliente cómo lo harías y cuánto cobrarías. Si te elige, el pago queda retenido antes de que empieces.'
+        {project.status === 'OPEN'
+          ? 'Los estudiantes de UTEC pueden postular con su propuesta y su precio.'
           : 'Este proyecto ya tiene a alguien trabajando o terminó.'}
       </p>
-      {canApply && (
-        <ButtonLink to={`/projects/${project.id}/apply`} className="w-full">
-          Postular
-        </ButtonLink>
-      )}
+      <ButtonLink to="/projects" variant="secondary" className="w-full">
+        Explorar proyectos
+      </ButtonLink>
       <div className="mt-4 flex gap-2.5 rounded-[10px] bg-escrow-light p-3.5 text-escrow">
         <Icon name="shield" />
         <span className="text-xs leading-normal">
@@ -99,7 +100,6 @@ function VisitorPanel({ project, canApply }) {
 
 VisitorPanel.propTypes = {
   project: projectShape.isRequired,
-  canApply: PropTypes.bool,
 }
 
 function DetailLoading() {
@@ -138,7 +138,8 @@ export default function ProjectDetail() {
 
   const isOwner = Boolean(user?.id && project && user.id === project.clientId)
   const canManage = isOwner || user?.rol === 'ADMIN'
-  const canApply = user?.rol === 'FREELANCER' && project?.status === 'OPEN'
+  const isFreelancer = user?.rol === 'FREELANCER'
+  const mine = useMyProjectApplication(id, isFreelancer)
 
   const facts = project
     ? [
@@ -147,7 +148,7 @@ export default function ProjectDetail() {
         { icon: 'calendar', label: 'PUBLICADO', value: formatDate(project.createdAt) },
       ]
     : []
-  const byline = project ? [isOwner ? (user.nombre ?? 'Tú') : null, project.location, `Publicado ${timeAgo(project.createdAt)}`].filter(Boolean).join(' · ') : ''
+  const byline = project ? [isOwner ? (user.nombre ?? 'Tú') : project.clientName, project.location, `Publicado ${timeAgo(project.createdAt)}`].filter(Boolean).join(' · ') : ''
 
   return (
     <main className="mx-auto w-full max-w-[1248px] px-4 pb-20 pt-[45px] md:px-6 md:pb-[120px] md:pt-[70px]">
@@ -209,10 +210,24 @@ export default function ProjectDetail() {
                   </ul>
                 </div>
               )}
+
+              {!isOwner && <ClientCard project={project} />}
             </section>
 
             <div className="row-start-1 lg:row-start-auto">
-              {canManage ? <OwnerPanel project={project} isOwner={isOwner} /> : <VisitorPanel project={project} canApply={canApply} />}
+              {canManage ? (
+                <OwnerPanel project={project} isOwner={isOwner} />
+              ) : isFreelancer ? (
+                <ApplyPanel
+                  project={project}
+                  application={mine.data?.application}
+                  contract={mine.data?.contract}
+                  loading={mine.loading}
+                  onApplied={mine.reload}
+                />
+              ) : (
+                <VisitorPanel project={project} />
+              )}
             </div>
           </div>
         </>
