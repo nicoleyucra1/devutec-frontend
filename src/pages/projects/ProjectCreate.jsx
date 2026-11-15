@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom'
-import Breadcrumbs from '../../components/ui/Breadcrumbs'
+import FormHeading from '../../components/projects/FormHeading'
 import ProjectForm from '../../components/projects/ProjectForm'
+import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import { useProjectActions } from '../../hooks/useProjectActions'
 import { useToast } from '../../hooks/useToast'
 
+// Publicar proyecto (mockup FormularioProyecto). Al publicar lleva al detalle del proyecto nuevo.
 export default function ProjectCreate() {
   const navigate = useNavigate()
   const toast = useToast()
@@ -12,7 +14,7 @@ export default function ProjectCreate() {
   const handleSubmit = async (project) => {
     try {
       const created = await actions.create(project)
-      toast.success('Proyecto publicado')
+      toast.success('Publicaste tu proyecto. Te avisaremos cuando llegue la primera propuesta.')
       navigate(`/projects/${created.id}`, { replace: true })
     } catch {
       // El mensaje ya queda en actions.error
@@ -20,10 +22,10 @@ export default function ProjectCreate() {
   }
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-10">
+    <main className="mx-auto w-full max-w-[1248px] px-4 pb-20 pt-[45px] md:px-6 md:pb-[120px] md:pt-[70px]">
       <Breadcrumbs items={[{ label: 'Mis proyectos', to: '/my-projects' }, { label: 'Publicar proyecto' }]} />
-      <h1 className="mb-6 text-2xl font-bold text-gray-900">Publicar proyecto</h1>
-      <ProjectForm submitLabel="Publicar" saving={actions.saving} serverError={actions.error} onSubmit={handleSubmit} />
+      <FormHeading kicker="NUEVO PROYECTO" title="Cuéntanos qué necesitas" emphasis="resolver." />
+      <ProjectForm saving={actions.saving} serverError={actions.error} onSubmit={handleSubmit} onCancel={() => navigate(-1)} />
     </main>
   )
 }
