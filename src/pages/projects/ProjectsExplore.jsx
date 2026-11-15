@@ -13,7 +13,10 @@ import { useDebounce } from '../../hooks/useDebounce'
 import { useAuth } from '../../hooks/useAuth'
 import { readPageParams } from '../../utils/pageParams'
 
-const FILTER_KEYS = ['status', 'skillId', 'minBudget', 'maxBudget', 'deadlineBefore']
+const FILTER_KEYS = ['status', 'minBudget', 'maxBudget', 'deadlineBefore']
+
+// Habilidades elegidas en la URL: ?skillIds=3,7 (los links viejos con ?skillId=3 también sirven)
+const readSkillIds = (params) => (params.get('skillIds') ?? params.get('skillId') ?? '').split(',').filter(Boolean)
 
 // Explorar proyectos: los filtros y la página viven en la URL (?search=&status=&page=2&size=25),
 // así se puede compartir el enlace o volver atrás sin perder la búsqueda.
@@ -24,7 +27,7 @@ export default function ProjectsExplore() {
   const urlSearch = searchParams.get('search') ?? ''
 
   const filters = useMemo(
-    () => Object.fromEntries(FILTER_KEYS.map((key) => [key, searchParams.get(key) ?? ''])),
+    () => ({ ...Object.fromEntries(FILTER_KEYS.map((key) => [key, searchParams.get(key) ?? ''])), skillIds: readSkillIds(searchParams) }),
     [searchParams],
   )
 
@@ -57,10 +60,14 @@ export default function ProjectsExplore() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch])
 
-  const { data, loading, error, status, reload } = useProjects({ ...filters, search: urlSearch, page, size })
+  // Con una habilidad se manda skillId, que entiende cualquier versión del backend; con varias, skillIds
+  const { skillIds, ...otherFilters } = filters
+  const skillParams = skillIds.length === 1 ? { skillId: skillIds[0] } : { skillIds: skillIds.join(',') }
+  const { data, loading, error, status, reload } = useProjects({ ...otherFilters, ...skillParams, search: urlSearch, page, size })
   const skills = useSkills()
 
-  const handleFilterChange = (key, value) => updateParams({ [key]: value, page: null })
+  const handleFilterChange = (key, value) =>
+    updateParams({ [key]: value, page: null, ...(key === 'skillIds' ? { skillId: null } : {}) })
   const handlePageChange = (nextPage) => {
     updateParams({ page: nextPage > 1 ? nextPage : null })
     window.scrollTo({ top: 0, behavior: 'smooth' })

@@ -1,5 +1,6 @@
 import Button from './Button'
 import Modal from './Modal'
+import PropTypes from 'prop-types'
 
 //Pide confirmación antes de una acción que no se puede deshacer, como cancelar un contrato
 export default function ConfirmDialog({ open, title, message, confirmLabel = 'Confirmar', busy = false, onConfirm, onCancel }) {
@@ -18,3 +19,12 @@ export default function ConfirmDialog({ open, title, message, confirmLabel = 'Co
   )
 }
 
+ConfirmDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  title: PropTypes.node.isRequired,
+  message: PropTypes.node,
+  confirmLabel: PropTypes.string,
+  busy: PropTypes.bool,
+  onConfirm: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+}

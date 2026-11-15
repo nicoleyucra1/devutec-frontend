@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { AuthContext } from './authContext'
 import { authService } from '../services/authService'
 import { userService } from '../services/userService'
 import { useToast } from '../hooks/useToast'
 import { setSessionExpiredHandler } from '../services/api'
 import { tokenStorage } from '../utils/tokenStorage'
+import PropTypes from 'prop-types'
 
 export function AuthProvider({ children }) {
   // Se recupera la sesión guardada para no perderla al recargar la página
@@ -16,6 +17,25 @@ export function AuthProvider({ children }) {
   }, [])
 
   const toast = useToast()
+
+  // Cambia los datos del usuario con sesión (por ejemplo, su foto nueva) en pantalla y en el almacenamiento
+  const updateUser = useCallback((next) => {
+    tokenStorage.setUser(next)
+    setUser(next)
+  }, [])
+
+  // Al abrir la web con una sesión guardada, se piden de nuevo los datos del usuario: así aparece su foto
+  // aunque la sesión se haya iniciado antes de subirla. Si falla, se sigue con lo guardado.
+  const hadSession = useRef(user !== null)
+  useEffect(() => {
+    if (!hadSession.current) return
+    const controller = new AbortController()
+    userService
+      .getMe({ signal: controller.signal })
+      .then((me) => tokenStorage.getUser() && updateUser(me))
+      .catch(() => {})
+    return () => controller.abort()
+  }, [updateUser])
 
   // Si el refresh falla, se cierra la sesión y se avisa por qué se volvió al login
   useEffect(() => {
@@ -48,13 +68,22 @@ export function AuthProvider({ children }) {
   // El registro también devuelve tokens, así que el usuario queda logueado
   const register = async (data) => startSession(await authService.register(data))
 
+  // Continuar con Google: idToken viene del botón de Google y rol solo se manda al crear la cuenta
+  const loginWithGoogle = async (data) => startSession(await authService.google(data))
+
   const value = {
     user,
     isAuthenticated: user !== null,
     login,
     register,
+    loginWithGoogle,
     logout,
+    updateUser,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+
+AuthProvider.propTypes = {
+  children: PropTypes.node,
 }

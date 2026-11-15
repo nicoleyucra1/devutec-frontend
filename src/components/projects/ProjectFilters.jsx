@@ -1,8 +1,11 @@
 import Button from '../ui/Button'
 import Card from '../ui/Card'
 import Input from '../ui/Input'
+import SkillPicker from '../ui/SkillPicker'
 import { fieldClass, labelClass } from './fieldStyles'
 import { STATUS_LABELS } from '../../utils/format'
+import PropTypes from 'prop-types'
+import { skillShape } from '../../utils/propShapes'
 
 // Controles de filtro. El texto de búsqueda se maneja aparte para aplicarle debounce.
 export default function ProjectFilters({ search, onSearchChange, filters, onFilterChange, skills, onClear }) {
@@ -31,17 +34,9 @@ export default function ProjectFilters({ search, onSearchChange, filters, onFilt
           </select>
         </label>
 
-        <label className="block">
-          <span className={labelClass}>Habilidad</span>
-          <select className={fieldClass} value={filters.skillId} onChange={(event) => onFilterChange('skillId', event.target.value)}>
-            <option value="">Cualquier habilidad</option>
-            {skills?.map((skill) => (
-              <option key={skill.id} value={skill.id}>
-                {skill.name}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="sm:col-span-2 lg:col-span-2">
+          <SkillPicker skills={skills ?? []} value={filters.skillIds} onChange={(ids) => onFilterChange('skillIds', ids.join(','))} />
+        </div>
 
         <Input
           label="Entrega antes de"
@@ -72,4 +67,17 @@ export default function ProjectFilters({ search, onSearchChange, filters, onFilt
       </form>
     </Card>
   )
+}
+
+ProjectFilters.propTypes = {
+  search: PropTypes.string.isRequired,
+  onSearchChange: PropTypes.func.isRequired,
+  filters: PropTypes.shape({
+    status: PropTypes.string,
+    skillIds: PropTypes.arrayOf(PropTypes.string),
+    deadlineBefore: PropTypes.string,
+  }).isRequired,
+  onFilterChange: PropTypes.func.isRequired,
+  skills: PropTypes.arrayOf(skillShape),
+  onClear: PropTypes.func.isRequired,
 }

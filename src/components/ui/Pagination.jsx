@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 const SIZES = [10, 25, 50]
 
 //Números a mostrar: la primera, la última y las cercanas a la actual. Los huecos se marcan con '...'
@@ -79,4 +81,13 @@ export default function Pagination({ page, size, totalPages, totalElements, onPa
       </label>
     </nav>
   )
+}
+
+Pagination.propTypes = {
+  page: PropTypes.number.isRequired,
+  size: PropTypes.number.isRequired,
+  totalPages: PropTypes.number,
+  totalElements: PropTypes.number,
+  onPageChange: PropTypes.func.isRequired,
+  onSizeChange: PropTypes.func,
 }

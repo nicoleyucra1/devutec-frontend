@@ -4,6 +4,7 @@ import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import { Link, useParams } from 'react-router-dom'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
+import Avatar from '../../components/ui/Avatar'
 import Card from '../../components/ui/Card'
 import EmptyState from '../../components/ui/EmptyState'
 import Pagination from '../../components/ui/Pagination'
@@ -12,6 +13,8 @@ import { useAuth } from '../../hooks/useAuth'
 import { useFreelancerProfile } from '../../hooks/useFreelancerProfile'
 import { useUserReviews } from '../../hooks/useUserReviews'
 import { formatBudget, formatDate } from '../../utils/format'
+import PropTypes from 'prop-types'
+import { idType, freelancerProfileShape } from '../../utils/propShapes'
 
 const RATING_FILTERS = [
   { value: '', label: 'Todas las calificaciones' },
@@ -43,11 +46,14 @@ function ProfileHeader({ profile, isOwner }) {
   return (
     <Card>
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">{profile.nombre}</h1>
-          <p className="mt-1 text-gray-500">
-            {[profile.universidad, study].filter(Boolean).join(' · ') || 'Freelancer en DevUTEC'}
-          </p>
+        <div className="flex items-center gap-4">
+          <Avatar name={profile.nombre} src={profile.avatarUrl} size="xl" />
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">{profile.nombre}</h1>
+            <p className="mt-1 text-gray-500">
+              {[profile.universidad, study].filter(Boolean).join(' · ') || 'Freelancer en DevUTEC'}
+            </p>
+          </div>
         </div>
         {isOwner && (
           <Link
@@ -215,4 +221,17 @@ export default function FreelancerProfile() {
       </div>
     </main>
   )
+}
+
+Stars.propTypes = {
+  rating: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+}
+
+ProfileHeader.propTypes = {
+  profile: freelancerProfileShape.isRequired,
+  isOwner: PropTypes.bool,
+}
+
+ReviewList.propTypes = {
+  userId: idType.isRequired,
 }

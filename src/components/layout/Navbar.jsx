@@ -2,8 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import Logo from '../brand/Logo'
+import AvatarUploader from '../profile/AvatarUploader'
 import ButtonLink from '../projects/ButtonLink'
-import { initials, linksForRole, ROLE_LABELS } from './navLinks'
+import Avatar from '../ui/Avatar'
+import Button from '../ui/Button'
+import Modal from '../ui/Modal'
+import { linksForRole, ROLE_LABELS } from './navLinks'
+import PropTypes from 'prop-types'
+import { userShape } from '../../utils/propShapes'
 
 const desktopLinkClass = ({ isActive }) =>
   `relative flex h-full items-center text-sm transition-colors after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 ${
@@ -32,11 +38,16 @@ function useCloseOnOutside(open, setOpen) {
   return ref
 }
 
-// Opciones del menú del avatar: el perfil del freelancer y cerrar sesión
-function UserMenuItems({ user, onNavigate, onLogout }) {
+// Opciones del menú del avatar: la foto de perfil, el perfil del freelancer y cerrar sesión
+function UserMenuItems({ user, onNavigate, onLogout, onPhoto }) {
   const itemClass = 'block w-full rounded-md px-2.5 py-2.5 text-left text-xs hover:bg-paper'
   return (
     <>
+      {user.rol !== 'ADMIN' && (
+        <button type="button" onClick={onPhoto} className={itemClass}>
+          Foto de perfil
+        </button>
+      )}
       {user.rol === 'FREELANCER' && user.id && (
         <Link to={`/freelancers/${user.id}`} onClick={onNavigate} className={itemClass}>
           Ver mi perfil público
@@ -60,6 +71,7 @@ export default function Navbar() {
   const { user, logout } = useAuth()
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [photoOpen, setPhotoOpen] = useState(false)
   const userMenuRef = useCloseOnOutside(userMenuOpen, setUserMenuOpen)
 
   if (!user) return null
@@ -69,6 +81,10 @@ export default function Navbar() {
   const closeAll = () => {
     setUserMenuOpen(false)
     setMobileOpen(false)
+  }
+  const openPhoto = () => {
+    closeAll()
+    setPhotoOpen(true)
   }
 
   return (
@@ -100,9 +116,7 @@ export default function Navbar() {
               aria-haspopup="menu"
               className="flex items-center gap-2 text-sm"
             >
-              <span className="grid h-[34px] w-[34px] place-items-center rounded-full bg-ink text-[11px] font-semibold tracking-wide text-white">
-                {initials(name)}
-              </span>
+              <Avatar name={name} src={user.avatarUrl} size="nav" />
               <span>{name.split(' ')[0]}</span>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
                 <path d={userMenuOpen ? 'm6 15 6-6 6 6' : 'm6 9 6 6 6-6'} strokeLinecap="round" strokeLinejoin="round" />
@@ -114,7 +128,7 @@ export default function Navbar() {
                   <p className="text-xs font-semibold">{name}</p>
                   <p className="mt-0.5 text-[11px] text-muted">{ROLE_LABELS[user.rol] ?? user.rol}</p>
                 </div>
-                <UserMenuItems user={user} onNavigate={closeAll} onLogout={logout} />
+                <UserMenuItems user={user} onNavigate={closeAll} onLogout={logout} onPhoto={openPhoto} />
               </div>
             )}
           </div>
@@ -154,18 +168,33 @@ export default function Navbar() {
           </nav>
           <div className="mt-3 border-t border-line pt-3">
             <div className="mb-2 flex items-center gap-2.5 px-2.5">
-              <span className="grid h-[34px] w-[34px] place-items-center rounded-full bg-ink text-[11px] font-semibold text-white">
-                {initials(name)}
-              </span>
+              <Avatar name={name} src={user.avatarUrl} size="nav" />
               <span>
                 <span className="block text-sm font-semibold">{name}</span>
                 <span className="block text-xs text-muted">{ROLE_LABELS[user.rol] ?? user.rol}</span>
               </span>
             </div>
-            <UserMenuItems user={user} onNavigate={closeAll} onLogout={logout} />
+            <UserMenuItems user={user} onNavigate={closeAll} onLogout={logout} onPhoto={openPhoto} />
           </div>
         </div>
       )}
+
+      <Modal open={photoOpen} title="Foto de perfil" kicker="TU CUENTA" onClose={() => setPhotoOpen(false)}>
+        <p className="mb-5 text-sm text-muted">Se ve en la barra de arriba y, si eres freelancer, en tu perfil público.</p>
+        {photoOpen && <AvatarUploader showTitle={false} />}
+        <div className="mt-7 flex justify-end">
+          <Button variant="secondary" onClick={() => setPhotoOpen(false)}>
+            Listo
+          </Button>
+        </div>
+      </Modal>
     </header>
   )
+}
+
+UserMenuItems.propTypes = {
+  user: userShape.isRequired,
+  onNavigate: PropTypes.func,
+  onLogout: PropTypes.func.isRequired,
+  onPhoto: PropTypes.func.isRequired,
 }

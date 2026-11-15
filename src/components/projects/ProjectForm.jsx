@@ -5,6 +5,8 @@ import Input from '../ui/Input'
 import Skeleton from '../ui/Skeleton'
 import { fieldClass, labelClass } from './fieldStyles'
 import { useSkills } from '../../hooks/useSkills'
+import PropTypes from 'prop-types'
+import { projectShape } from '../../utils/propShapes'
 
 const EMPTY = { title: '', description: '', budget: '', deadline: '', location: '', skillIds: [] }
 
@@ -145,4 +147,12 @@ export default function ProjectForm({ initialProject, submitLabel, saving, serve
       </form>
     </Card>
   )
+}
+
+ProjectForm.propTypes = {
+  initialProject: projectShape,
+  submitLabel: PropTypes.string.isRequired,
+  saving: PropTypes.bool,
+  serverError: PropTypes.node,
+  onSubmit: PropTypes.func.isRequired,
 }

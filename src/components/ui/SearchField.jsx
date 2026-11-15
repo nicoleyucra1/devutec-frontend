@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import PropTypes from 'prop-types'
 
 // Buscador chico con lupa para filtrar una lista que ya está en pantalla.
 // Lo escrito se guarda aquí y se avisa a la página cuando la persona deja de escribir: la búsqueda vive en la URL,
@@ -41,4 +42,13 @@ export default function SearchField({ value, onChange, placeholder, label, class
       />
     </label>
   )
+}
+
+SearchField.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string,
+  label: PropTypes.string,
+  className: PropTypes.string,
+  delay: PropTypes.number,
 }

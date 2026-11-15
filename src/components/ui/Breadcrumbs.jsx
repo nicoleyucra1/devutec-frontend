@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { linkTo } from '../../utils/propShapes'
 
 // Muestra dónde está la persona dentro de la app, por ejemplo Explorar › Web para pizzería › Postulantes.
 // Cada paso con "to" es un link; el último es la página actual y queda como texto.
@@ -35,4 +37,9 @@ export default function Breadcrumbs({ items, className = '' }) {
       </ol>
     </nav>
   )
+}
+
+Breadcrumbs.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.shape({ label: PropTypes.node, to: linkTo })).isRequired,
+  className: PropTypes.string,
 }

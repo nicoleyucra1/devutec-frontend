@@ -4,6 +4,7 @@ import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import { Link } from 'react-router-dom'
 import Button from '../../components/ui/Button'
 import Card from '../../components/ui/Card'
+import AvatarUploader from '../../components/profile/AvatarUploader'
 import Input from '../../components/ui/Input'
 import Skeleton from '../../components/ui/Skeleton'
 import { fieldClass, labelClass } from '../../components/projects/fieldStyles'
@@ -12,6 +13,8 @@ import { useMyFreelancerProfile } from '../../hooks/useMyFreelancerProfile'
 import { freelancerService } from '../../services/freelancerService'
 import { errorMessage } from '../../utils/errorMessage'
 import { validateFreelancerProfile } from '../../utils/validation'
+import PropTypes from 'prop-types'
+import { freelancerProfileShape } from '../../utils/propShapes'
 
 // Los ciclos de pregrado en UTEC van del 1 al 10
 const CICLOS = Array.from({ length: 10 }, (_, index) => index + 1)
@@ -193,6 +196,10 @@ export default function EditMyProfile() {
       </div>
 
       <Card className="mt-6">
+        <AvatarUploader />
+      </Card>
+
+      <Card className="mt-4">
         {loading && (
           <div className="space-y-5">
             {[1, 2, 3, 4].map((n) => (
@@ -205,4 +212,9 @@ export default function EditMyProfile() {
       </Card>
     </main>
   )
+}
+
+ProfileForm.propTypes = {
+  profile: freelancerProfileShape.isRequired,
+  onSaved: PropTypes.func.isRequired,
 }

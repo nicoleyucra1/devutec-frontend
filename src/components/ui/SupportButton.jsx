@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Button from './Button'
 import Modal from './Modal'
 import { ERROR_ICONS } from './errorIcons'
+import PropTypes from 'prop-types'
 
 // Botón "Contactar soporte" de los estados de error. El equipo todavía está definiendo el canal de soporte;
 // cuando exista (correo, WhatsApp o formulario), se cambia solo aquí y todas las pantallas lo usan.
@@ -26,4 +27,9 @@ export default function SupportButton({ variant = 'secondary', className = '' })
       </Modal>
     </>
   )
+}
+
+SupportButton.propTypes = {
+  variant: PropTypes.oneOf(['primary', 'secondary', 'ghost', 'danger', 'lime', 'inverse']),
+  className: PropTypes.string,
 }

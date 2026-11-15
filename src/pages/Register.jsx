@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import AuthField from '../components/auth/AuthField'
+import GoogleSignIn from '../components/auth/GoogleSignIn'
 import PasswordToggle from '../components/auth/PasswordToggle'
 import RegisterAside from '../components/auth/RegisterAside'
 import PublicHeader from '../components/layout/PublicHeader'
@@ -9,6 +10,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useToast } from '../hooks/useToast'
 import { errorMessage } from '../utils/errorMessage'
 import { PASSWORD_RULES, validateRegister } from '../utils/validation'
+import PropTypes from 'prop-types'
 
 const briefcase = (
   <>
@@ -99,7 +101,7 @@ function RoleCard({ role, selected, onChange }) {
 // Las reglas de la contraseña se marcan en verde apenas se cumplen
 function PasswordRules({ password }) {
   return (
-    <ul aria-label="Requisitos de la contraseña" className="flex flex-col gap-2 sm:col-span-2 sm:flex-row sm:gap-[18px]">
+    <ul aria-label="Requisitos de la contraseña" className="flex flex-col gap-2 sm:col-span-2 sm:flex-row sm:flex-wrap sm:gap-x-[18px] sm:gap-y-2">
       {PASSWORD_RULES.map((rule) => {
         const valid = rule.test(password)
         return (
@@ -247,6 +249,10 @@ export default function Register() {
               </div>
             </form>
 
+            <div className="mt-5">
+              <GoogleSignIn rol={values.rol} text="signup_with" onSuccess={() => navigate('/', { replace: true })} />
+            </div>
+
             <p className="mt-7 text-center text-xs text-muted lg:text-left">
               ¿Ya tienes cuenta?{' '}
               <Link to="/login" className="font-semibold text-ink underline underline-offset-2">
@@ -260,4 +266,29 @@ export default function Register() {
       </main>
     </>
   )
+}
+
+Check.propTypes = {
+  size: PropTypes.number.isRequired,
+}
+
+Step.propTypes = {
+  number: PropTypes.string.isRequired,
+  children: PropTypes.node,
+  className: PropTypes.string,
+}
+
+RoleCard.propTypes = {
+  role: PropTypes.shape({
+    value: PropTypes.oneOf(['CLIENT', 'FREELANCER']).isRequired,
+    icon: PropTypes.node,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+  }).isRequired,
+  selected: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+}
+
+PasswordRules.propTypes = {
+  password: PropTypes.string.isRequired,
 }

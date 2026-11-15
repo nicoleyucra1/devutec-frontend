@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 // Título de un bloque del resumen: texto chico arriba, título y algo opcional a la derecha (un link o un contador)
 export default function BlockHeading({ kicker, title, children }) {
   return (
@@ -9,4 +11,10 @@ export default function BlockHeading({ kicker, title, children }) {
       {children}
     </div>
   )
+}
+
+BlockHeading.propTypes = {
+  kicker: PropTypes.node,
+  title: PropTypes.node.isRequired,
+  children: PropTypes.node,
 }

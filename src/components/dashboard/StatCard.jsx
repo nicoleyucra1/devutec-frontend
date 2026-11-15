@@ -1,5 +1,6 @@
 import Card from '../ui/Card'
 import Skeleton from '../ui/Skeleton'
+import PropTypes from 'prop-types'
 
 // Un número destacado del dashboard, por ejemplo "Contratos en curso: 2"
 export default function StatCard({ label, value, hint, loading = false }) {
@@ -14,4 +15,11 @@ export default function StatCard({ label, value, hint, loading = false }) {
       {hint && <p className="mt-1 text-xs text-gray-500">{hint}</p>}
     </Card>
   )
+}
+
+StatCard.propTypes = {
+  label: PropTypes.node.isRequired,
+  value: PropTypes.node,
+  hint: PropTypes.node,
+  loading: PropTypes.bool,
 }
