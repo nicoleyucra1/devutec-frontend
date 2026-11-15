@@ -3,18 +3,21 @@ import ProjectCard from './ProjectCard'
 import PropTypes from 'prop-types'
 import { projectShape } from '../../utils/propShapes'
 
-const GRID = 'grid gap-4 sm:grid-cols-2 lg:grid-cols-3'
+const LIST = 'grid gap-3'
 
-// Grilla de tarjetas; mientras carga muestra tarjetas grises que parpadean
+// Lista de tarjetas de Explorar; mientras carga muestra tarjetas grises que parpadean
 export default function ProjectGrid({ projects, loading }) {
   if (loading) {
     return (
-      <div className={GRID} aria-busy="true" aria-label="Cargando proyectos">
-        {Array.from({ length: 6 }, (_, index) => (
-          <div key={index} className="space-y-3 rounded-xl border border-gray-200 bg-white p-5">
-            <Skeleton className="h-5 w-2/3" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-1/2" />
+      <div className={LIST} aria-busy="true" aria-label="Cargando proyectos">
+        {Array.from({ length: 3 }, (_, index) => (
+          <div key={index} className="flex min-h-[230px] flex-col justify-between rounded-2xl border border-line bg-surface p-[22px]">
+            <div className="space-y-3">
+              <Skeleton className="h-3 w-1/4" />
+              <Skeleton className="h-6 w-1/2" />
+              <Skeleton className="h-6 w-1/3" />
+            </div>
+            <Skeleton className="h-10 w-full" />
           </div>
         ))}
       </div>
@@ -22,11 +25,13 @@ export default function ProjectGrid({ projects, loading }) {
   }
 
   return (
-    <section className={GRID}>
+    <ul className={LIST} aria-label="Proyectos">
       {projects.map((project) => (
-        <ProjectCard key={project.id} project={project} />
+        <li key={project.id}>
+          <ProjectCard project={project} />
+        </li>
       ))}
-    </section>
+    </ul>
   )
 }
 
