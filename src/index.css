@@ -165,6 +165,86 @@ em {
   }
 }
 
+/* Chat de Cuyi: la burbuja entra rebotando, el chat se abre deslizándose y cada mensaje aparece suave */
+@keyframes chat-bubble-in {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.08);
+  }
+  80% {
+    transform: translateY(2px) scale(0.97);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes chat-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+}
+
+@keyframes chat-msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes chat-dot {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+@keyframes chat-hint {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  12%,
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chat-bubble-in {
+  animation: chat-bubble-in 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) 0.4s both;
+}
+
+.chat-panel-in {
+  transform-origin: bottom right;
+  animation: chat-panel-in 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+}
+
+.chat-msg-in {
+  animation: chat-msg-in 0.3s ease-out;
+}
+
+.chat-dot {
+  animation: chat-dot 1s ease-in-out infinite;
+}
+
+/* El globito "¿Te ayudo?" aparece un rato al entrar y se va */
+.chat-hint {
+  animation: chat-hint 5s ease-in-out 1.4s both;
+}
+
 /* Con "reducir movimiento" todo llega directo a su estado final */
 @media (prefers-reduced-motion: reduce) {
   *,
