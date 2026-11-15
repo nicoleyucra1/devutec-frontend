@@ -4,6 +4,7 @@ import ErrorState from '../ui/ErrorState'
 import { ERROR_ICONS } from '../ui/errorIcons'
 import SupportButton from '../ui/SupportButton'
 import { errorVariant } from '../../utils/errorVariant'
+import PropTypes from 'prop-types'
 
 // Error al cargar una página o una sección. Con status (el código HTTP que da useAsync) elige la pantalla del
 // diseño que corresponde; children son botones extra que van junto a Reintentar. compact es para secciones.
@@ -38,4 +39,13 @@ export default function ErrorBox({ message, status, onRetry, children, compact, 
       }
     />
   )
+}
+
+ErrorBox.propTypes = {
+  message: PropTypes.node,
+  status: PropTypes.number,
+  onRetry: PropTypes.func,
+  children: PropTypes.node,
+  compact: PropTypes.bool,
+  className: PropTypes.string,
 }

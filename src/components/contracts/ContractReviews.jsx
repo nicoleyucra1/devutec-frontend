@@ -6,6 +6,8 @@ import { useContractReviews } from '../../hooks/useContracts'
 import { useToast } from '../../hooks/useToast'
 import { contractService } from '../../services/contractService'
 import { errorMessage } from '../../utils/errorMessage'
+import PropTypes from 'prop-types'
+import { idType } from '../../utils/propShapes'
 
 const MAX_COMMENT = 1000
 
@@ -152,4 +154,19 @@ export default function ContractReviews({ contractId, userName, revieweeName }) 
       ))}
     </>
   )
+}
+
+StarIcon.propTypes = {
+  size: PropTypes.number.isRequired,
+}
+
+Stars.propTypes = {
+  value: PropTypes.number.isRequired,
+  size: PropTypes.number,
+}
+
+ContractReviews.propTypes = {
+  contractId: idType.isRequired,
+  userName: PropTypes.string,
+  revieweeName: PropTypes.string,
 }

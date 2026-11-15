@@ -6,6 +6,7 @@ import { useToast } from '../../hooks/useToast'
 import { userService } from '../../services/userService'
 import { AVATAR_MAX_MB, AVATAR_TYPES, prepareAvatar } from '../../utils/avatar'
 import { errorMessage } from '../../utils/errorMessage'
+import PropTypes from 'prop-types'
 
 // Subir, cambiar o quitar la foto de perfil de la persona con sesión. Mientras sube se ve la foto nueva
 // (ya recortada) para que no haya que esperar a la respuesta. El administrador tiene la foto fija de DevUTEC.
@@ -108,4 +109,8 @@ export default function AvatarUploader({ showTitle = true }) {
       </div>
     </div>
   )
+}
+
+AvatarUploader.propTypes = {
+  showTitle: PropTypes.bool,
 }

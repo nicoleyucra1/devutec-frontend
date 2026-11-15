@@ -9,6 +9,8 @@ import Avatar from '../ui/Avatar'
 import Button from '../ui/Button'
 import Modal from '../ui/Modal'
 import { linksForRole, ROLE_LABELS } from './navLinks'
+import PropTypes from 'prop-types'
+import { userShape } from '../../utils/propShapes'
 
 const desktopLinkClass = ({ isActive }) =>
   `relative flex h-full items-center text-sm transition-colors after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 ${
@@ -195,4 +197,11 @@ export default function Navbar() {
       </Modal>
     </header>
   )
+}
+
+UserMenuItems.propTypes = {
+  user: userShape.isRequired,
+  onNavigate: PropTypes.func,
+  onLogout: PropTypes.func.isRequired,
+  onPhoto: PropTypes.func.isRequired,
 }

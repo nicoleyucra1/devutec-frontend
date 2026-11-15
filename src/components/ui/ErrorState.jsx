@@ -5,6 +5,7 @@ import SupportButton from './SupportButton'
 import { useAuth } from '../../hooks/useAuth'
 import { errorVariant } from '../../utils/errorVariant'
 import { ERROR_ICONS } from './errorIcons'
+import PropTypes from 'prop-types'
 
 const MONEY_SEAL = { strong: 'Tu dinero en garantía no se movió.', text: 'Ningún pago avanza sin una confirmación.' }
 
@@ -176,4 +177,32 @@ export default function ErrorState({ status, message, title, text, seal, anim, o
       </div>
     </section>
   )
+}
+
+CodeHero.propTypes = {
+  code: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  anim: PropTypes.string,
+  compact: PropTypes.bool,
+}
+
+ErrorSeal.propTypes = {
+  strong: PropTypes.node,
+  text: PropTypes.node,
+  avatar: PropTypes.node,
+}
+
+ErrorState.propTypes = {
+  status: PropTypes.number,
+  message: PropTypes.node,
+  title: PropTypes.arrayOf(PropTypes.node),
+  text: PropTypes.node,
+  seal: PropTypes.oneOfType([
+    PropTypes.oneOf(['account']),
+    PropTypes.shape({ strong: PropTypes.node, text: PropTypes.node, avatar: PropTypes.node }),
+  ]),
+  anim: PropTypes.string,
+  onRetry: PropTypes.func,
+  actions: PropTypes.node,
+  compact: PropTypes.bool,
+  className: PropTypes.string,
 }

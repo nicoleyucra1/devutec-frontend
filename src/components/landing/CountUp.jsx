@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useInView } from '../../hooks/useInView'
 import { prefersReducedMotion } from '../../utils/motion'
+import PropTypes from 'prop-types'
 
 const defaultFormat = (n) => n.toLocaleString('en-US')
 
@@ -30,4 +31,11 @@ export default function CountUp({ value, duration = 900, format = defaultFormat,
       <span className="sr-only">{final}</span>
     </span>
   )
+}
+
+CountUp.propTypes = {
+  value: PropTypes.number.isRequired,
+  duration: PropTypes.number,
+  format: PropTypes.func,
+  className: PropTypes.string,
 }

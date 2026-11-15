@@ -1,4 +1,5 @@
 import { formatBudget } from '../../utils/format'
+import PropTypes from 'prop-types'
 
 // Monto grande del diseño: "S/ 600" en tinta y ".00" en gris
 export default function MoneyAmount({ value, className = '' }) {
@@ -16,4 +17,9 @@ export default function MoneyAmount({ value, className = '' }) {
       )}
     </p>
   )
+}
+
+MoneyAmount.propTypes = {
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  className: PropTypes.string,
 }

@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
 import Avatar from '../ui/Avatar'
+import PropTypes from 'prop-types'
+import { linkTo } from '../../utils/propShapes'
 
 // Tarjeta de una de las partes del contrato. Si tiene perfil público, el nombre lleva a él.
 export default function PersonCard({ role, name, isYou, to }) {
@@ -21,4 +23,11 @@ export default function PersonCard({ role, name, isYou, to }) {
       </div>
     </div>
   )
+}
+
+PersonCard.propTypes = {
+  role: PropTypes.node.isRequired,
+  name: PropTypes.string,
+  isYou: PropTypes.bool,
+  to: linkTo,
 }

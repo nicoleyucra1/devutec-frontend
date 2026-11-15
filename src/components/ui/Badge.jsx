@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 // Tonos del lenguaje de estado: verde = abierto o liberado, azul = en curso, ámbar = pendiente o retenido,
 // rojo = rechazado o cancelado, gris = finalizado o reembolsado
 const colors = {
@@ -18,4 +20,9 @@ export default function Badge({ children, color = 'gray' }) {
       {children}
     </span>
   )
+}
+
+Badge.propTypes = {
+  children: PropTypes.node,
+  color: PropTypes.oneOf(Object.keys(colors)),
 }

@@ -15,6 +15,8 @@ import { applicationService } from '../../services/applicationService'
 import { APPLICATION_STATUS } from '../../utils/applicationStatus'
 import { errorMessage } from '../../utils/errorMessage'
 import { formatBudget, formatDate } from '../../utils/format'
+import PropTypes from 'prop-types'
+import { idType } from '../../utils/propShapes'
 
 // Pantalla 409 del diseño: la postulación ya no se puede retirar porque el cliente la respondió
 function WithdrawConflict({ conflict, current, onBack }) {
@@ -192,4 +194,10 @@ export default function MyApplications() {
       />
     </main>
   )
+}
+
+WithdrawConflict.propTypes = {
+  conflict: PropTypes.shape({ id: idType, projectTitle: PropTypes.string, message: PropTypes.string }).isRequired,
+  current: PropTypes.shape({ status: PropTypes.string }),
+  onBack: PropTypes.func.isRequired,
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { CUYI_ANIMS, CUYI_PALETTE } from './cuyiFrames'
+import PropTypes from 'prop-types'
 
 function prefersReducedMotion() {
   try {
@@ -40,4 +41,10 @@ export default function Cuyi({ anim = 'saluda', px = 8, className = '' }) {
       )}
     </div>
   )
+}
+
+Cuyi.propTypes = {
+  anim: PropTypes.oneOf(Object.keys(CUYI_ANIMS)),
+  px: PropTypes.number,
+  className: PropTypes.string,
 }
