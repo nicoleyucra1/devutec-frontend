@@ -2,21 +2,29 @@ import { lazy } from 'react'
 
 const RELOAD_KEY = 'devutec.recargaPorVersion'
 
+// Marca de "ya recargué por una versión nueva", guardada solo en esta pestaña.
 // sessionStorage puede no estar disponible (por ejemplo, con el almacenamiento bloqueado)
-const storage = {
-  get: () => {
+const reloadMark = {
+  exists: () => {
     try {
-      return sessionStorage.getItem(RELOAD_KEY)
+      return sessionStorage.getItem(RELOAD_KEY) !== null
     } catch {
-      return '1'
+      // Sin almacenamiento se responde que ya se recargó, para no entrar en un bucle de recargas
+      return true
     }
   },
-  set: (value) => {
+  save: () => {
     try {
-      if (value) sessionStorage.setItem(RELOAD_KEY, value)
-      else storage.set(null)
+      sessionStorage.setItem(RELOAD_KEY, '1')
     } catch {
-      // Sin almacenamiento no se recarga sola, para no entrar en un bucle
+      // Sin almacenamiento no se guarda nada
+    }
+  },
+  clear: () => {
+    try {
+      sessionStorage.removeItem(RELOAD_KEY)
+    } catch {
+      // Sin almacenamiento no hay nada que borrar
     }
   },
 }
@@ -27,12 +35,12 @@ export function lazyPage(importer) {
   return lazy(async () => {
     try {
       const page = await importer()
-      storage.set(null)
+      reloadMark.clear()
       return page
     } catch (error) {
       // Si ya se recargó y sigue fallando, no es por la versión: se deja que lo muestre el ErrorBoundary
-      if (!storage.get()) {
-        storage.set('1')
+      if (!reloadMark.exists()) {
+        reloadMark.save()
         window.location.reload()
         // La página se va a recargar: mientras tanto sigue mostrándose el cargador
         return new Promise(() => {})
