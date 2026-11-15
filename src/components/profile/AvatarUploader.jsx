@@ -65,7 +65,7 @@ export default function AvatarUploader({ showTitle = true }) {
       <div className="relative shrink-0">
         <Avatar name={name} src={preview ?? user.avatarUrl} size="xl" />
         {busy && (
-          <span aria-hidden="true" className="absolute inset-0 grid place-items-center rounded-full bg-ink/45">
+          <span aria-hidden="true" className="absolute inset-0 grid place-items-center rounded-full bg-night/45">
             <span className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent" />
           </span>
         )}

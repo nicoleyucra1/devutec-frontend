@@ -53,7 +53,7 @@ function exportCsv(payments) {
 
 function StatCard({ label, value, hint, loading, dark = false, children }) {
   return (
-    <article className={`rounded-2xl p-6 ${dark ? 'bg-ink text-white' : 'border border-line bg-surface'}`}>
+    <article className={`rounded-2xl p-6 ${dark ? 'bg-night text-white' : 'border border-line bg-surface'}`}>
       <span className={`text-[10px] font-semibold tracking-[0.13em] ${dark ? 'text-lime' : 'text-muted'}`}>{label}</span>
       {loading ? (
         <Skeleton className="mt-3 h-12 w-32" />
@@ -91,7 +91,7 @@ export default function AdminPayments() {
       <header className="mb-9 flex flex-wrap items-end justify-between gap-5">
         <div>
           <p className="text-[11px] font-semibold tracking-[0.13em]">
-            <span className="mr-2 rounded-md bg-ink px-2 py-1 font-mono text-[10px] tracking-[0.1em] text-lime">ADMIN</span>
+            <span className="mr-2 rounded-md bg-night px-2 py-1 font-mono text-[10px] tracking-[0.1em] text-lime">ADMIN</span>
             ADMINISTRACIÓN
           </p>
           <h1 className="mt-4 text-[46px] leading-none tracking-[-0.045em] lg:text-[60px]">

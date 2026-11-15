@@ -21,7 +21,7 @@ export default function CuyiMessage({ role, text, anim = 'saluda', children }) {
   if (role === 'user') {
     return (
       <div className="chat-msg-in flex justify-end">
-        <p className="max-w-[80%] whitespace-pre-line rounded-[16px] rounded-br-[4px] bg-ink px-3.5 py-2.5 text-[13px] leading-relaxed text-white">
+        <p className="max-w-[80%] whitespace-pre-line rounded-[16px] rounded-br-[4px] bg-ink px-3.5 py-2.5 text-[13px] leading-relaxed text-on-ink">
           {text}
         </p>
       </div>

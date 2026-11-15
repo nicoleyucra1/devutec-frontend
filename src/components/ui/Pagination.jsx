@@ -48,7 +48,7 @@ export default function Pagination({ page, size, totalPages, totalElements, onPa
               key={n}
               type="button"
               aria-current={n === page ? 'page' : undefined}
-              className={`${buttonClass} ${n === page ? 'border-ink bg-ink text-white' : 'border-line hover:bg-white'}`}
+              className={`${buttonClass} ${n === page ? 'border-ink bg-ink text-on-ink' : 'border-line hover:bg-white'}`}
               onClick={() => onPageChange(n)}
             >
               {n}

@@ -379,7 +379,7 @@ export default function ContractDetail() {
         </section>
 
         <aside className="grid gap-3 lg:sticky lg:top-24">
-          <div className="relative overflow-hidden rounded-2xl bg-ink p-6 text-white sm:p-7">
+          <div className="relative overflow-hidden rounded-2xl bg-night p-6 text-white sm:p-7">
             {contract.status === 'CONFIRMED' && (
               <span className="absolute right-5 top-5">
                 <Cuyi anim="celebra" px={3} />

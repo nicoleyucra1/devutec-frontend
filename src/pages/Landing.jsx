@@ -25,7 +25,7 @@ const IMPACT = [
   { value: '4.8/5', label: 'satisfacción promedio' },
 ]
 
-function Avatar({ children, className = 'bg-ink text-white', style }) {
+function Avatar({ children, className = 'bg-ink text-on-ink', style }) {
   return (
     <span
       style={style}

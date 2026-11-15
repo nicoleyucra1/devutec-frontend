@@ -51,7 +51,7 @@ export default function ProjectCard({ project }) {
           <strong className="text-sm tabular-nums">{formatDate(project.deadline)}</strong>
         </div>
         {/* Solo decorativa: el link es toda la tarjeta */}
-        <span aria-hidden="true" className="ml-auto grid h-10 w-10 place-items-center rounded-full bg-ink text-white">
+        <span aria-hidden="true" className="ml-auto grid h-10 w-10 place-items-center rounded-full bg-ink text-on-ink">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14M13 6l6 6-6 6" />
           </svg>
