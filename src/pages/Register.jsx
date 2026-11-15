@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import AuthField from '../components/auth/AuthField'
+import GoogleSignIn from '../components/auth/GoogleSignIn'
 import PasswordToggle from '../components/auth/PasswordToggle'
 import RegisterAside from '../components/auth/RegisterAside'
 import PublicHeader from '../components/layout/PublicHeader'
@@ -99,7 +100,7 @@ function RoleCard({ role, selected, onChange }) {
 // Las reglas de la contraseña se marcan en verde apenas se cumplen
 function PasswordRules({ password }) {
   return (
-    <ul aria-label="Requisitos de la contraseña" className="flex flex-col gap-2 sm:col-span-2 sm:flex-row sm:gap-[18px]">
+    <ul aria-label="Requisitos de la contraseña" className="flex flex-col gap-2 sm:col-span-2 sm:flex-row sm:flex-wrap sm:gap-x-[18px] sm:gap-y-2">
       {PASSWORD_RULES.map((rule) => {
         const valid = rule.test(password)
         return (
@@ -246,6 +247,10 @@ export default function Register() {
                 </Button>
               </div>
             </form>
+
+            <div className="mt-5">
+              <GoogleSignIn rol={values.rol} text="signup_with" onSuccess={() => navigate('/', { replace: true })} />
+            </div>
 
             <p className="mt-7 text-center text-xs text-muted lg:text-left">
               ¿Ya tienes cuenta?{' '}

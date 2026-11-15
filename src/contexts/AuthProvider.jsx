@@ -67,11 +67,15 @@ export function AuthProvider({ children }) {
   // El registro también devuelve tokens, así que el usuario queda logueado
   const register = async (data) => startSession(await authService.register(data))
 
+  // Continuar con Google: idToken viene del botón de Google y rol solo se manda al crear la cuenta
+  const loginWithGoogle = async (data) => startSession(await authService.google(data))
+
   const value = {
     user,
     isAuthenticated: user !== null,
     login,
     register,
+    loginWithGoogle,
     logout,
     updateUser,
   }

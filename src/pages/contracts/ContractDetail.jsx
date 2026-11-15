@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import ContractDetailSkeleton from '../../components/contracts/ContractDetailSkeleton'
 import ContractReviews from '../../components/contracts/ContractReviews'
 import ContractTimeline from '../../components/contracts/ContractTimeline'
@@ -161,6 +161,46 @@ export default function ContractDetail() {
   // Acción que espera confirmación en la ventana: 'deliver', 'confirm' o 'cancel'
   const [pending, setPending] = useState(null)
   const [termsOpen, setTermsOpen] = useState(false)
+  const [paying, setPaying] = useState(false)
+
+  // Al volver de Stripe la URL trae ?pago=ok&session_id=... o ?pago=cancelado
+  const [searchParams, setSearchParams] = useSearchParams()
+  const checkoutHandled = useRef(false)
+
+  useEffect(() => {
+    const result = searchParams.get('pago')
+    if (!result || checkoutHandled.current) return
+    checkoutHandled.current = true
+    const sessionId = searchParams.get('session_id')
+    // Se limpia la URL para que recargar la página no repita el aviso
+    const clearParams = () => setSearchParams({}, { replace: true })
+
+    if (result === 'ok' && sessionId) {
+      contractService
+        .confirmCheckout(id, sessionId)
+        .then(() => {
+          toast.success('Pago recibido. El dinero queda en garantía hasta que confirmes la entrega.')
+          reload()
+        })
+        .catch((err) => toast.error(errorMessage(err)))
+        .finally(clearParams)
+    } else {
+      if (result === 'cancelado') toast.info('No se hizo ningún cobro. Puedes pagar cuando quieras.')
+      clearParams()
+    }
+  }, [id, searchParams, setSearchParams, toast, reload])
+
+  // Pide al backend la página de pago de Stripe y lleva al cliente ahí
+  const payWithCard = async () => {
+    setPaying(true)
+    try {
+      const { checkoutUrl } = await contractService.startCheckout(id)
+      window.location.assign(checkoutUrl)
+    } catch (err) {
+      toast.error(errorMessage(err))
+      setPaying(false)
+    }
+  }
 
   // Cierra la sesión y vuelve a este contrato después de ingresar con otra cuenta
   const switchAccount = () => {
@@ -248,6 +288,12 @@ export default function ContractDetail() {
   const canDeliver = isFreelancer && contract.status === 'IN_PROGRESS'
   const canCancel = isClient && contract.status === 'IN_PROGRESS'
   const canConfirm = isClient && contract.status === 'DELIVERED'
+  // El cliente puede pagar con tarjeta mientras el contrato siga abierto y no lo haya pagado antes
+  const canPay =
+    isClient &&
+    (contract.status === 'IN_PROGRESS' || contract.status === 'DELIVERED') &&
+    contract.paymentStatus === 'HELD' &&
+    !contract.paidWithCard
 
   const moneyKicker = { HELD: 'PAGO EN GARANTÍA', RELEASED: 'PAGO LIBERADO', REFUNDED: 'PAGO REEMBOLSADO' }[contract.paymentStatus]
   const parties = [contract.clientName, contract.freelancerName].filter(Boolean).join(' · ')
@@ -341,8 +387,21 @@ export default function ContractDetail() {
             <p className="text-[10px] font-semibold tracking-[0.13em] text-lime">{box.kicker}</p>
             <h2 className="mt-3 max-w-[80%] text-2xl font-semibold leading-tight tracking-tight">{box.title}</h2>
             <p className="mt-3 text-[13px] leading-relaxed text-white/70">{box.text}</p>
-            {(canDeliver || canConfirm || canCancel || finished) && (
+            {contract.paidWithCard && (
+              <p className="mt-4 text-[12px] font-semibold text-lime">Pagado con tarjeta ✓</p>
+            )}
+            {(canPay || canDeliver || canConfirm || canCancel || finished) && (
               <div className="mt-6 grid gap-2">
+                {canPay && (
+                  <>
+                    <Button onClick={payWithCard} loading={paying} variant="lime" className="w-full">
+                      {paying ? 'Abriendo Stripe...' : 'Pagar con tarjeta'}
+                    </Button>
+                    <p className="text-center text-[11px] text-white/60">
+                      Modo de prueba: tarjeta 4242 4242 4242 4242, cualquier fecha futura y CVC
+                    </p>
+                  </>
+                )}
                 {canDeliver && (
                   <Button onClick={() => setPending('deliver')} variant="lime" className="w-full">
                     Entregar trabajo
