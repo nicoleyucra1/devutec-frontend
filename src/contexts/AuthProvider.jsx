@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { AuthContext } from './authContext'
 import { authService } from '../services/authService'
 import { userService } from '../services/userService'
@@ -16,6 +16,25 @@ export function AuthProvider({ children }) {
   }, [])
 
   const toast = useToast()
+
+  // Cambia los datos del usuario con sesión (por ejemplo, su foto nueva) en pantalla y en el almacenamiento
+  const updateUser = useCallback((next) => {
+    tokenStorage.setUser(next)
+    setUser(next)
+  }, [])
+
+  // Al abrir la web con una sesión guardada, se piden de nuevo los datos del usuario: así aparece su foto
+  // aunque la sesión se haya iniciado antes de subirla. Si falla, se sigue con lo guardado.
+  const hadSession = useRef(user !== null)
+  useEffect(() => {
+    if (!hadSession.current) return
+    const controller = new AbortController()
+    userService
+      .getMe({ signal: controller.signal })
+      .then((me) => tokenStorage.getUser() && updateUser(me))
+      .catch(() => {})
+    return () => controller.abort()
+  }, [updateUser])
 
   // Si el refresh falla, se cierra la sesión y se avisa por qué se volvió al login
   useEffect(() => {
@@ -58,6 +77,7 @@ export function AuthProvider({ children }) {
     register,
     loginWithGoogle,
     logout,
+    updateUser,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
