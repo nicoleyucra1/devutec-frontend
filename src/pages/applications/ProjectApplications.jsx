@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import AcceptProposalDialog from '../../components/applications/AcceptProposalDialog'
@@ -28,6 +29,10 @@ function ShieldIcon({ size = 18 }) {
       <path d="m9 12 2 2 4-5" />
     </svg>
   )
+}
+
+ShieldIcon.propTypes = {
+  size: PropTypes.number,
 }
 
 function CardsLoading() {

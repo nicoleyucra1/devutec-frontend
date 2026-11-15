@@ -1,8 +1,10 @@
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import Badge from '../ui/Badge'
 import Button from '../ui/Button'
 import { initials } from '../layout/navLinks'
 import { formatBudget } from '../../utils/format'
+import { applicationShape } from '../../utils/propShapes'
 
 // "UTEC · Ciclo 6" o "UTEC · Egresado", con lo que haya en el perfil
 function studyLine(profile) {
@@ -131,4 +133,16 @@ export default function ProposalCard({ application, budget, selected, canDecide,
       {accepted && contractLink}
     </article>
   )
+}
+
+ProposalCard.propTypes = {
+  application: applicationShape.isRequired,
+  budget: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  selected: PropTypes.bool,
+  canDecide: PropTypes.bool,
+  busy: PropTypes.bool,
+  onSelect: PropTypes.func.isRequired,
+  onAccept: PropTypes.func.isRequired,
+  onReject: PropTypes.func.isRequired,
+  contractLink: PropTypes.node,
 }

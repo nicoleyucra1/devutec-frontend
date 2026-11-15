@@ -52,5 +52,18 @@ export const freelancerProfileShape = PropTypes.shape({
   portafolioUrl: PropTypes.string,
 })
 
+// Una postulación con lo que agrega useApplicants: el perfil del freelancer y cuántas reseñas tiene
+export const applicationShape = PropTypes.shape({
+  id: idType.isRequired,
+  freelancerName: PropTypes.string,
+  freelancerUserId: idType,
+  message: PropTypes.string,
+  proposedPrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  status: PropTypes.oneOf(['PENDING', 'ACCEPTED', 'REJECTED']),
+  createdAt: PropTypes.string,
+  profile: freelancerProfileShape,
+  reviewCount: PropTypes.number,
+})
+
 // Un link de react-router: un texto ('/projects') o un objeto ({ pathname, search })
 export const linkTo = PropTypes.oneOfType([PropTypes.string, PropTypes.object])

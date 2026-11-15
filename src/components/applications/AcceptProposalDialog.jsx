@@ -1,7 +1,9 @@
+import PropTypes from 'prop-types'
 import { useState } from 'react'
 import Button from '../ui/Button'
 import Modal from '../ui/Modal'
 import { formatBudget } from '../../utils/format'
+import { applicationShape, projectShape } from '../../utils/propShapes'
 
 const shield = (
   <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -57,6 +59,15 @@ function AcceptBody({ application, project, otherPending, busy, onConfirm, onClo
   )
 }
 
+AcceptBody.propTypes = {
+  application: applicationShape.isRequired,
+  project: projectShape.isRequired,
+  otherPending: PropTypes.number.isRequired,
+  busy: PropTypes.bool,
+  onConfirm: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+}
+
 // Confirmación antes de aceptar una propuesta: aceptar crea el contrato y retiene el pago
 export default function AcceptProposalDialog({ application, project, otherPending, busy, onConfirm, onClose }) {
   const open = Boolean(application && project)
@@ -81,4 +92,14 @@ export default function AcceptProposalDialog({ application, project, otherPendin
       )}
     </Modal>
   )
+}
+
+AcceptProposalDialog.propTypes = {
+  // null mientras no se eligió a quién aceptar (la ventana está cerrada)
+  application: applicationShape,
+  project: projectShape,
+  otherPending: PropTypes.number.isRequired,
+  busy: PropTypes.bool,
+  onConfirm: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
 }
