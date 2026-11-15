@@ -30,7 +30,17 @@ function Highlight({ text, query }) {
 // habilidad elegida queda como un chip con ×. Con el teclado: flechas para moverse, Enter para elegir, Esc para
 // cerrar y Borrar (con el campo vacío) para quitar la última.
 // value es una lista de ids; onChange recibe la lista nueva.
-export default function SkillPicker({ skills = [], value = [], onChange, label = 'Habilidades', placeholder = 'Busca React, Figma, Excel…' }) {
+// max limita cuántas se pueden elegir; error pinta el borde en rojo; hideLabel deja la etiqueta solo para lectores de pantalla.
+export default function SkillPicker({
+  skills = [],
+  value = [],
+  onChange,
+  label = 'Habilidades',
+  placeholder = 'Busca React, Figma, Excel…',
+  max,
+  error = false,
+  hideLabel = false,
+}) {
   const id = useId()
   const inputRef = useRef(null)
   const [query, setQuery] = useState('')
@@ -49,10 +59,12 @@ export default function SkillPicker({ skills = [], value = [], onChange, label =
         .sort((a, b) => normalize(b.name).startsWith(normalize(q)) - normalize(a.name).startsWith(normalize(q)))
         .slice(0, MAX_SUGGESTIONS)
     : POPULAR.map((name) => available.find((skill) => skill.name === name)).filter(Boolean)
-  const showList = open && suggestions.length > 0
+  const full = Boolean(max) && selected.length >= max
+  const showList = open && !full && suggestions.length > 0
   const highlighted = Math.min(active, suggestions.length - 1)
 
   const add = (skill) => {
+    if (full) return
     onChange([...selectedIds, String(skill.id)])
     setQuery('')
     setActive(0)
@@ -85,12 +97,12 @@ export default function SkillPicker({ skills = [], value = [], onChange, label =
 
   return (
     <div className="relative">
-      <label htmlFor={`${id}-input`} className="text-xs font-medium text-ink">
+      <label htmlFor={`${id}-input`} className={hideLabel ? 'sr-only' : 'text-xs font-medium text-ink'}>
         {label}
       </label>
       <div
         onClick={() => inputRef.current?.focus()}
-        className="mt-2 flex min-h-12 w-full cursor-text flex-wrap items-center gap-1.5 rounded-[10px] border border-gray-300 bg-white px-2.5 py-2 transition focus-within:border-ink focus-within:ring-[3px] focus-within:ring-ink/5"
+        className={`${hideLabel ? '' : 'mt-2 '}flex min-h-12 w-full cursor-text flex-wrap items-center gap-1.5 rounded-[10px] border ${error ? 'border-error' : 'border-gray-300'} bg-white px-2.5 py-2 transition focus-within:border-ink focus-within:ring-[3px] focus-within:ring-ink/5`}
       >
         {selected.map((skill) => (
           <span key={skill.id} className="inline-flex items-center gap-1 rounded-[7px] border border-escrow bg-escrow-light py-1 pl-2.5 pr-1 text-xs font-semibold text-escrow">
@@ -127,7 +139,7 @@ export default function SkillPicker({ skills = [], value = [], onChange, label =
           onFocus={() => setOpen(true)}
           onBlur={() => setOpen(false)}
           onKeyDown={handleKeyDown}
-          placeholder={selected.length ? 'Agregar otra…' : placeholder}
+          placeholder={full ? `Llegaste al máximo de ${max}` : selected.length ? 'Agregar otra…' : placeholder}
           autoComplete="off"
           className="min-w-[120px] flex-1 bg-transparent px-1 py-1 text-sm text-ink outline-none placeholder:text-muted"
           // El foco se marca en el recuadro de afuera; la regla global de :focus-visible le ganaría a una clase
@@ -187,4 +199,7 @@ SkillPicker.propTypes = {
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,
+  max: PropTypes.number,
+  error: PropTypes.bool,
+  hideLabel: PropTypes.bool,
 }
