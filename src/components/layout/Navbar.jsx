@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import Logo from '../brand/Logo'
 import AvatarUploader from '../profile/AvatarUploader'
+import PhoneEditor from '../profile/PhoneEditor'
 import ButtonLink from '../projects/ButtonLink'
 import Avatar from '../ui/Avatar'
 import Button from '../ui/Button'
@@ -36,14 +37,14 @@ function useCloseOnOutside(open, setOpen) {
   return ref
 }
 
-// Opciones del menú del avatar: la foto de perfil, el perfil del freelancer y cerrar sesión
+// Opciones del menú del avatar: Mi cuenta (foto y celular), el perfil del freelancer y cerrar sesión
 function UserMenuItems({ user, onNavigate, onLogout, onPhoto }) {
   const itemClass = 'block w-full rounded-md px-2.5 py-2.5 text-left text-xs hover:bg-paper'
   return (
     <>
       {user.rol !== 'ADMIN' && (
         <button type="button" onClick={onPhoto} className={itemClass}>
-          Foto de perfil
+          Mi cuenta
         </button>
       )}
       {user.rol === 'FREELANCER' && user.id && (
@@ -177,9 +178,15 @@ export default function Navbar() {
         </div>
       )}
 
-      <Modal open={photoOpen} title="Foto de perfil" kicker="TU CUENTA" onClose={() => setPhotoOpen(false)}>
-        <p className="mb-5 text-sm text-muted">Se ve en la barra de arriba y, si eres freelancer, en tu perfil público.</p>
-        {photoOpen && <AvatarUploader showTitle={false} />}
+      <Modal open={photoOpen} title="Mi cuenta" kicker={name.toUpperCase()} onClose={() => setPhotoOpen(false)}>
+        {photoOpen && (
+          <div className="mt-2 grid gap-6">
+            <AvatarUploader />
+            <div className="border-t border-line pt-6">
+              <PhoneEditor help="Solo lo ve la otra persona cuando tienen un contrato, para escribirte por WhatsApp." />
+            </div>
+          </div>
+        )}
         <div className="mt-7 flex justify-end">
           <Button variant="secondary" onClick={() => setPhotoOpen(false)}>
             Listo
