@@ -6,6 +6,19 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DevUTEC</title>
+  <!-- Pone el modo claro u oscuro antes de que se pinte la página, así no hay un destello blanco al abrir en oscuro.
+       Usa la misma preferencia que guarda ThemeProvider ('devutec.theme'); por ahora, si no hay nada, es claro. -->
+  <script>
+    (function () {
+      var preference = 'light'
+      try {
+        var saved = localStorage.getItem('devutec.theme')
+        if (saved === 'light' || saved === 'dark' || saved === 'system') preference = saved
+      } catch (e) {}
+      var dark = preference === 'dark' || (preference === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+    })()
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
