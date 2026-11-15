@@ -58,6 +58,7 @@ export const freelancerProfileShape = PropTypes.shape({
   githubUsername: PropTypes.string,
   portafolioUrl: PropTypes.string,
   avatarUrl: PropTypes.string,
+  presentacion: PropTypes.string,
 })
 
 // Una postulación con lo que agrega useApplicants: el perfil del freelancer y cuántas reseñas tiene
