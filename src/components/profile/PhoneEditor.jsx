@@ -73,7 +73,7 @@ export default function PhoneEditor({ label = 'Celular para WhatsApp', help }) {
           </label>
           <div className="flex flex-wrap gap-2">
             <div
-              className={`flex min-h-11 min-w-0 flex-1 items-center overflow-hidden rounded-[10px] border bg-white focus-within:border-ink focus-within:ring-[3px] focus-within:ring-ink/5 ${
+              className={`flex min-h-11 min-w-0 flex-1 items-center overflow-hidden rounded-[10px] border bg-surface focus-within:border-ink focus-within:ring-[3px] focus-within:ring-ink/5 ${
                 error ? 'border-error' : 'border-gray-300'
               }`}
             >

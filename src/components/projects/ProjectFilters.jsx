@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { skillShape } from '../../utils/propShapes'
 
 const FIELD =
-  'h-10 w-full rounded-lg border border-line bg-white px-2.5 text-xs transition-colors focus:border-ink'
+  'h-10 w-full rounded-lg border border-line bg-surface px-2.5 text-xs transition-colors focus:border-ink'
 
 function Group({ title, children, htmlFor }) {
   return (

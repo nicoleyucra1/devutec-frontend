@@ -190,7 +190,7 @@ export default function ClientDashboard() {
                 />
               ))}
               {actions === 0 && !contracts.error && (
-                <div className="flex items-center gap-5 rounded-[15px] border border-dashed border-[#cbc7be] px-[22px] py-5">
+                <div className="flex items-center gap-5 rounded-[15px] border border-dashed border-gray-300 px-[22px] py-5">
                   <Cuyi anim="duerme" px={3} />
                   <p className="text-[13px] text-muted">
                     Cuando un freelancer entregue un trabajo o recibas postulaciones nuevas, aparecerán aquí.

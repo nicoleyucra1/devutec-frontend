@@ -139,7 +139,7 @@ function ProjectRow({ project, onDelete }) {
 function Table({ children, label }) {
   return (
     <div className="overflow-x-auto rounded-[15px] border border-line bg-surface">
-      <div aria-hidden="true" className={`${ROW} min-h-[43px] bg-[#efede7] text-[10px] font-semibold tracking-[0.09em] text-muted`}>
+      <div aria-hidden="true" className={`${ROW} min-h-[43px] bg-table-head text-[10px] font-semibold tracking-[0.09em] text-muted`}>
         <span>PROYECTO</span>
         <span>ESTADO</span>
         <span>POSTULANTES</span>
