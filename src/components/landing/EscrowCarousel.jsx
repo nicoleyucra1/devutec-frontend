@@ -151,14 +151,14 @@ function SlideCard({ slide, className = '', style, ...props }) {
         ))}
       </div>
 
-      <div className="flex gap-3 rounded-xl bg-[#f0f5f1] p-[15px] text-xs leading-normal text-escrow">
+      <div className="flex gap-3 rounded-xl bg-[#f0f5f1] dark:bg-escrow-light p-[15px] text-xs leading-normal text-escrow">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="flex-none">
           <path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6L12 3Z" />
           <path d="m8.8 12 2.2 2.2 4.2-4.4" />
         </svg>
         <p>
           <strong className="block font-semibold">{slide.note}</strong>
-          <span className="text-[#365242]">{slide.detail}</span>
+          <span className="text-[#365242] dark:text-[#9cc9ae]">{slide.detail}</span>
         </p>
       </div>
     </article>

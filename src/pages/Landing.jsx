@@ -85,7 +85,7 @@ function Hero() {
           Contrata talento junior de UTEC.{' '}
           <em className="block text-escrow">
             Paga solo cuando{' '}
-            {/* Trazo lima a mano que se dibuja una vez al cargar, como un resaltador */}
+            {/* Trazo a mano que se dibuja una vez al cargar, como un resaltador: lima en claro y verde profundo en oscuro */}
             <span className="relative isolate inline-block">
               apruebes.
               <svg
@@ -98,7 +98,7 @@ function Hero() {
                   d="M4 11C46 5 112 3 196 8"
                   pathLength="1"
                   fill="none"
-                  stroke="#d7f25c"
+                  stroke="var(--color-highlight)"
                   strokeWidth="9"
                   strokeLinecap="round"
                   style={{ strokeDasharray: 1, strokeDashoffset: 1, animation: 'draw-stroke .8s var(--ease-brand) .5s forwards' }}
@@ -107,7 +107,7 @@ function Hero() {
             </span>
           </em>
         </h1>
-        <p className="max-w-[530px] text-base leading-normal text-[#4c4b47] lg:text-lg lg:leading-[1.55]">
+        <p className="max-w-[530px] text-base leading-normal text-[#4c4b47] dark:text-gray-600 lg:text-lg lg:leading-[1.55]">
           Publica lo que necesitas, recibe propuestas de estudiantes verificados y mantén tu dinero protegido hasta revisar
           la entrega.
         </p>
@@ -217,7 +217,7 @@ function ForBusinesses() {
 
 function ForStudents() {
   return (
-    <section id="estudiantes" className="scroll-mt-[72px] bg-[#ece9e1] py-[75px] lg:py-[105px]">
+    <section id="estudiantes" className="scroll-mt-[72px] bg-[#ece9e1] dark:bg-soft py-[75px] lg:py-[105px]">
       <div className={`${shell} flex flex-col-reverse gap-[50px] lg:grid lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:gap-[130px]`}>
         {/* Perfil de ejemplo de una freelancer: al pasar el mouse se endereza y se levanta */}
         <article className="rounded-[18px] border border-line bg-surface p-6 shadow-[0_24px_60px_rgba(14,14,12,0.06)] transition duration-500 ease-[var(--ease-brand)] hover:-translate-y-1 hover:shadow-[0_32px_70px_rgba(14,14,12,0.1)] lg:-rotate-1 lg:hover:rotate-0">

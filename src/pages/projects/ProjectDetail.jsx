@@ -91,7 +91,7 @@ function VisitorPanel({ project }) {
         <Icon name="shield" />
         <span className="text-xs leading-normal">
           <strong className="block font-semibold">Pago protegido en garantía.</strong>
-          <span className="text-[#52705f]">El cliente paga al contratar y el dinero se libera al aprobar la entrega.</span>
+          <span className="text-[#52705f] dark:text-[#9cc9ae]">El cliente paga al contratar y el dinero se libera al aprobar la entrega.</span>
         </span>
       </div>
     </aside>
@@ -195,7 +195,7 @@ export default function ProjectDetail() {
 
               <div className="border-b border-line py-11">
                 <p className="text-[11px] font-semibold tracking-[0.13em]">DESCRIPCIÓN</p>
-                <p className="mt-5 whitespace-pre-line text-[15px] leading-[1.75] text-[#55534e]">{project.description || 'Sin descripción.'}</p>
+                <p className="mt-5 whitespace-pre-line text-[15px] leading-[1.75] text-[#55534e] dark:text-gray-600">{project.description || 'Sin descripción.'}</p>
               </div>
 
               {project.skills?.length > 0 && (

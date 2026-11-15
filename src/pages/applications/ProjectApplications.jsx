@@ -179,7 +179,7 @@ export default function ProjectApplications() {
               </svg>
               <div className="min-w-0 flex-1">
                 <strong className="text-[13px]">Propuesta de {accepted.freelancerName.split(' ')[0]} aceptada</strong>
-                <p className="mt-[3px] text-xs text-[#52705f]">
+                <p className="mt-[3px] text-xs text-[#52705f] dark:text-[#9cc9ae]">
                   {project.data?.status === 'DONE'
                     ? 'El proyecto ya terminó y el pago se liberó.'
                     : `El contrato se creó y ${formatBudget(contract?.amount ?? accepted.proposedPrice)} quedaron retenidos en garantía.`}
