@@ -8,6 +8,8 @@ import { supportService } from '../../services/supportService'
 
 const GREETING = '¡Hola! Soy Cuyi 🐹 ¿En qué te ayudo? Pregúntame lo que quieras sobre DEVUTEC o elige una de estas:'
 const MAX_HISTORY = 8
+// Evento para abrir el chat desde otras partes de la web (por ejemplo, "Contactar soporte")
+export const OPEN_CHAT_EVENT = 'devutec:abrir-ayuda'
 // En estas pantallas el chat estorbaría (pago, sesión expirada)
 const HIDDEN_ON = ['/pago-listo', '/session-expired']
 
@@ -46,6 +48,16 @@ function ChatWindow() {
   useEffect(() => {
     if (open) inputRef.current?.focus()
   }, [open])
+
+  // "Contactar soporte" pide abrir el chat; preventDefault le avisa que alguien lo abrió
+  useEffect(() => {
+    const handleOpen = (event) => {
+      event.preventDefault()
+      setOpen(true)
+    }
+    window.addEventListener(OPEN_CHAT_EVENT, handleOpen)
+    return () => window.removeEventListener(OPEN_CHAT_EVENT, handleOpen)
+  }, [])
 
   const ask = async (question) => {
     const clean = question.trim()
