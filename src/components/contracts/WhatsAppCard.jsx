@@ -2,6 +2,8 @@ import PhoneEditor from '../profile/PhoneEditor'
 import { useAuth } from '../../hooks/useAuth'
 import { whatsappLink } from '../../utils/phone'
 import { buttonClass } from '../ui/buttonClass'
+import PropTypes from 'prop-types'
+import { contractShape } from '../../utils/propShapes'
 
 function ChatIcon() {
   return (
@@ -51,4 +53,9 @@ export default function WhatsAppCard({ contract, isClient }) {
       )}
     </section>
   )
+}
+
+WhatsAppCard.propTypes = {
+  contract: contractShape.isRequired,
+  isClient: PropTypes.bool,
 }

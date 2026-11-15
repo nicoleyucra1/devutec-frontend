@@ -5,6 +5,7 @@ import { useToast } from '../../hooks/useToast'
 import { userService } from '../../services/userService'
 import { errorMessage } from '../../utils/errorMessage'
 import { formatPhone, normalizePhone } from '../../utils/phone'
+import PropTypes from 'prop-types'
 
 // Agregar, cambiar o quitar el celular para WhatsApp de la persona con sesión.
 // label y help cambian según dónde se use (en "Mi cuenta" o en el contrato, cuando todavía no lo agregó).
@@ -123,4 +124,9 @@ export default function PhoneEditor({ label = 'Celular para WhatsApp', help }) {
       )}
     </div>
   )
+}
+
+PhoneEditor.propTypes = {
+  label: PropTypes.string,
+  help: PropTypes.node,
 }
