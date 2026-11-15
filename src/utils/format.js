@@ -35,3 +35,10 @@ export function formatWhen(value) {
 function startOfDay(date) {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate())
 }
+
+// Días que faltan para una fecha "2026-12-15" (0 = hoy, negativo = ya pasó)
+export function daysUntil(value) {
+  if (!value) return null
+  const [year, month, day] = value.slice(0, 10).split('-').map(Number)
+  return Math.round((new Date(year, month - 1, day) - startOfDay(new Date())) / 86_400_000)
+}
