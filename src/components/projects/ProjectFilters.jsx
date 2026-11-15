@@ -1,83 +1,111 @@
-import Button from '../ui/Button'
-import Card from '../ui/Card'
-import Input from '../ui/Input'
 import SkillPicker from '../ui/SkillPicker'
-import { fieldClass, labelClass } from './fieldStyles'
 import { STATUS_LABELS } from '../../utils/format'
 import PropTypes from 'prop-types'
 import { skillShape } from '../../utils/propShapes'
 
-// Controles de filtro. El texto de búsqueda se maneja aparte para aplicarle debounce.
-export default function ProjectFilters({ search, onSearchChange, filters, onFilterChange, skills, onClear }) {
+const FIELD =
+  'h-10 w-full rounded-lg border border-line bg-white px-2.5 text-xs transition-colors focus:border-ink'
+
+function Group({ title, children, htmlFor }) {
   return (
-    <Card className="mb-6">
-      <form role="search" onSubmit={(event) => event.preventDefault()} className="grid items-end gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="sm:col-span-2 lg:col-span-3">
-          <Input
-            label="Buscar"
-            type="search"
-            placeholder="Título o descripción"
-            value={search}
-            onChange={(event) => onSearchChange(event.target.value)}
-          />
-        </div>
-
-        <label className="block">
-          <span className={labelClass}>Estado</span>
-          <select className={fieldClass} value={filters.status} onChange={(event) => onFilterChange('status', event.target.value)}>
-            <option value="">Cualquier estado</option>
-            {Object.entries(STATUS_LABELS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
+    <div className="mb-[25px] border-b border-line pb-[25px] last:mb-0 last:border-b-0">
+      {htmlFor ? (
+        <label htmlFor={htmlFor} className="text-[11px] font-semibold tracking-[0.13em] text-muted">
+          {title}
         </label>
-
-        <div className="sm:col-span-2 lg:col-span-2">
-          <SkillPicker skills={skills ?? []} value={filters.skillIds} onChange={(ids) => onFilterChange('skillIds', ids.join(','))} />
-        </div>
-
-        <Input
-          label="Entrega antes de"
-          type="date"
-          value={filters.deadlineBefore}
-          onChange={(event) => onFilterChange('deadlineBefore', event.target.value)}
-        />
-
-        <Input
-          label="Presupuesto mín. (S/)"
-          type="number"
-          min="0"
-          value={filters.minBudget}
-          onChange={(event) => onFilterChange('minBudget', event.target.value)}
-        />
-
-        <Input
-          label="Presupuesto máx. (S/)"
-          type="number"
-          min="0"
-          value={filters.maxBudget}
-          onChange={(event) => onFilterChange('maxBudget', event.target.value)}
-        />
-
-        <Button variant="secondary" onClick={onClear}>
-          Limpiar filtros
-        </Button>
-      </form>
-    </Card>
+      ) : (
+        <p className="text-[11px] font-semibold tracking-[0.13em] text-muted">{title}</p>
+      )}
+      <div className="mt-[13px]">{children}</div>
+    </div>
   )
 }
 
+// Columna de filtros de Explorar: estado, habilidades, presupuesto y fecha de entrega.
+// El estado "ALL" significa "todos"; si no viene en la URL se muestran los abiertos.
+export default function ProjectFilters({ filters, onFilterChange, skills }) {
+  return (
+    <div>
+      <Group title="ESTADO" htmlFor="filtro-estado">
+        <select id="filtro-estado" className={FIELD} value={filters.status} onChange={(event) => onFilterChange('status', event.target.value)}>
+          <option value="ALL">Todos</option>
+          {Object.entries(STATUS_LABELS).map(([value, label]) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </Group>
+
+      <Group title="HABILIDADES">
+        {/* El título del grupo ya dice "HABILIDADES": la etiqueta del buscador queda solo para lectores de pantalla */}
+        <div className="[&>div>div:nth-child(2)]:mt-0 [&>div>label:first-child]:sr-only">
+          <SkillPicker
+          skills={skills ?? []}
+          value={filters.skillIds}
+          onChange={(ids) => onFilterChange('skillIds', ids.join(','))}
+          label="Filtrar por habilidades"
+          placeholder="React, Figma…"
+          />
+        </div>
+      </Group>
+
+      <Group title="PRESUPUESTO">
+        <div className="grid grid-cols-2 gap-2">
+          <label className="flex flex-col gap-1.5 text-[9px] text-muted">
+            Mínimo (S/)
+            <input
+              type="number"
+              min="0"
+              inputMode="numeric"
+              placeholder="300"
+              className={`${FIELD} text-ink`}
+              value={filters.minBudget}
+              onChange={(event) => onFilterChange('minBudget', event.target.value)}
+            />
+          </label>
+          <label className="flex flex-col gap-1.5 text-[9px] text-muted">
+            Máximo (S/)
+            <input
+              type="number"
+              min="0"
+              inputMode="numeric"
+              placeholder="1500"
+              className={`${FIELD} text-ink`}
+              value={filters.maxBudget}
+              onChange={(event) => onFilterChange('maxBudget', event.target.value)}
+            />
+          </label>
+        </div>
+      </Group>
+
+      <Group title="ENTREGA ANTES DE" htmlFor="filtro-fecha">
+        <input
+          id="filtro-fecha"
+          type="date"
+          className={FIELD}
+          value={filters.deadlineBefore}
+          onChange={(event) => onFilterChange('deadlineBefore', event.target.value)}
+        />
+      </Group>
+    </div>
+  )
+}
+
+Group.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node,
+  htmlFor: PropTypes.string,
+}
+
 ProjectFilters.propTypes = {
-  search: PropTypes.string.isRequired,
-  onSearchChange: PropTypes.func.isRequired,
   filters: PropTypes.shape({
     status: PropTypes.string,
     skillIds: PropTypes.arrayOf(PropTypes.string),
+    minBudget: PropTypes.string,
+    maxBudget: PropTypes.string,
     deadlineBefore: PropTypes.string,
   }).isRequired,
   onFilterChange: PropTypes.func.isRequired,
   skills: PropTypes.arrayOf(skillShape),
-  onClear: PropTypes.func.isRequired,
 }
