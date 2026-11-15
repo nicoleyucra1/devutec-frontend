@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { QRCodeSVG } from 'qrcode.react'
 import MoneyAmount from '../../components/contracts/MoneyAmount'
@@ -126,6 +126,29 @@ function ProfileHero({ profile, isOwner }) {
           )}
         </div>
       </div>
+    </section>
+  )
+}
+
+// "Sobre Camila": la presentación que escribió en Editar perfil. Si no tiene, a los demás no se les muestra
+// nada y a la dueña del perfil se le invita a escribirla.
+function About({ profile, firstName, isOwner }) {
+  const text = profile.presentacion?.trim()
+  if (!text && !isOwner) return null
+
+  return (
+    <section className="border-b border-line pb-[55px] pt-[55px]">
+      <p className="text-[11px] font-semibold tracking-[0.13em]">SOBRE {firstName.toUpperCase()}</p>
+      {text ? (
+        <p className="mt-5 max-w-[700px] whitespace-pre-line text-[17px] leading-[1.7] text-[#55534e]">{text}</p>
+      ) : (
+        <p className="mt-5 text-sm text-muted">
+          Todavía no escribiste tu presentación. Cuéntales a los clientes qué haces bien y cómo trabajas.{' '}
+          <Link to="/profile/edit" className="font-semibold text-ink underline hover:no-underline">
+            Escribir mi presentación
+          </Link>
+        </p>
+      )}
     </section>
   )
 }
@@ -435,6 +458,7 @@ export default function FreelancerProfile() {
           <ProfileHero profile={profile} isOwner={isOwner} />
           <div className="mx-auto grid w-full max-w-[1248px] items-start gap-[50px] px-4 pb-20 pt-[55px] md:px-6 md:pb-[110px] md:pt-[75px] lg:grid-cols-[1.35fr_0.65fr] lg:gap-[70px]">
             <section className="min-w-0">
+              <About profile={profile} firstName={firstName} isOwner={isOwner} />
               <GithubRepos username={profile.githubUsername} />
               <Reviews userId={userId} firstName={firstName} />
             </section>
@@ -462,6 +486,12 @@ Stars.propTypes = {
 
 ProfileHero.propTypes = {
   profile: freelancerProfileShape.isRequired,
+  isOwner: PropTypes.bool,
+}
+
+About.propTypes = {
+  profile: freelancerProfileShape.isRequired,
+  firstName: PropTypes.string,
   isOwner: PropTypes.bool,
 }
 
