@@ -40,6 +40,7 @@ export function validateRegister({ nombre, email, password, rol, terms }) {
   if (emailError) errors.email = emailError
   const passwordError = validatePassword(password)
   if (passwordError) errors.password = passwordError
+  if (!rol) errors.rol = 'Elige si quieres contratar o trabajar'
   if (!terms) errors.terms = 'Acepta los Términos y condiciones y la Política de privacidad para crear tu cuenta'
   return errors
 }

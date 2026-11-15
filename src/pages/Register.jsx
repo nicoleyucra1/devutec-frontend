@@ -66,23 +66,26 @@ function Step({ number, children, className = '' }) {
 function RoleCard({ role, selected, onChange }) {
   return (
     <label
-      className={`relative flex min-h-[205px] cursor-pointer flex-col items-start rounded-2xl bg-surface text-left transition duration-200 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-progress lg:min-h-[235px] ${selected
+      className={`relative flex min-h-[205px] cursor-pointer flex-col items-start rounded-2xl bg-surface text-left transition duration-200 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-progress lg:min-h-[235px] ${
+        selected
           ? 'border-2 border-escrow bg-[#f9fcfa] p-[23px]'
           : 'border border-line p-6 hover:-translate-y-0.5 hover:border-[#aaa69d]'
-        }`}
+      }`}
     >
       <input type="radio" name="rol" value={role.value} checked={selected} onChange={onChange} className="sr-only" />
       <span
         aria-hidden="true"
-        className={`absolute right-5 top-5 grid h-[23px] w-[23px] place-items-center rounded-full border ${selected ? 'border-escrow bg-escrow text-white' : 'border-line'
-          }`}
+        className={`absolute right-5 top-5 grid h-[23px] w-[23px] place-items-center rounded-full border ${
+          selected ? 'border-escrow bg-escrow text-white' : 'border-line'
+        }`}
       >
         {selected && <Check size={13} />}
       </span>
       <span
         aria-hidden="true"
-        className={`mb-[25px] grid h-12 w-12 place-items-center rounded-xl transition-colors ${selected ? 'bg-[#e8f2eb] text-escrow' : 'bg-paper'
-          }`}
+        className={`mb-[25px] grid h-12 w-12 place-items-center rounded-xl transition-colors ${
+          selected ? 'bg-[#e8f2eb] text-escrow' : 'bg-paper'
+        }`}
       >
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           {role.icon}
@@ -105,8 +108,9 @@ function PasswordRules({ password }) {
           <li key={rule.label} className={`flex items-center gap-1.5 text-[11px] transition-colors ${valid ? 'text-escrow' : 'text-muted'}`}>
             <span
               aria-hidden="true"
-              className={`grid h-3.5 w-3.5 place-items-center rounded-full border transition-colors ${valid ? 'border-escrow bg-escrow text-white' : 'border-[#aaa69e]'
-                }`}
+              className={`grid h-3.5 w-3.5 place-items-center rounded-full border transition-colors ${
+                valid ? 'border-escrow bg-escrow text-white' : 'border-[#aaa69e]'
+              }`}
             >
               {valid && <Check size={9} />}
             </span>
