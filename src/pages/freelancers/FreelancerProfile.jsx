@@ -345,7 +345,7 @@ function RatingSummary({ userId, average }) {
 
 // Tarjeta para compartir el perfil: un QR, el enlace y un botón para copiarlo.
 // El QR guarda la misma URL de la web: con la cámara de cualquier celular abre el perfil en la web, y el
-// escáner de la app de DevUTEC también la reconoce (parseProfileLink acepta .../freelancers/49) y lo abre en la app.
+// escáner de la app de DEVUTEC también la reconoce (parseProfileLink acepta .../freelancers/49) y lo abre en la app.
 function ShareCard({ userId }) {
   const toast = useToast()
   const link = `${window.location.origin}/freelancers/${userId}`
@@ -374,7 +374,10 @@ function ShareCard({ userId }) {
         />
       </div>
       <strong className="block break-all font-mono text-[11px]">{link.replace(/^https?:\/\//, '')}</strong>
-      <p className="mb-4 mt-1 text-[11px] text-muted">Escanéalo con la cámara o con la app de DevUTEC.</p>
+      {/* El perfil es solo para usuarios de DEVUTEC (política de privacidad): quien escanea inicia sesión y vuelve aquí */}
+      <p className="mb-4 mt-1 text-[11px] leading-snug text-muted">
+        Escanéalo con la cámara o con la app de DEVUTEC. Para ver el perfil hay que iniciar sesión.
+      </p>
       <Button variant="secondary" onClick={copy} className="w-full">
         <Icon>
           <rect x="8" y="8" width="11" height="11" rx="2" />
