@@ -2,10 +2,10 @@
 // lime e inverse son para fondos oscuros, como el recuadro negro del contrato.
 const variants = {
   primary: 'border-transparent bg-ink text-on-ink hover:-translate-y-px hover:bg-[#292925] dark:hover:bg-[#dedbd3]',
-  secondary: 'border-[#bab7b0] bg-transparent text-ink hover:border-ink hover:bg-white',
+  secondary: 'border-line-strong bg-transparent text-ink hover:border-ink hover:bg-surface',
   ghost: 'border-transparent bg-soft text-ink hover:bg-line',
-  danger: 'border-transparent bg-error text-white hover:bg-[#9a1d14]',
-  lime: 'border-transparent bg-lime text-ink hover:-translate-y-px hover:bg-[#cbe64f]',
+  danger: 'border-transparent bg-error text-white hover:bg-[#9a1d14] dark:text-night dark:hover:bg-[#f58a7b]',
+  lime: 'border-transparent bg-lime text-night hover:-translate-y-px hover:bg-[#cbe64f]',
   inverse: 'border-white/30 bg-transparent text-white hover:border-white hover:bg-white/10',
 }
 

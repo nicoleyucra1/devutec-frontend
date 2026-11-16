@@ -32,7 +32,7 @@ function ShieldNote() {
       </svg>
       <span className="text-xs leading-normal">
         <strong className="block font-semibold">Pago protegido</strong>
-        <span className="text-[#52705f]">El cliente deja el monto en garantía antes de que empieces.</span>
+        <span className="text-[#52705f] dark:text-[#9cc9ae]">El cliente deja el monto en garantía antes de que empieces.</span>
       </span>
     </div>
   )
@@ -222,7 +222,7 @@ export default function ApplyPanel({ project, application, contract, loading, on
             placeholder="Hola, puedo desarrollar…"
             aria-invalid={Boolean(errors.message)}
             aria-describedby={`${id}-message-help`}
-            className={`h-[150px] resize-none rounded-[10px] border bg-white p-3 text-[13px] leading-normal transition-colors focus:border-ink ${
+            className={`h-[150px] resize-none rounded-[10px] border bg-surface p-3 text-[13px] leading-normal transition-colors focus:border-ink ${
               errors.message ? 'border-error' : 'border-line'
             }`}
             style={{ outline: 'none' }}
@@ -240,8 +240,8 @@ export default function ApplyPanel({ project, application, contract, loading, on
             Precio propuesto
           </label>
           <div
-            className={`flex min-h-12 items-center overflow-hidden rounded-[10px] border bg-white transition-colors focus-within:border-ink ${
-              errors.proposedPrice ? 'border-error' : 'border-[#cfcac1]'
+            className={`flex min-h-12 items-center overflow-hidden rounded-[10px] border bg-surface transition-colors focus-within:border-ink ${
+              errors.proposedPrice ? 'border-error' : 'border-gray-300'
             }`}
           >
             <span className="border-r border-line px-3 text-muted">S/</span>

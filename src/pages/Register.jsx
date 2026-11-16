@@ -68,7 +68,7 @@ function RoleCard({ role, selected, onChange }) {
     <label
       className={`relative flex min-h-[205px] cursor-pointer flex-col items-start rounded-2xl bg-surface text-left transition duration-200 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-progress lg:min-h-[235px] ${
         selected
-          ? 'border-2 border-escrow bg-[#f9fcfa] p-[23px]'
+          ? 'border-2 border-escrow bg-[#f9fcfa] dark:bg-escrow-light p-[23px]'
           : 'border border-line p-6 hover:-translate-y-0.5 hover:border-[#aaa69d]'
       }`}
     >
@@ -84,7 +84,7 @@ function RoleCard({ role, selected, onChange }) {
       <span
         aria-hidden="true"
         className={`mb-[25px] grid h-12 w-12 place-items-center rounded-xl transition-colors ${
-          selected ? 'bg-[#e8f2eb] text-escrow' : 'bg-paper'
+          selected ? 'bg-[#e8f2eb] dark:bg-escrow-light text-escrow' : 'bg-paper'
         }`}
       >
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

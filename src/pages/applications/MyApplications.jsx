@@ -309,7 +309,7 @@ export default function MyApplications() {
           <div className="overflow-hidden rounded-[15px] border border-line bg-surface">
             <div
               aria-hidden="true"
-              className={`hidden min-h-[43px] items-center gap-x-4 bg-[#efede7] px-5 text-[10px] font-semibold tracking-[0.09em] text-muted lg:grid ${COLUMNS}`}
+              className={`hidden min-h-[43px] items-center gap-x-4 bg-table-head px-5 text-[10px] font-semibold tracking-[0.09em] text-muted lg:grid ${COLUMNS}`}
             >
               <span>PROYECTO</span>
               <span>ESTADO</span>

@@ -10,8 +10,8 @@ export default function AuthField({ label, name, error, trailing, ...inputProps 
         {label}
       </label>
       <div
-        className={`flex h-[49px] items-center overflow-hidden rounded-[10px] border bg-white transition focus-within:ring-[3px] ${
-          error ? 'border-error focus-within:ring-error/10' : 'border-[#cbc7be] focus-within:border-ink focus-within:ring-ink/5'
+        className={`flex h-[49px] items-center overflow-hidden rounded-[10px] border bg-surface transition focus-within:ring-[3px] ${
+          error ? 'border-error focus-within:ring-error/10' : 'border-gray-300 focus-within:border-ink focus-within:ring-ink/5'
         }`}
       >
         <input
@@ -19,7 +19,7 @@ export default function AuthField({ label, name, error, trailing, ...inputProps 
           name={name}
           aria-invalid={Boolean(error)}
           aria-describedby={errorId}
-          className="h-full min-w-0 flex-1 bg-transparent px-3.5 text-sm outline-none placeholder:text-[#9e9b94]"
+          className="h-full min-w-0 flex-1 bg-transparent px-3.5 text-sm outline-none placeholder:text-[#9e9b94] dark:placeholder:text-[#6f6d67]"
           {...inputProps}
         />
         {trailing}

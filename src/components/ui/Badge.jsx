@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 // Tonos del lenguaje de estado: verde = abierto o liberado, azul = en curso, ámbar = pendiente o retenido,
 // rojo = rechazado o cancelado, gris = finalizado o reembolsado
 const colors = {
-  gray: 'bg-[#efede8] text-[#686660]',
+  gray: 'bg-[#efede8] text-[#686660] dark:bg-[#2a2a25] dark:text-[#b8b5ad]',
   green: 'bg-escrow-light text-escrow',
   yellow: 'bg-pending-light text-pending',
   red: 'bg-error-light text-error',

@@ -8,7 +8,7 @@ export default function Input({ label, name, error, ...inputProps }) {
       <input
         name={name}
         aria-invalid={Boolean(error)}
-        className={`mt-2 block min-h-12 w-full rounded-[10px] border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition focus:ring-[3px] ${
+        className={`mt-2 block min-h-12 w-full rounded-[10px] border bg-surface px-3.5 py-2.5 text-sm text-ink outline-none transition focus:ring-[3px] ${
           error ? 'border-error focus:ring-error/10' : 'border-gray-300 focus:border-ink focus:ring-ink/5'
         }`}
         {...inputProps}

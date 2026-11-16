@@ -46,7 +46,7 @@ function ContractRow({ contract, counterpart }) {
     <li>
       <Link
         to={`/contracts/${contract.id}`}
-        className={`grid grid-cols-2 items-center gap-x-4 gap-y-3 border-t border-line px-5 py-4 text-[13px] transition-colors duration-200 hover:bg-[#faf9f6] focus-visible:bg-[#faf9f6] focus-visible:outline-none lg:gap-y-0 ${COLUMNS}`}
+        className={`grid grid-cols-2 items-center gap-x-4 gap-y-3 border-t border-line px-5 py-4 text-[13px] transition-colors duration-200 hover:bg-[#faf9f6] dark:hover:bg-soft focus-visible:bg-[#faf9f6] dark:focus-visible:bg-soft focus-visible:outline-none lg:gap-y-0 ${COLUMNS}`}
       >
         <span className="col-span-2 flex min-w-0 items-center gap-3 lg:col-span-1">
           <i className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-paper text-[11px] font-semibold not-italic">

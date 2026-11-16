@@ -70,7 +70,7 @@ export default function ContractDetailSkeleton() {
           </div>
 
           <div className="grid gap-3">
-            <div className="grid gap-3 rounded-2xl bg-[#e9e7e1] p-6 sm:p-7">
+            <div className="grid gap-3 rounded-2xl bg-[#e9e7e1] dark:bg-soft p-6 sm:p-7">
               <Skeleton className="h-2.5 w-24" />
               <Skeleton className="h-7 w-4/5 rounded-md" />
               <Skeleton className="h-2.5 w-full" />

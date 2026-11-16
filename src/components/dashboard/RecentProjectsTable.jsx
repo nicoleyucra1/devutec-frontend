@@ -35,7 +35,7 @@ function Applicants({ applications }) {
 function Frame({ children, label }) {
   return (
     <div className="overflow-x-auto rounded-[15px] border border-line bg-surface">
-      <div aria-hidden="true" className={`${ROW} min-h-[42px] bg-[#efede7] text-[10px] font-semibold tracking-[0.1em] text-muted`}>
+      <div aria-hidden="true" className={`${ROW} min-h-[42px] bg-table-head text-[10px] font-semibold tracking-[0.1em] text-muted`}>
         <span>PROYECTO</span>
         <span>ESTADO</span>
         <span>POSTULACIONES</span>
@@ -56,7 +56,7 @@ export default function RecentProjectsTable({ projects }) {
         <li key={project.id}>
           <Link
             to={`/projects/${project.id}`}
-            className={`${ROW} min-h-[72px] border-t border-line py-2.5 text-[13px] transition-colors duration-200 hover:bg-[#faf9f6] focus-visible:bg-[#faf9f6] focus-visible:outline-none`}
+            className={`${ROW} min-h-[72px] border-t border-line py-2.5 text-[13px] transition-colors duration-200 hover:bg-[#faf9f6] dark:hover:bg-soft focus-visible:bg-[#faf9f6] dark:focus-visible:bg-soft focus-visible:outline-none`}
           >
             <span className="flex min-w-0 items-center gap-2.5">
               <i className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-paper text-[10px] font-semibold not-italic">

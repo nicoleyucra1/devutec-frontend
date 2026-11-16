@@ -72,8 +72,8 @@ Section.propTypes = {
 }
 
 const inputClass = (error) =>
-  `w-full rounded-[10px] border bg-white px-3.5 text-sm text-ink outline-none transition placeholder:text-muted focus:border-ink focus:ring-[3px] focus:ring-ink/5 ${
-    error ? 'border-error' : 'border-[#cbc7be]'
+  `w-full rounded-[10px] border bg-surface px-3.5 text-sm text-ink outline-none transition placeholder:text-muted focus:border-ink focus:ring-[3px] focus:ring-ink/5 ${
+    error ? 'border-error' : 'border-gray-300'
   }`
 
 // Etiqueta, campo, contador (opcional) y error de cada dato
@@ -223,8 +223,8 @@ export default function ProjectForm({ initialProject, saving, serverError, onSub
           <div className="grid gap-5 sm:grid-cols-2">
             <Field id={`${id}-budget`} label="Presupuesto" error={errors.budget}>
               <div
-                className={`flex min-h-12 items-center overflow-hidden rounded-[10px] border bg-white focus-within:border-ink focus-within:ring-[3px] focus-within:ring-ink/5 ${
-                  errors.budget ? 'border-error' : 'border-[#cbc7be]'
+                className={`flex min-h-12 items-center overflow-hidden rounded-[10px] border bg-surface focus-within:border-ink focus-within:ring-[3px] focus-within:ring-ink/5 ${
+                  errors.budget ? 'border-error' : 'border-gray-300'
                 }`}
               >
                 <span className="flex h-12 items-center border-r border-line bg-paper px-3 text-sm text-muted">S/</span>

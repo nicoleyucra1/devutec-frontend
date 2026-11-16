@@ -105,7 +105,7 @@ export default function ProposalCard({ application, budget, selected, canDecide,
         </div>
       </div>
 
-      <p className="flex-1 whitespace-pre-line text-[13px] leading-relaxed text-[#55534e]">“{application.message}”</p>
+      <p className="flex-1 whitespace-pre-line text-[13px] leading-relaxed text-[#55534e] dark:text-gray-600">“{application.message}”</p>
 
       {pending && canDecide && (
         <div className="mt-[25px] grid grid-cols-2 gap-1.5">

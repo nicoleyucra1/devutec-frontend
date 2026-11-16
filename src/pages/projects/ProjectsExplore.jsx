@@ -33,7 +33,7 @@ function Icon({ children, size = 18 }) {
 // Píldora de un filtro activo con su × para quitarlo
 function Chip({ label, onRemove }) {
   return (
-    <span className="flex shrink-0 items-center gap-2 rounded-full bg-[#e8e5dd] px-[11px] py-[7px] text-[11px]">
+    <span className="flex shrink-0 items-center gap-2 rounded-full bg-[#e8e5dd] dark:bg-soft px-[11px] py-[7px] text-[11px]">
       {label}
       <button type="button" onClick={onRemove} aria-label={`Quitar filtro ${label}`} className="cursor-pointer leading-none">
         ×
@@ -159,7 +159,7 @@ export default function ProjectsExplore() {
       </header>
 
       <form role="search" onSubmit={(event) => event.preventDefault()} className="flex gap-2.5 border-b border-line pb-4">
-        <label className="flex min-h-12 flex-1 items-center gap-2.5 rounded-[11px] border border-line bg-white px-3.5 transition focus-within:border-ink focus-within:shadow-[0_0_0_3px_rgba(14,14,12,0.06)]">
+        <label className="flex min-h-12 flex-1 items-center gap-2.5 rounded-[11px] border border-line bg-surface px-3.5 transition focus-within:border-ink focus-within:shadow-[0_0_0_3px_rgba(14,14,12,0.06)]">
           <Icon>
             <circle cx="11" cy="11" r="7" />
             <path d="m20 20-4-4" />
@@ -189,7 +189,7 @@ export default function ProjectsExplore() {
           aria-expanded={showFilters}
           aria-controls="filtros-explorar"
           aria-label={`Filtros${chips.length ? `, ${chips.length} activos` : ''}`}
-          className="relative grid h-12 w-12 shrink-0 cursor-pointer place-items-center rounded-[11px] border border-[#bab7b0] transition hover:border-ink hover:bg-white md:hidden"
+          className="relative grid h-12 w-12 shrink-0 cursor-pointer place-items-center rounded-[11px] border border-line-strong transition hover:border-ink hover:bg-surface md:hidden"
         >
           <Icon>
             <path d="M4 6h16M7 12h10M10 18h4" />
@@ -256,7 +256,7 @@ export default function ProjectsExplore() {
           {!loading && error && <ErrorBox message={error} status={httpStatus} onRetry={reload} />}
 
           {!loading && !error && data?.content.length === 0 && (
-            <div className="flex min-h-[430px] flex-col items-center justify-center rounded-2xl border border-line bg-white p-6 text-center">
+            <div className="flex min-h-[430px] flex-col items-center justify-center rounded-2xl border border-line bg-surface p-6 text-center">
               <span className="grid h-[55px] w-[55px] place-items-center rounded-full bg-paper text-muted">
                 <Icon size={26}>
                   <circle cx="11" cy="11" r="7" />
@@ -268,7 +268,7 @@ export default function ProjectsExplore() {
               <button
                 type="button"
                 onClick={handleClear}
-                className="inline-flex min-h-[46px] cursor-pointer items-center rounded-[11px] border border-[#bab7b0] px-5 text-sm font-semibold transition hover:border-ink hover:bg-white"
+                className="inline-flex min-h-[46px] cursor-pointer items-center rounded-[11px] border border-line-strong px-5 text-sm font-semibold transition hover:border-ink hover:bg-surface"
               >
                 Limpiar filtros
               </button>

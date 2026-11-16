@@ -19,7 +19,7 @@ const desktopLinkClass = ({ isActive }) =>
   }`
 
 const mobileLinkClass = ({ isActive }) =>
-  `rounded-lg px-3 py-2.5 text-sm font-medium ${isActive ? 'bg-white text-ink' : 'text-muted hover:text-ink'}`
+  `rounded-lg px-3 py-2.5 text-sm font-medium ${isActive ? 'bg-surface text-ink' : 'text-muted hover:text-ink'}`
 
 // Se cierra al hacer clic fuera del menú o al apretar Esc
 function useCloseOnOutside(open, setOpen) {
@@ -40,29 +40,87 @@ function useCloseOnOutside(open, setOpen) {
   return ref
 }
 
-// Opciones del menú del avatar: Mi cuenta (foto y celular), el perfil del freelancer y cerrar sesión
+const menuIcon = (children) => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0 text-muted">
+    {children}
+  </svg>
+)
+
+const ICONS = {
+  account: menuIcon(
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="10" r="3" />
+      <path d="M6.2 18.4a7 7 0 0 1 11.6 0" />
+    </>,
+  ),
+  profile: menuIcon(
+    <>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21a8 8 0 0 1 16 0" />
+    </>,
+  ),
+  edit: menuIcon(
+    <>
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+    </>,
+  ),
+  contracts: menuIcon(
+    <>
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" />
+      <path d="M14 3v5h5M9 13h6M9 17h6" />
+    </>,
+  ),
+  logout: menuIcon(
+    <>
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <path d="m16 17 5-5-5-5M21 12H9" />
+    </>,
+  ),
+}
+
+// Opciones del menú del avatar (diseño "Tema · menú"): Mi cuenta (foto y celular), Mi perfil y Editar perfil
+// (solo el freelancer tiene perfil público), Mis contratos, el tema y cerrar sesión
 function UserMenuItems({ user, onNavigate, onLogout, onPhoto }) {
-  const itemClass = 'block w-full rounded-md px-2.5 py-2.5 text-left text-xs hover:bg-paper'
+  const itemClass = 'flex w-full items-center gap-3 rounded-lg px-2.5 py-2.5 text-left text-sm hover:bg-soft'
   return (
     <>
-      {user.rol !== 'ADMIN' && (
-        <button type="button" onClick={onPhoto} className={itemClass}>
-          Mi cuenta
+      <div className="border-b border-line py-1.5">
+        {user.rol !== 'ADMIN' && (
+          <button type="button" onClick={onPhoto} className={itemClass}>
+            {ICONS.account}
+            Mi cuenta
+          </button>
+        )}
+        {user.rol === 'FREELANCER' && user.id && (
+          <Link to={`/freelancers/${user.id}`} onClick={onNavigate} className={itemClass}>
+            {ICONS.profile}
+            Mi perfil
+          </Link>
+        )}
+        {user.rol === 'FREELANCER' && (
+          <Link to="/profile/edit" onClick={onNavigate} className={itemClass}>
+            {ICONS.edit}
+            Editar perfil
+          </Link>
+        )}
+        {user.rol !== 'ADMIN' && (
+          <Link to="/contracts" onClick={onNavigate} className={itemClass}>
+            {ICONS.contracts}
+            Mis contratos
+          </Link>
+        )}
+      </div>
+      <div className="border-b border-line px-1.5 py-3">
+        <ThemePicker />
+      </div>
+      <div className="pt-1.5">
+        <button type="button" onClick={onLogout} className={itemClass}>
+          {ICONS.logout}
+          Cerrar sesión
         </button>
-      )}
-      {user.rol === 'FREELANCER' && user.id && (
-        <Link to={`/freelancers/${user.id}`} onClick={onNavigate} className={itemClass}>
-          Ver mi perfil público
-        </Link>
-      )}
-      {user.rol === 'FREELANCER' && (
-        <Link to="/profile/edit" onClick={onNavigate} className={itemClass}>
-          Editar mi perfil
-        </Link>
-      )}
-      <button type="button" onClick={onLogout} className={itemClass}>
-        Cerrar sesión
-      </button>
+      </div>
     </>
   )
 }
@@ -115,8 +173,8 @@ export default function Navbar() {
               type="button"
               onClick={() => setUserMenuOpen((open) => !open)}
               aria-expanded={userMenuOpen}
-              aria-haspopup="menu"
-              className="flex items-center gap-2 text-sm"
+              aria-controls="menu-usuario"
+              className="flex items-center gap-2 rounded-full border border-line py-1 pl-1 pr-3 text-sm font-medium transition-colors hover:border-gray-400"
             >
               <Avatar name={name} src={user.avatarUrl} size="nav" />
               <span>{name.split(' ')[0]}</span>
@@ -125,10 +183,16 @@ export default function Navbar() {
               </svg>
             </button>
             {userMenuOpen && (
-              <div role="menu" className="absolute right-0 top-12 w-[230px] rounded-xl border border-line bg-white p-2 shadow-[0_16px_45px_rgba(0,0,0,0.12)]">
-                <div className="mb-1 border-b border-line px-2.5 pb-3.5 pt-2.5">
-                  <p className="text-xs font-semibold">{name}</p>
-                  <p className="mt-0.5 text-[11px] text-muted">{ROLE_LABELS[user.rol] ?? user.rol}</p>
+              <div
+                id="menu-usuario"
+                className="absolute right-0 top-[52px] w-[280px] rounded-2xl border border-line bg-raised p-2 shadow-[0_16px_45px_rgba(0,0,0,0.14)]"
+              >
+                <div className="flex items-center gap-3 border-b border-line px-2.5 pb-3.5 pt-2.5">
+                  <Avatar name={name} src={user.avatarUrl} size="md" />
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-semibold">{name}</span>
+                    <span className="block truncate text-xs text-muted">{user.email ?? ROLE_LABELS[user.rol]}</span>
+                  </span>
                 </div>
                 <UserMenuItems user={user} onNavigate={closeAll} onLogout={logout} onPhoto={openPhoto} />
               </div>
@@ -187,9 +251,6 @@ export default function Navbar() {
             <AvatarUploader />
             <div className="border-t border-line pt-6">
               <PhoneEditor help="Solo lo ve la otra persona cuando tienen un contrato, para escribirte por WhatsApp." />
-            </div>
-            <div className="border-t border-line pt-6">
-              <ThemePicker />
             </div>
           </div>
         )}
