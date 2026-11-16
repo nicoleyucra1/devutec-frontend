@@ -26,10 +26,11 @@ export function LogoMark({ tone = 'day', width = 34 }) {
 export default function Logo({ tone = 'day', className = '' }) {
   const { text, accent } = TONES[tone] ?? TONES.day
   return (
-    <span className={`inline-flex items-center gap-2.5 text-xl font-bold tracking-[-0.045em] ${text} ${className}`}>
+    // El nombre va en mayúsculas (DEVUTEC), como en la app, con un poco más de aire entre letras
+    <span className={`inline-flex items-center gap-2.5 text-xl font-bold tracking-[-0.01em] ${text} ${className}`}>
       <LogoMark tone={tone} />
       <span>
-        Dev<span className={accent}>UTEC</span>
+        DEV<span className={accent}>UTEC</span>
       </span>
     </span>
   )
