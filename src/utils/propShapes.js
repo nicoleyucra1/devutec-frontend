@@ -22,6 +22,13 @@ export const projectShape = PropTypes.shape({
   clientId: idType,
   clientName: PropTypes.string,
   clientSince: PropTypes.string,
+  // Redes del negocio del cliente; cada una es un link completo o null
+  clientLinks: PropTypes.shape({
+    instagram: PropTypes.string,
+    facebook: PropTypes.string,
+    tiktok: PropTypes.string,
+    sitioWeb: PropTypes.string,
+  }),
   createdAt: PropTypes.string,
   skills: PropTypes.arrayOf(skillShape),
 })
