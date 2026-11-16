@@ -125,7 +125,7 @@ function FormHelp({ editing }) {
     ? ['Los cambios se ven al instante', 'Quienes postularon ven la versión nueva', 'Un contrato ya creado no cambia de monto']
     : ['No se cobra al publicar', 'Tú eliges a quién contratar', 'El pago queda protegido']
   return (
-    <aside className="rounded-2xl bg-ink p-7 text-white lg:sticky lg:top-24">
+    <aside className="rounded-2xl bg-night p-7 text-white lg:sticky lg:top-24">
       <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="text-lime">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
         <path d="m9 12 2 2 4-5" />

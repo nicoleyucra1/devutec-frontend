@@ -120,7 +120,7 @@ function ChatWindow() {
           onKeyDown={(event) => event.key === 'Escape' && setOpen(false)}
           className="chat-panel-in fixed inset-x-3 bottom-[88px] z-50 flex max-h-[min(560px,calc(100vh-120px))] flex-col overflow-hidden rounded-[20px] border border-line bg-paper shadow-[0_24px_60px_rgba(0,0,0,0.18)] sm:inset-x-auto sm:right-5 sm:w-[380px]"
         >
-          <header className="flex items-center gap-3 bg-ink px-4 py-3 text-white">
+          <header className="flex items-center gap-3 bg-night px-4 py-3 text-white">
             <span className="grid h-10 w-10 place-items-center rounded-full bg-lime">
               <Cuyi anim={thinking ? 'escribe' : 'saluda'} px={1.8} />
             </span>
@@ -179,7 +179,7 @@ function ChatWindow() {
                 type="submit"
                 disabled={!text.trim() || thinking}
                 aria-label="Enviar"
-                className="grid h-8 w-8 place-items-center rounded-full bg-ink text-white transition hover:scale-105 disabled:opacity-30"
+                className="grid h-8 w-8 place-items-center rounded-full bg-ink text-on-ink transition hover:scale-105 disabled:opacity-30"
               >
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M5 12h14M13 6l6 6-6 6" />
@@ -206,7 +206,7 @@ function ChatWindow() {
       >
         <Cuyi anim={open ? 'celebra' : 'saluda'} px={2.6} />
         {!open && messages.length === 0 && (
-          <span className="chat-hint pointer-events-none absolute bottom-[calc(100%+10px)] right-0 whitespace-nowrap rounded-[12px] bg-ink px-3 py-1.5 text-xs font-medium text-white">
+          <span className="chat-hint pointer-events-none absolute bottom-[calc(100%+10px)] right-0 whitespace-nowrap rounded-[12px] bg-night px-3 py-1.5 text-xs font-medium text-white">
             ¿Te ayudo?
           </span>
         )}

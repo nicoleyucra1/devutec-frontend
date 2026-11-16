@@ -9,7 +9,7 @@ const linkClass =
 // Pie de la landing: marca, enlaces de la plataforma, confianza y contacto
 export default function SiteFooter() {
   return (
-    <footer className="bg-ink pb-[25px] pt-[55px] text-white lg:pt-[70px]">
+    <footer className="bg-night pb-[25px] pt-[55px] text-white lg:pt-[70px]">
       <div className="mx-auto w-full max-w-[1200px] px-6">
         <div className="grid grid-cols-2 gap-x-[25px] gap-y-[45px] pb-[70px] lg:grid-cols-[2fr_1fr_1fr_1fr] lg:gap-[60px]">
           <div className="col-span-2 flex flex-col items-start gap-3 lg:col-span-1">

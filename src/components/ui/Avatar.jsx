@@ -34,7 +34,7 @@ export default function Avatar({ name, src, size = 'md', className = '' }) {
   return (
     <span
       aria-hidden="true"
-      className={`grid shrink-0 place-items-center rounded-full bg-ink font-semibold tracking-wide text-white ${sizeClass} ${className}`}
+      className={`grid shrink-0 place-items-center rounded-full bg-ink font-semibold tracking-wide text-on-ink ${sizeClass} ${className}`}
     >
       {initials(name)}
     </span>

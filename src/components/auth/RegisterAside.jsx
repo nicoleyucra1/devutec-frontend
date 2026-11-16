@@ -27,7 +27,7 @@ function CheckIcon() {
 export default function RegisterAside({ role }) {
   const content = CONTENT[role] ?? CONTENT.CLIENT
   return (
-    <aside className="relative order-first overflow-hidden rounded-[20px] bg-ink p-[35px] text-white lg:sticky lg:top-[110px] lg:order-none">
+    <aside className="relative order-first overflow-hidden rounded-[20px] bg-night p-[35px] text-white lg:sticky lg:top-[110px] lg:order-none">
       <span aria-hidden="true" className="pointer-events-none absolute -right-[30px] -top-10 h-40 w-40 rounded-full bg-lime/[0.12] blur-[45px]" />
 
       <div className="relative" aria-live="polite">

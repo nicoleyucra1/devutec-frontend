@@ -4,7 +4,7 @@ export default function AuthEditorial() {
   return (
     <section
       aria-label="Lo que dicen en DevUTEC"
-      className="relative hidden flex-col justify-between overflow-hidden bg-ink px-[max(7vw,50px)] py-[70px] text-white lg:flex"
+      className="relative hidden flex-col justify-between overflow-hidden bg-night px-[max(7vw,50px)] py-[70px] text-white lg:flex"
     >
       <span
         aria-hidden="true"

@@ -65,7 +65,7 @@ const ease = 'var(--ease-brand)'
 function Person({ initials, label, name }) {
   return (
     <div className="flex max-w-[48%] items-center gap-2.5 sm:max-w-none">
-      <span className="grid h-[34px] w-[34px] flex-none place-items-center rounded-full bg-ink text-[11px] font-semibold tracking-[0.03em] text-white">
+      <span className="grid h-[34px] w-[34px] flex-none place-items-center rounded-full bg-ink text-[11px] font-semibold tracking-[0.03em] text-on-ink">
         {initials}
       </span>
       <span className="flex flex-col text-[11px] sm:text-[13px]">

@@ -13,12 +13,12 @@ export default function FilterChips({ options, value, onChange, label }) {
             aria-pressed={active}
             onClick={() => onChange(option.value)}
             className={`inline-flex h-9 items-center gap-1.5 rounded-full border px-4 text-xs font-medium transition-colors duration-200 ${
-              active ? 'border-ink bg-ink text-white' : 'border-line bg-surface text-ink hover:border-[#aaa69d]'
+              active ? 'border-ink bg-ink text-on-ink' : 'border-line bg-surface text-ink hover:border-[#aaa69d]'
             }`}
           >
             {option.label}
             {option.count !== undefined && (
-              <span className={`tabular-nums ${active ? 'text-white/60' : 'text-muted'}`}>{option.count}</span>
+              <span className={`tabular-nums ${active ? 'text-on-ink/60' : 'text-muted'}`}>{option.count}</span>
             )}
           </button>
         )

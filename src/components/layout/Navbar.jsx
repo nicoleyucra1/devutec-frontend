@@ -4,6 +4,7 @@ import { useAuth } from '../../hooks/useAuth'
 import Logo from '../brand/Logo'
 import AvatarUploader from '../profile/AvatarUploader'
 import PhoneEditor from '../profile/PhoneEditor'
+import ThemePicker from '../profile/ThemePicker'
 import ButtonLink from '../projects/ButtonLink'
 import Avatar from '../ui/Avatar'
 import Button from '../ui/Button'
@@ -186,6 +187,9 @@ export default function Navbar() {
             <AvatarUploader />
             <div className="border-t border-line pt-6">
               <PhoneEditor help="Solo lo ve la otra persona cuando tienen un contrato, para escribirte por WhatsApp." />
+            </div>
+            <div className="border-t border-line pt-6">
+              <ThemePicker />
             </div>
           </div>
         )}

@@ -1,7 +1,7 @@
 // Botones del sistema de diseño: primario (tinta), secundario (con borde), ghost (gris suave) y eliminar (rojo).
 // lime e inverse son para fondos oscuros, como el recuadro negro del contrato.
 const variants = {
-  primary: 'border-transparent bg-ink text-white hover:-translate-y-px hover:bg-[#292925]',
+  primary: 'border-transparent bg-ink text-on-ink hover:-translate-y-px hover:bg-[#292925] dark:hover:bg-[#dedbd3]',
   secondary: 'border-[#bab7b0] bg-transparent text-ink hover:border-ink hover:bg-white',
   ghost: 'border-transparent bg-soft text-ink hover:bg-line',
   danger: 'border-transparent bg-error text-white hover:bg-[#9a1d14]',

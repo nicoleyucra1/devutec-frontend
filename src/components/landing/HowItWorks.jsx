@@ -54,7 +54,7 @@ export default function HowItWorks() {
   const approved = progress >= 0.9
 
   return (
-    <section id="como-funciona" className="scroll-mt-[72px] bg-ink py-[70px] text-white lg:py-[100px]">
+    <section id="como-funciona" className="scroll-mt-[72px] bg-night py-[70px] text-white lg:py-[100px]">
       <div className={`${shell} grid lg:grid-cols-[1fr_2fr] lg:gap-x-[72px]`}>
         <p className="text-[11px] font-semibold tracking-[0.13em] text-[#a6a39c]">ASÍ FUNCIONA</p>
         <h2 className="mb-[50px] mt-[25px] text-[39px] font-medium leading-[1.02] tracking-[-0.035em] lg:-mt-2.5 lg:mb-[70px] lg:text-[50px]">

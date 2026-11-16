@@ -116,7 +116,7 @@ function Summary({ applications }) {
   return (
     <section
       aria-label="Resumen de tus postulaciones"
-      className="mb-[35px] grid grid-cols-3 overflow-hidden rounded-[15px] bg-ink text-white lg:grid-cols-[0.7fr_0.7fr_0.7fr_1.9fr]"
+      className="mb-[35px] grid grid-cols-3 overflow-hidden rounded-[15px] bg-night text-white lg:grid-cols-[0.7fr_0.7fr_0.7fr_1.9fr]"
     >
       {stats.map((stat) => (
         <div key={stat.label} className="flex flex-col gap-[7px] border-r border-[#393934] px-3 py-4 lg:p-[22px]">

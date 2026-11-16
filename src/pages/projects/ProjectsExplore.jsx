@@ -195,7 +195,7 @@ export default function ProjectsExplore() {
             <path d="M4 6h16M7 12h10M10 18h4" />
           </Icon>
           {chips.length > 0 && (
-            <span className="absolute -right-1.5 -top-1.5 grid h-[18px] w-[18px] place-items-center rounded-full bg-ink text-[10px] text-white">
+            <span className="absolute -right-1.5 -top-1.5 grid h-[18px] w-[18px] place-items-center rounded-full bg-ink text-[10px] text-on-ink">
               {chips.length}
             </span>
           )}

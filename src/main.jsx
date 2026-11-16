@@ -5,6 +5,7 @@ import ErrorBoundary from './components/ErrorBoundary'
 import Navbar from './components/layout/Navbar'
 import CuyiChat from './components/support/CuyiChat'
 import { AuthProvider } from './contexts/AuthProvider'
+import { ThemeProvider } from './contexts/ThemeProvider'
 import { ToastProvider } from './contexts/ToastProvider'
 import AppRoutes from './routes'
 import './index.css'
@@ -12,15 +13,17 @@ import './index.css'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <ToastProvider>
-        <AuthProvider>
-          <ErrorBoundary>
-            <Navbar />
-            <AppRoutes />
-            <CuyiChat />
-          </ErrorBoundary>
-        </AuthProvider>
-      </ToastProvider>
+      <ThemeProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <ErrorBoundary>
+              <Navbar />
+              <AppRoutes />
+              <CuyiChat />
+            </ErrorBoundary>
+          </AuthProvider>
+        </ToastProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </StrictMode>,
 )
