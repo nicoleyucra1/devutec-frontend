@@ -48,7 +48,7 @@ export default function SiteFooter() {
         </div>
 
         <div className="flex flex-col gap-2 border-t border-[#343430] pt-6 text-[10px] text-[#77756f] sm:flex-row sm:justify-between">
-          <p>© 2026 DevUTEC</p>
+          <p>© 2026 DEVUTEC</p>
           <p>Hecho para el talento que recién empieza.</p>
         </div>
       </div>

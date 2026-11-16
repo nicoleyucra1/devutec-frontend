@@ -51,7 +51,7 @@ export default function RegisterAside({ role }) {
         </svg>
         <p className="flex flex-col">
           <strong className="text-[11px] font-semibold text-white">Pago protegido</strong>
-          <small className="mt-[3px] text-[10px] text-[#77756f]">por las reglas de DevUTEC</small>
+          <small className="mt-[3px] text-[10px] text-[#77756f]">por las reglas de DEVUTEC</small>
         </p>
       </div>
     </aside>

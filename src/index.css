@@ -19,7 +19,7 @@ body {
   font-synthesis: none;
 }
 
-/* Sistema de diseño DevUTEC (UI 1.0): Ink, Paper, Surface, Line, Escrow, Lime, Pending, Error y Progress */
+/* Sistema de diseño DEVUTEC (UI 1.0): Ink, Paper, Surface, Line, Escrow, Lime, Pending, Error y Progress */
 @theme {
   --color-ink: #0e0e0c;
   --color-paper: #f5f3ee;

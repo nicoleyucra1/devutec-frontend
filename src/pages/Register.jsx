@@ -185,7 +185,7 @@ export default function Register() {
         <header className="mb-10 max-w-[690px] lg:mb-[60px]">
           <p className="text-[11px] font-semibold tracking-[0.13em]">CREA TU CUENTA</p>
           <h1 className="my-[18px] text-[46px] leading-none tracking-[-0.045em] lg:text-[60px]">
-            ¿Cómo usarás <em>DevUTEC?</em>
+            ¿Cómo usarás <em>DEVUTEC?</em>
           </h1>
           <p className="text-muted">Elige un rol para personalizar tu experiencia. Podrás cambiarlo después.</p>
         </header>

@@ -14,7 +14,7 @@ const shield = (
 // Términos del pago en garantía. Son las reglas que aplica el backend en cada contrato.
 export default function TermsDialog({ open, contract, onClose }) {
   const terms = [
-    `Al aceptar la postulación, el cliente pagó ${formatBudget(contract.amount)} y DevUTEC los retiene en garantía.`,
+    `Al aceptar la postulación, el cliente pagó ${formatBudget(contract.amount)} y DEVUTEC los retiene en garantía.`,
     'Nadie puede mover ese dinero mientras el trabajo está en curso.',
     'El freelancer marca el trabajo como entregado cuando lo termina.',
     'Al confirmar la entrega, el pago se libera al freelancer y el contrato queda finalizado.',
