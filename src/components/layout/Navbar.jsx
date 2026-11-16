@@ -150,7 +150,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur-md">
       <div className="mx-auto flex h-[72px] max-w-[1200px] items-center gap-8 px-6">
-        <Link to="/" onClick={closeAll} aria-label="DevUTEC, ir al inicio">
+        <Link to="/" onClick={closeAll} aria-label="DEVUTEC, ir al inicio">
           <Logo />
         </Link>
 

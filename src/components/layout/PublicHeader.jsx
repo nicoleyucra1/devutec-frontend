@@ -28,7 +28,7 @@ export default function PublicHeader() {
       }`}
     >
       <div className="mx-auto grid h-[72px] max-w-[1200px] grid-cols-[1fr_auto] items-center gap-6 px-6 md:grid-cols-[1fr_auto_1fr]">
-        <Link to="/" aria-label="DevUTEC, ir al inicio" className="justify-self-start">
+        <Link to="/" aria-label="DEVUTEC, ir al inicio" className="justify-self-start">
           <Logo />
         </Link>
         <nav aria-label="Secciones" className="hidden items-center gap-8 md:flex">

@@ -9,15 +9,15 @@ function monthYear(value) {
 }
 
 // Tarjeta del cliente que publicó el proyecto: foto, nombre, distrito, desde cuándo está y su calificación.
-// La calificación sale de las reseñas que recibió (las primeras 50 alcanzan para un cliente de DevUTEC).
-// Si el backend todavía no manda clientName, se muestra "Cliente de DevUTEC".
+// La calificación sale de las reseñas que recibió (las primeras 50 alcanzan para un cliente de DEVUTEC).
+// Si el backend todavía no manda clientName, se muestra "Cliente de DEVUTEC".
 export default function ClientCard({ project }) {
   const reviews = useUserReviews(project.clientId, { size: 50 })
   const list = reviews.data?.content ?? []
   const total = reviews.data?.totalElements ?? 0
   const average = list.length ? list.reduce((sum, review) => sum + review.rating, 0) / list.length : null
 
-  const name = project.clientName || 'Cliente de DevUTEC'
+  const name = project.clientName || 'Cliente de DEVUTEC'
   const since = monthYear(project.clientSince)
   const details = [project.location, since && `Miembro desde ${since}`].filter(Boolean).join(' · ')
 

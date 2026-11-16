@@ -24,7 +24,7 @@ export default function WhatsAppCard({ contract, isClient }) {
   const otherName = (isClient ? contract.freelancerName : contract.clientName) ?? (isClient ? 'el freelancer' : 'el cliente')
   const otherPhone = isClient ? contract.freelancerPhone : contract.clientPhone
   const firstName = otherName.split(' ')[0]
-  const message = `Hola ${firstName}, te escribo por el contrato de “${contract.projectTitle}” en DevUTEC.`
+  const message = `Hola ${firstName}, te escribo por el contrato de “${contract.projectTitle}” en DEVUTEC.`
 
   return (
     <section aria-label="Contacto por WhatsApp" className="rounded-2xl border border-line bg-surface p-5">

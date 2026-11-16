@@ -9,7 +9,7 @@ import { errorMessage } from '../../utils/errorMessage'
 import PropTypes from 'prop-types'
 
 // Subir, cambiar o quitar la foto de perfil de la persona con sesión. Mientras sube se ve la foto nueva
-// (ya recortada) para que no haya que esperar a la respuesta. El administrador tiene la foto fija de DevUTEC.
+// (ya recortada) para que no haya que esperar a la respuesta. El administrador tiene la foto fija de DEVUTEC.
 // showTitle=false cuando ya hay un título afuera (por ejemplo, en la ventana del menú)
 export default function AvatarUploader({ showTitle = true }) {
   const { user, updateUser } = useAuth()
@@ -74,7 +74,7 @@ export default function AvatarUploader({ showTitle = true }) {
       <div className="min-w-0">
         {showTitle && <p className="font-semibold">Foto de perfil</p>}
         {isAdmin ? (
-          <p className="text-sm text-muted">La cuenta de administrador usa la foto de DevUTEC y no se puede cambiar.</p>
+          <p className="text-sm text-muted">La cuenta de administrador usa la foto de DEVUTEC y no se puede cambiar.</p>
         ) : (
           <>
             <p className="text-sm text-muted">

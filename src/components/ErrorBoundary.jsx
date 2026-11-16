@@ -28,7 +28,7 @@ export default class ErrorBoundary extends Component {
       <div className="min-h-screen bg-paper">
         <header className="border-b border-line bg-paper/90">
           <div className="mx-auto flex h-[73px] w-full max-w-[1200px] items-center px-6">
-            <a href="/" aria-label="DevUTEC, ir al inicio">
+            <a href="/" aria-label="DEVUTEC, ir al inicio">
               <Logo />
             </a>
           </div>

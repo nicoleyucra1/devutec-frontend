@@ -5,9 +5,9 @@ export const LEGAL_DOCS = {
     updated: '14 de noviembre de 2026',
     sections: [
       {
-        heading: 'Qué es DevUTEC',
+        heading: 'Qué es DEVUTEC',
         paragraphs: [
-          'DevUTEC es una plataforma que conecta a negocios (clientes) con estudiantes y egresados (freelancers) para proyectos de desarrollo de software.',
+          'DEVUTEC es una plataforma que conecta a negocios (clientes) con estudiantes y egresados (freelancers) para proyectos de desarrollo de software.',
           'Al crear una cuenta, aceptas estos términos. Si no estás de acuerdo, no uses la plataforma.',
         ],
       },
@@ -15,7 +15,7 @@ export const LEGAL_DOCS = {
         heading: 'Cuentas',
         paragraphs: [
           'Cada persona puede tener una sola cuenta y es responsable de mantener su contraseña en secreto.',
-          'La información de tu perfil debe ser real. DevUTEC puede suspender cuentas con datos falsos o que incumplan estos términos.',
+          'La información de tu perfil debe ser real. DEVUTEC puede suspender cuentas con datos falsos o que incumplan estos términos.',
         ],
       },
       {
@@ -28,7 +28,7 @@ export const LEGAL_DOCS = {
       {
         heading: 'Pago en garantía',
         paragraphs: [
-          'Al aceptar una postulación, el cliente paga el monto del contrato y DevUTEC lo retiene en garantía.',
+          'Al aceptar una postulación, el cliente paga el monto del contrato y DEVUTEC lo retiene en garantía.',
           'El pago se libera al freelancer solo cuando el cliente confirma la entrega del trabajo.',
           'El cliente puede cancelar mientras no exista una entrega. En ese caso, el monto se le reembolsa completo.',
         ],
@@ -73,8 +73,8 @@ export const LEGAL_DOCS = {
       {
         heading: 'Quién puede verlos',
         paragraphs: [
-          'Tu perfil de freelancer y tus reseñas son públicos para los usuarios de DevUTEC. Tu correo y tu contraseña no se muestran a nadie.',
-          'El equipo administrador de DevUTEC puede ver los pagos para supervisar la garantía.',
+          'Tu perfil de freelancer y tus reseñas son públicos para los usuarios de DEVUTEC. Tu correo y tu contraseña no se muestran a nadie.',
+          'El equipo administrador de DEVUTEC puede ver los pagos para supervisar la garantía.',
         ],
       },
       {

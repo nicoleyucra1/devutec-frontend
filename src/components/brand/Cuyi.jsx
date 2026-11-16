@@ -10,7 +10,7 @@ function prefersReducedMotion() {
   }
 }
 
-// Cuyi, la mascota de DevUTEC, en pixel art 16 × 16. anim: saluda, escribe, celebra, duerme o confundido.
+// Cuyi, la mascota de DEVUTEC, en pixel art 16 × 16. anim: saluda, escribe, celebra, duerme o confundido.
 // px es el tamaño de cada píxel. Con "reducir movimiento" activado se queda quieto en el primer cuadro.
 export default function Cuyi({ anim = 'saluda', px = 8, className = '' }) {
   const animation = CUYI_ANIMS[anim] ?? CUYI_ANIMS.saluda
