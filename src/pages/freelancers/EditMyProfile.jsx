@@ -21,14 +21,14 @@ import { MAX_PRESENTACION, validateFreelancerProfile } from '../../utils/validat
 const CICLOS = Array.from({ length: 10 }, (_, index) => index + 1)
 
 const inputClass = (error) =>
-  `w-full rounded-[10px] border bg-white px-3.5 text-sm text-ink outline-none transition placeholder:text-muted focus:border-ink focus:ring-[3px] focus:ring-ink/5 disabled:cursor-not-allowed disabled:opacity-45 ${
-    error ? 'border-error' : 'border-[#cbc7be]'
+  `w-full rounded-[10px] border bg-surface px-3.5 text-sm text-ink outline-none transition placeholder:text-muted focus:border-ink focus:ring-[3px] focus:ring-ink/5 disabled:cursor-not-allowed disabled:opacity-45 ${
+    error ? 'border-error' : 'border-gray-300'
   }`
 
 // Caja con prefijo ("S/" o "github.com/") y el campo al lado
 const prefixedClass = (error) =>
-  `flex min-h-12 items-center overflow-hidden rounded-[10px] border bg-white transition focus-within:border-ink focus-within:ring-[3px] focus-within:ring-ink/5 ${
-    error ? 'border-error' : 'border-[#cbc7be]'
+  `flex min-h-12 items-center overflow-hidden rounded-[10px] border bg-surface transition focus-within:border-ink focus-within:ring-[3px] focus-within:ring-ink/5 ${
+    error ? 'border-error' : 'border-gray-300'
   }`
 
 function toFormValues(profile) {
@@ -116,10 +116,10 @@ function Field({ id, label, error, hint, children }) {
 function ProfilePreview({ values, user, rating, reviews }) {
   const stage = [values.universidad.trim() || null, stageLabel(values)].filter(Boolean).join(' · ')
   return (
-    <aside className="rounded-[17px] bg-ink p-7 text-white lg:sticky lg:top-24" aria-label="Vista previa de tu perfil">
+    <aside className="rounded-[17px] bg-night p-7 text-white lg:sticky lg:top-24" aria-label="Vista previa de tu perfil">
       <p className="text-[11px] font-semibold tracking-[0.13em] text-lime">VISTA PREVIA</p>
       <div className="my-7 flex items-center gap-3">
-        <Avatar name={user.nombre} src={user.avatarUrl} size="lg" className="bg-lime! text-ink!" />
+        <Avatar name={user.nombre} src={user.avatarUrl} size="lg" className="bg-lime! text-night!" />
         <span className="flex min-w-0 flex-col gap-1">
           <strong className="truncate">{user.nombre}</strong>
           <small className="text-[11px] text-[#aaa8a0]">{stage || 'Tu universidad y ciclo'}</small>
@@ -237,7 +237,7 @@ function ProfileForm({ profile, user }) {
 
       <div className="grid items-start gap-[25px] lg:grid-cols-[1.4fr_0.6fr]">
         <form onSubmit={handleSubmit} noValidate className="overflow-hidden rounded-[17px] border border-line bg-surface">
-          <div className="bg-[#efede7] p-[18px] md:px-[30px] md:py-6">
+          <div className="bg-soft p-[18px] md:px-[30px] md:py-6">
             <AvatarUploader />
           </div>
 
@@ -280,7 +280,7 @@ function ProfileForm({ profile, user }) {
               onClick={() => setField('egresado', !values.egresado)}
               className="flex w-fit cursor-pointer items-center gap-[11px] text-left"
             >
-              <span className={`h-[23px] w-10 rounded-full p-[3px] transition-colors ${values.egresado ? 'bg-escrow' : 'bg-[#aaa79f]'}`}>
+              <span className={`h-[23px] w-10 rounded-full p-[3px] transition-colors ${values.egresado ? 'bg-escrow' : 'bg-gray-400'}`}>
                 <span className={`block h-[17px] w-[17px] rounded-full bg-white transition-transform ${values.egresado ? 'translate-x-[17px]' : ''}`} />
               </span>
               <span className="flex flex-col gap-[3px]">
