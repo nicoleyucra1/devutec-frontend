@@ -7,10 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DEVUTEC</title>
   <!-- Pone el modo claro u oscuro antes de que se pinte la página, así no hay un destello blanco al abrir en oscuro.
-       Usa la misma preferencia que guarda ThemeProvider ('devutec.theme'); por ahora, si no hay nada, es claro. -->
+       Usa la misma preferencia que guarda ThemeProvider ('devutec.theme'); si no hay nada, sigue al sistema. -->
   <script>
     (function () {
-      var preference = 'light'
+      var preference = 'system'
       try {
         var saved = localStorage.getItem('devutec.theme')
         if (saved === 'light' || saved === 'dark' || saved === 'system') preference = saved
