@@ -1,6 +1,8 @@
 import Avatar from '../ui/Avatar'
 import { useUserReviews } from '../../hooks/useUserReviews'
 import { projectShape } from '../../utils/propShapes'
+import SocialIcon from '../profile/SocialIcon'
+import { filledLinks, shortLink } from '../../utils/socialLinks'
 
 // "mar 2026" para "Miembro desde"
 function monthYear(value) {
@@ -8,7 +10,8 @@ function monthYear(value) {
   return new Date(value).toLocaleDateString('es-PE', { month: 'short', year: 'numeric' }).replace('.', '')
 }
 
-// Tarjeta del cliente que publicó el proyecto: foto, nombre, distrito, desde cuándo está y su calificación.
+// Tarjeta del cliente que publicó el proyecto: foto, nombre, distrito, desde cuándo está, su calificación
+// y las redes de su negocio.
 // La calificación sale de las reseñas que recibió (las primeras 50 alcanzan para un cliente de DEVUTEC).
 // Si el backend todavía no manda clientName, se muestra "Cliente de DEVUTEC".
 export default function ClientCard({ project }) {
@@ -20,6 +23,8 @@ export default function ClientCard({ project }) {
   const name = project.clientName || 'Cliente de DEVUTEC'
   const since = monthYear(project.clientSince)
   const details = [project.location, since && `Miembro desde ${since}`].filter(Boolean).join(' · ')
+  // Redes del negocio, para que el freelancer vea el estilo de la marca antes de postular
+  const links = filledLinks(project.clientLinks)
 
   return (
     <section aria-label="Cliente" className="mt-11 flex items-center gap-4 rounded-[15px] border border-line bg-surface p-[22px]">
@@ -44,6 +49,24 @@ export default function ClientCard({ project }) {
               <span className="text-muted">Todavía no tiene reseñas</span>
             )}
           </p>
+        )}
+        {links.length > 0 && (
+          <ul aria-label="Redes del negocio" className="mt-4 flex flex-wrap gap-1.5">
+            {links.map((link) => (
+              <li key={link.key} className="min-w-0 max-w-full">
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-w-0 items-center gap-1.5 rounded-full border border-line bg-paper px-3 py-1.5 text-xs font-semibold transition hover:border-ink"
+                >
+                  <SocialIcon network={link.key} />
+                  <span className="truncate">{shortLink(link.key, link.url)}</span>
+                  <span className="sr-only">({link.label}, se abre en otra pestaña)</span>
+                </a>
+              </li>
+            ))}
+          </ul>
         )}
       </div>
     </section>
