@@ -3,15 +3,15 @@ import PropTypes from 'prop-types'
 
 // Número grande del resumen con su etiqueta arriba y una nota abajo.
 // tone="dark" es la tarjeta del dinero: fondo tinta, etiqueta lima y número un poco más chico.
-// tone="green" es la del dinero ya liberado (resumen del freelancer): fondo verde y textos verde claro
-// (en oscuro el verde se aclara, así que el texto pasa a oscuro para que se lea).
+// tone="green" es la del dinero ya liberado (resumen del freelancer): fondo verde y textos verde claro.
+// En oscuro pasa a verde profundo con borde y etiqueta verdes, como el resto de tarjetas oscuras, para que se lea.
 const TONES = {
   light: { card: 'border-line bg-surface', label: 'text-muted', note: 'text-muted' },
   dark: { card: 'border-night bg-night text-white', label: 'text-lime', note: 'text-white/60' },
   green: {
-    card: 'border-escrow bg-escrow text-white dark:text-night',
-    label: 'text-[#b9d4c4] dark:text-night/70',
-    note: 'text-[#b9d4c4] dark:text-night/70',
+    card: 'border-escrow bg-escrow text-white dark:border-escrow/40 dark:bg-escrow-light dark:text-ink',
+    label: 'text-[#b9d4c4] dark:text-escrow',
+    note: 'text-[#b9d4c4] dark:text-muted',
   },
 }
 
