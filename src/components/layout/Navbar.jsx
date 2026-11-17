@@ -251,7 +251,7 @@ export default function Navbar() {
           <div className="mt-2 grid gap-6">
             <AvatarUploader />
             <div className="border-t border-line pt-6">
-              <PhoneEditor help="Solo lo ve la otra persona cuando tienen un contrato, para escribirte por WhatsApp." />
+              <PhoneEditor help="Solo lo ve la persona con quien tienes un contrato para escribirte por WhatsApp." />
             </div>
             {user.rol === 'CLIENT' && (
               <div className="border-t border-line pt-6">
