@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import Logo from '../brand/Logo'
+import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '../support/faq'
 
 const titleClass = 'mb-2 text-[10px] font-semibold tracking-[0.12em] text-[#87857f]'
 // Al pasar el mouse, la línea de abajo se dibuja de izquierda a derecha
@@ -42,7 +43,9 @@ export default function SiteFooter() {
 
           <div className="flex flex-col items-start gap-3">
             <p className={titleClass}>Contacto</p>
-            <span className="text-xs text-white">hola@devutec.pe</span>
+            <a href={SUPPORT_MAILTO} className={`${linkClass} break-all`}>
+              {SUPPORT_EMAIL}
+            </a>
             <span className="text-xs text-white">Lima, Perú</span>
           </div>
         </div>

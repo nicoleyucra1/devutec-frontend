@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '../support/faq'
 
 const linkClass = 'transition hover:text-ink hover:underline'
 
@@ -20,8 +21,8 @@ export default function AppFooter() {
           <Link to="/privacidad" className={linkClass}>
             Política de privacidad
           </Link>
-          <a href="mailto:hola@devutec.pe" className={linkClass}>
-            hola@devutec.pe
+          <a href={SUPPORT_MAILTO} className={linkClass}>
+            {SUPPORT_EMAIL}
           </a>
         </nav>
       </div>
