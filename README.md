@@ -4,6 +4,16 @@ Frontend web de DevUTEC, hecho con React y Vite.
 
 **En vivo:** https://devutec.vercel.app · **API:** https://devutec.duckdns.org/api/v1 ([repositorio del backend](https://github.com/alissonbrena-dotcom/devutec-backend))
 
+## Entrega: repositorios y despliegues
+
+| Parte | Repositorio | En vivo |
+|---|---|---|
+| Web (React + Vite) | este repositorio | https://devutec.vercel.app (Vercel) |
+| App móvil (React Native + Expo) | [nicoleyucra1/devutec-frontend-mobile](https://github.com/nicoleyucra1/devutec-frontend-mobile) | [APK para Android](https://expo.dev/artifacts/eas/hQcUsLVGSvmn8gePOpiwRcLXR3_UEWk0TpJoCoTUg8Y.apk) (build con EAS) |
+| API (Spring Boot) | [alissonbrena-dotcom/devutec-backend](https://github.com/alissonbrena-dotcom/devutec-backend) | https://devutec.duckdns.org/api/v1 (AWS EC2 + RDS, HTTPS) |
+
+Las **cuentas de prueba** para entrar sin registrarse están en el [README del backend](https://github.com/alissonbrena-dotcom/devutec-backend#readme). Los pagos usan Stripe en modo prueba: tarjeta `4242 4242 4242 4242`, cualquier fecha futura y cualquier CVC.
+
 ## Participación
 
 Todas las integrantes cumplieron sus responsabilidades y aportaron activamente en el backend, la web y la app móvil.
@@ -12,7 +22,7 @@ Todas las integrantes cumplieron sus responsabilidades y aportaron activamente e
 |---|---|---|
 | **Alisson Luciana Breña Dávila** | **Backend:** módulo de Proyectos y Skills (CRUD, filtros, paginación), contraseñas fuertes, pagos con Stripe en modo prueba. **Web y mobile:** módulo de Proyectos (explorar, detalle, publicar, editar, mis proyectos; distrito por GPS en la app), pago con tarjeta y regreso a la app, PropTypes. **Deploy e infraestructura:** AWS EC2 + RDS, HTTPS con Caddy y DuckDNS, despliegue continuo, Vercel, builds de EAS (APK) y variables de entorno del servidor. | 100 % |
 | **Camila Gomez Arias** | **Backend:** módulos de Postulaciones y Contratos (pago en garantía al aceptar), eventos y correos asíncronos, manejo de errores, GitHub Actions, colección de Postman, fecha de aceptación de términos. **Web:** kit de componentes con Tailwind (Button, Input, Card, Modal, Pagination…), postulaciones, contratos y reseñas, términos y privacidad. **Mobile:** postulaciones y contratos con confirmación biométrica. | 100 % |
-| **Ariana Alejandra Isla Urbina** | **Backend:** perfil del freelancer, usuario actual, foto de perfil, celular, CORS por variable de entorno, cascadas, plantillas de correo y documentación del README. **Web:** rediseño según el mockup (explorar, detalle, formulario, postulantes, mis postulaciones, mis proyectos, contratos, resumen del cliente, pagos del admin), pantallas de error y de carga, foto de perfil y WhatsApp. **Mobile:** escáner QR con cámara, perfil público del freelancer, repos de GitHub, foto de perfil, biometría y WhatsApp. | 100 % |
+| **Ariana Alejandra Isla Urbina** | **Backend:** perfil del freelancer y su presentación, usuario actual, foto de perfil, celular para WhatsApp, redes del negocio del cliente, link de entrega del trabajo, confirmar pagos con Google, CORS por variable de entorno, cascadas, plantillas de correo, script de datos de demostración y documentación del README. **Web:** rediseño según el mockup (explorar, detalle, formulario, postulantes, mis postulaciones, mis proyectos, contratos, resumen del cliente, pagos del admin), modo oscuro, redes del negocio, link de entrega, pantallas de error y de carga, foto de perfil y WhatsApp. **Mobile:** pantallas del mockup (Inicio, Postulaciones, Contratos, detalle y publicación de proyectos, liberar pago con biometría o contraseña), postulantes del cliente, Inicio del admin y eliminar proyectos, redes del negocio, link de entrega, escáner QR con cámara, perfil público del freelancer, repos de GitHub, foto de perfil y WhatsApp. | 100 % |
 | **Nicole Valeria Yucra Castro** | **Backend:** autenticación con JWT y Spring Security, inicio de sesión con Google, asistente de ayuda con IA (Gemini). **Web:** base del proyecto (Vite, cliente axios, renovación del token, rutas protegidas y carga diferida), login y registro, toasts, error boundary, reintentos, Google y chat de Cuyi. **Mobile:** sistema de diseño con modo claro y oscuro, animaciones, bienvenida, login y registro, aviso sin conexión, Google y ayuda con Cuyi. | 100 % |
 
 ## Cómo correrlo
