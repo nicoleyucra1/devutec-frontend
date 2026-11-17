@@ -142,12 +142,13 @@ function About({ profile, firstName, isOwner }) {
       {text ? (
         <p className="mt-5 max-w-[700px] whitespace-pre-line text-[17px] leading-[1.7] text-gray-600">{text}</p>
       ) : (
-        <p className="mt-5 text-sm text-muted">
-          Todavía no escribiste tu presentación. Cuéntales a los clientes qué haces bien y cómo trabajas.{' '}
-          <Link to="/profile/edit" className="font-semibold text-ink underline hover:no-underline">
-            Escribir mi presentación
+        // El link va en su propia línea para que se vea como la acción y no se pierda al final de la frase
+        <div className="mt-5 text-sm">
+          <p className="text-muted">Todavía no escribiste tu presentación. Cuéntales a los clientes qué haces bien y cómo trabajas.</p>
+          <Link to="/profile/edit" className="mt-3 inline-block font-semibold text-ink underline hover:no-underline">
+            Escribir mi presentación →
           </Link>
-        </p>
+        </div>
       )}
     </section>
   )
