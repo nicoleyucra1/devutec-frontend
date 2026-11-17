@@ -21,7 +21,7 @@ Todas las integrantes cumplieron sus responsabilidades y aportaron activamente e
 | Integrante | Principales aportes | Participación |
 |---|---|---|
 | **Alisson Luciana Breña Dávila** | **Backend:** módulo de Proyectos y Skills (CRUD, filtros, paginación), contraseñas fuertes, pagos con Stripe en modo prueba. **Web y mobile:** módulo de Proyectos (explorar, detalle, publicar, editar, mis proyectos; distrito por GPS en la app), pago con tarjeta y regreso a la app, PropTypes. **Deploy e infraestructura:** AWS EC2 + RDS, HTTPS con Caddy y DuckDNS, despliegue continuo, Vercel, builds de EAS (APK) y variables de entorno del servidor. | 100 % |
-| **Camila Gomez Arias** | **Backend:** módulos de Postulaciones y Contratos (pago en garantía al aceptar), eventos y correos asíncronos, manejo de errores, GitHub Actions, colección de Postman, fecha de aceptación de términos. **Web:** kit de componentes con Tailwind (Button, Input, Card, Modal, Pagination…), postulaciones, contratos y reseñas, términos y privacidad. **Mobile:** postulaciones y contratos con confirmación biométrica. | 100 % |
+| **Camila Gomez Arias** | **Backend:** módulos de Postulaciones, Contratos y Reseñas (pago en garantía al aceptar), eventos y correos asíncronos, manejo de errores, GitHub Actions, colección de Postman, fecha de aceptación de términos. **Web:** kit de componentes con Tailwind (Button, Input, Card, Modal, Pagination…), postulaciones, contratos y reseñas, términos y privacidad. **Mobile:** postulaciones y contratos con confirmación biométrica. | 100 % |
 | **Ariana Alejandra Isla Urbina** | **Backend:** perfil del freelancer y su presentación, usuario actual, foto de perfil, celular para WhatsApp, redes del negocio del cliente, link de entrega del trabajo, confirmar pagos con Google, CORS por variable de entorno, cascadas, plantillas de correo, script de datos de demostración y documentación del README. **Web:** rediseño según el mockup (explorar, detalle, formulario, postulantes, mis postulaciones, mis proyectos, contratos, resumen del cliente, pagos del admin), modo oscuro, redes del negocio, link de entrega, pantallas de error y de carga, foto de perfil y WhatsApp. **Mobile:** pantallas del mockup (Inicio, Postulaciones, Contratos, detalle y publicación de proyectos, liberar pago con biometría o contraseña), postulantes del cliente, Inicio del admin y eliminar proyectos, redes del negocio, link de entrega, escáner QR con cámara, perfil público del freelancer, repos de GitHub, foto de perfil y WhatsApp. | 100 % |
 | **Nicole Valeria Yucra Castro** | **Backend:** autenticación con JWT y Spring Security, inicio de sesión con Google, asistente de ayuda con IA (Gemini). **Web:** base del proyecto (Vite, cliente axios, renovación del token, rutas protegidas y carga diferida), login y registro, toasts, error boundary, reintentos, Google y chat de Cuyi. **Mobile:** sistema de diseño con modo claro y oscuro, animaciones, bienvenida, login y registro, aviso sin conexión, Google y ayuda con Cuyi. | 100 % |
 
@@ -35,6 +35,14 @@ npm run dev
 
 La app abre en http://localhost:5173.
 
+Antes de subir cambios, el equipo revisa el código con:
+
+```bash
+npm run lint          # revisa el código con ESLint
+npm run check:props   # revisa que todos los componentes tengan PropTypes
+npm run build         # compila para producción
+```
+
 | Variable | Descripción |
 |---|---|
 | `VITE_API_URL` | URL base de la API, con `/api/v1` al final |
@@ -44,12 +52,12 @@ La app abre en http://localhost:5173.
 
 ```
 src/
-├── components/   componentes reutilizables (PrivateRoute, kit de componentes)
-├── contexts/     AuthContext y AuthProvider
-├── hooks/        hooks propios (useAuth, useProjects...)
-├── pages/        una página por ruta
+├── components/   componentes reutilizables (PrivateRoute, kit de componentes, contratos, landing...)
+├── contexts/     sesión (AuthProvider), modo claro y oscuro (ThemeProvider) y avisos (ToastProvider)
+├── hooks/        hooks propios (useAuth, useProjects, useTheme, useToast...)
+├── pages/        una página por ruta, agrupadas por módulo (projects/, contracts/, dashboard/...)
 ├── services/     llamadas a la API, una por módulo (authService, projectService...)
-├── utils/        utilidades (tokenStorage)
+├── utils/        utilidades (tokenStorage, format, validation, propShapes...)
 └── routes.jsx    todas las rutas de la app
 ```
 
@@ -78,19 +86,19 @@ const { user, isAuthenticated, login, register, logout } = useAuth()
 
 ## Cómo proteger una ruta
 
-Las rutas se agregan en `src/routes.jsx`, con la página cargada con `lazy`:
+Las rutas se agregan en `src/routes.jsx`, con la página cargada con `lazyPage` (un `React.lazy` que recarga la web si hubo un deploy nuevo mientras estaba abierta):
 
 ```jsx
-const MyProjects = lazy(() => import('./pages/MyProjects'))
+const MyProjects = lazyPage(() => import('./pages/projects/MyProjects'))
 
 // Cualquier usuario con sesión
 <Route element={<PrivateRoute />}>
-  <Route path="/contracts" element={<Contracts />} />
+  <Route path="/contracts" element={<MyContracts />} />
 </Route>
 
 // Solo un rol
 <Route element={<PrivateRoute roles={['CLIENT']} />}>
-  <Route path="/projects/me" element={<MyProjects />} />
+  <Route path="/my-projects" element={<MyProjects />} />
 </Route>
 ```
 
