@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-const SIZES = [10, 25, 50]
+const SIZES = [10, 25, 50, 100]
 
 //Números a mostrar: la primera, la última y las cercanas a la actual. Los huecos se marcan con '...'
 function pageNumbers(page, totalPages) {

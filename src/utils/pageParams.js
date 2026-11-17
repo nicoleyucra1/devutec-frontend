@@ -1,5 +1,4 @@
-// Lee ?page= y ?size= de la URL. La página empieza en 1 y el tamaño solo acepta los del selector.
-const SIZES = [10, 25, 50]
+const SIZES = [10, 25, 50, 100]
 
 export function readPageParams(searchParams) {
   const page = Math.max(Number(searchParams.get('page')) || 1, 1)
