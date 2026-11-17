@@ -15,6 +15,7 @@ import ButtonLink from '../../components/projects/ButtonLink'
 import Badge from '../../components/ui/Badge'
 import Breadcrumbs from '../../components/ui/Breadcrumbs'
 import Button from '../../components/ui/Button'
+import Input from '../../components/ui/Input'
 import LoadingNotice from '../../components/ui/LoadingNotice'
 import Modal from '../../components/ui/Modal'
 import { useAuth } from '../../hooks/useAuth'
@@ -65,7 +66,8 @@ const ACTIONS = {
     tone: 'green',
     kicker: 'ENTREGAR TRABAJO',
     title: () => '¿Listo para entregar?',
-    text: (c) => `${c.clientName ?? 'El cliente'} podrá revisar tu trabajo y confirmarlo. Mientras tanto, el pago sigue retenido.`,
+    text: (c) =>
+      `Pega el link a tu trabajo (Drive, GitHub, Figma o la web publicada). ${c.clientName ?? 'El cliente'} lo revisará y confirmará; mientras tanto, el pago sigue retenido.`,
     summary: (c) => ['Pago retenido a tu nombre', c.amount],
     label: 'Entregar trabajo',
     busyLabel: 'Entregando...',
@@ -161,6 +163,9 @@ export default function ContractDetail() {
   const [busy, setBusy] = useState(false)
   // Acción que espera confirmación en la ventana: 'deliver', 'confirm' o 'cancel'
   const [pending, setPending] = useState(null)
+  // Lo que escribe el freelancer en la ventana de entregar
+  const [delivery, setDelivery] = useState({ link: '', nota: '' })
+  const [deliveryError, setDeliveryError] = useState(null)
   const [termsOpen, setTermsOpen] = useState(false)
   const [paying, setPaying] = useState(false)
 
@@ -210,14 +215,21 @@ export default function ContractDetail() {
   }
 
   const runAction = async () => {
+    if (pending === 'deliver' && !delivery.link.trim()) {
+      setDeliveryError('Pega el link de tu trabajo')
+      return
+    }
     setBusy(true)
+    setDeliveryError(null)
     try {
-      await ACTIONS[pending].run(id)
+      await ACTIONS[pending].run(id, { link: delivery.link.trim(), nota: delivery.nota.trim() || null })
       toast.success(ACTIONS[pending].success)
       setPending(null)
       reload()
     } catch (err) {
-      toast.error(errorMessage(err))
+      // El error del link se muestra debajo del campo; los demás, como aviso
+      if (pending === 'deliver' && err.response?.status === 400) setDeliveryError(errorMessage(err))
+      else toast.error(errorMessage(err))
     } finally {
       setBusy(false)
     }
@@ -351,6 +363,23 @@ export default function ContractDetail() {
                 {contract.freelancerName} marcó el trabajo como entregado.{' '}
                 {contract.status === 'DELIVERED' && (isClient ? 'Revísalo y confirma cuando esté todo bien.' : 'Ahora le toca revisar al cliente.')}
               </p>
+              {contract.deliveryUrl && (
+                <a
+                  href={contract.deliveryUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-5 flex items-center justify-between gap-3 rounded-xl border border-line bg-paper px-4 py-3 text-sm font-semibold transition hover:border-ink"
+                >
+                  <span className="min-w-0 truncate">{contract.deliveryUrl.replace(/^https?:\/\//, '')}</span>
+                  <span className="shrink-0 text-escrow">Abrir ↗</span>
+                </a>
+              )}
+              {contract.deliveryNote && (
+                <blockquote className="mt-3 whitespace-pre-line rounded-xl bg-paper px-4 py-3 text-sm leading-relaxed">
+                  <span className="mb-1 block text-[10px] font-semibold tracking-[0.13em] text-muted">NOTA DE {contract.freelancerName?.split(' ')[0]?.toUpperCase()}</span>
+                  {contract.deliveryNote}
+                </blockquote>
+              )}
             </article>
           ) : (
             <article className="flex items-center gap-[18px] rounded-2xl border border-line bg-surface p-6 sm:p-[30px]">
@@ -482,6 +511,35 @@ export default function ContractDetail() {
         {action && (
           <>
             <p className="text-sm leading-relaxed text-muted">{action.text(contract)}</p>
+            {pending === 'deliver' && (
+              <div className="mt-5 grid gap-3">
+                <Input
+                  label="Link de tu trabajo"
+                  name="link"
+                  type="url"
+                  placeholder="drive.google.com/..."
+                  value={delivery.link}
+                  onChange={(event) => {
+                    setDelivery((prev) => ({ ...prev, link: event.target.value }))
+                    setDeliveryError(null)
+                  }}
+                  error={deliveryError}
+                  maxLength={255}
+                  autoFocus
+                />
+                <label className="block">
+                  <span className="text-xs font-medium text-ink">Nota para el cliente (opcional)</span>
+                  <textarea
+                    value={delivery.nota}
+                    onChange={(event) => setDelivery((prev) => ({ ...prev, nota: event.target.value }))}
+                    maxLength={1000}
+                    rows={3}
+                    placeholder="Qué incluye la entrega y cómo revisarla"
+                    className="mt-2 block w-full resize-y rounded-[10px] border border-gray-300 bg-surface px-3.5 py-2.5 text-sm text-ink outline-none transition focus:border-ink focus:ring-[3px] focus:ring-ink/5"
+                  />
+                </label>
+              </div>
+            )}
             <div className="my-6 flex items-center justify-between gap-3 rounded-xl bg-paper px-4 py-3 text-xs">
               <span className="min-w-0 truncate text-muted">{action.summary(contract)[0]}</span>
               <strong className="text-sm tabular-nums">{formatBudget(action.summary(contract)[1])}</strong>

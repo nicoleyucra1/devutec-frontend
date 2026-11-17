@@ -35,6 +35,9 @@ export const projectShape = PropTypes.shape({
 
 export const contractShape = PropTypes.shape({
   id: idType.isRequired,
+  // Link al trabajo entregado y nota del freelancer (null mientras no entregue)
+  deliveryUrl: PropTypes.string,
+  deliveryNote: PropTypes.string,
   projectTitle: PropTypes.string,
   status: PropTypes.string,
   amount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
