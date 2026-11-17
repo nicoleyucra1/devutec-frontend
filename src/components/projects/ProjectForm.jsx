@@ -185,7 +185,8 @@ export default function ProjectForm({ initialProject, saving, serverError, onSub
 
   return (
     <div className="grid items-start gap-6 lg:grid-cols-[1.4fr_0.6fr]">
-      <form onSubmit={handleSubmit} noValidate className="overflow-hidden rounded-[17px] border border-line bg-surface">
+      {/* Sin overflow-hidden: recortaba el desplegable de Habilidades, que sale por debajo de la última sección */}
+      <form onSubmit={handleSubmit} noValidate className="rounded-[17px] border border-line bg-surface">
         <Section number="01" title="Información principal" help="Lo primero que verán los freelancers.">
           <Field id={`${id}-title`} label="Título del proyecto" error={errors.title} count={values.title.length} max={LIMITS.title[1]}>
             <input
