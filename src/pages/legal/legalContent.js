@@ -1,3 +1,5 @@
+import { SUPPORT_EMAIL } from '../../components/support/faq'
+
 export const LEGAL_DOCS = {
   terms: {
     kicker: 'LEGAL',
@@ -47,7 +49,7 @@ export const LEGAL_DOCS = {
       },
       {
         heading: 'Contacto',
-        paragraphs: ['Si tienes dudas sobre estos términos, escríbenos a hola@devutec.pe.'],
+        paragraphs: [`Si tienes dudas sobre estos términos, escríbenos a ${SUPPORT_EMAIL}.`],
       },
     ],
   },
@@ -86,7 +88,7 @@ export const LEGAL_DOCS = {
       {
         heading: 'Tus derechos',
         paragraphs: [
-          'De acuerdo con la Ley N.° 29733, Ley de Protección de Datos Personales del Perú, puedes pedir acceder, corregir o eliminar tus datos escribiendo a hola@devutec.pe.',
+          `De acuerdo con la Ley N.° 29733, Ley de Protección de Datos Personales del Perú, puedes pedir acceder, corregir o eliminar tus datos escribiendo a ${SUPPORT_EMAIL}.`,
         ],
       },
     ],

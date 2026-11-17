@@ -5,7 +5,8 @@ import PropTypes from 'prop-types'
 // (Paper y lima) gracias a las variables logo-dev y logo-utec. "night" es para fondos siempre oscuros, como el footer.
 const TONES = {
   day: { dev: 'var(--color-logo-dev)', utec: 'var(--color-logo-utec)', text: 'text-logo-dev', accent: 'text-logo-utec' },
-  night: { dev: '#f5f3ee', utec: '#d7f25c', text: 'text-paper', accent: 'text-lime' },
+  // Colores fijos: text-paper se vuelve oscuro en modo oscuro y el "DEV" del footer no se veía
+  night: { dev: '#f5f3ee', utec: '#d7f25c', text: 'text-[#f5f3ee]', accent: 'text-[#d7f25c]' },
 }
 
 export function LogoMark({ tone = 'day', width = 34 }) {
