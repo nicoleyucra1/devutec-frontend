@@ -80,10 +80,10 @@ const shortUrl = (url) => url.replace(/^https?:\/\//, '').replace(/\/$/, '')
 function ProfileHero({ profile, isOwner }) {
   const study = [profile.universidad, studyLabel(profile)].filter(Boolean).join(' · ')
   return (
-    <section className="bg-ink py-[45px] text-white md:py-[65px]">
+    <section className="bg-night py-[45px] text-white md:py-[65px]">
       <div className="mx-auto flex w-full max-w-[1248px] flex-col gap-[35px] px-4 md:flex-row md:items-end md:justify-between md:px-6">
         <div className="flex items-start gap-4 md:items-center md:gap-[22px]">
-          <Avatar name={profile.nombre} src={profile.avatarUrl} size="xl" className="h-16! w-16! bg-lime! text-base! text-ink! md:h-[92px]! md:w-[92px]! md:text-[22px]!" />
+          <Avatar name={profile.nombre} src={profile.avatarUrl} size="xl" className="h-16! w-16! bg-lime! text-base! text-night! md:h-[92px]! md:w-[92px]! md:text-[22px]!" />
           <div className="min-w-0">
             <p className="text-[11px] font-semibold tracking-[0.13em] text-[#a6a39c]">FREELANCER EN DEVUTEC</p>
             <h1 className="mb-[5px] mt-2.5 text-[38px] font-semibold leading-tight tracking-[-0.045em] md:text-[53px]">{profile.nombre}</h1>
@@ -140,7 +140,7 @@ function About({ profile, firstName, isOwner }) {
     <section className="border-b border-line pb-[55px] pt-[55px]">
       <p className="text-[11px] font-semibold tracking-[0.13em]">SOBRE {firstName.toUpperCase()}</p>
       {text ? (
-        <p className="mt-5 max-w-[700px] whitespace-pre-line text-[17px] leading-[1.7] text-[#55534e]">{text}</p>
+        <p className="mt-5 max-w-[700px] whitespace-pre-line text-[17px] leading-[1.7] text-gray-600">{text}</p>
       ) : (
         <p className="mt-5 text-sm text-muted">
           Todavía no escribiste tu presentación. Cuéntales a los clientes qué haces bien y cómo trabajas.{' '}
@@ -282,7 +282,7 @@ function Reviews({ userId, firstName }) {
               </span>
             </div>
             {review.comment && (
-              <p className="mt-[18px] text-[13px] leading-[1.65] text-[#454440] md:ml-[46px]">“{review.comment}”</p>
+              <p className="mt-[18px] text-[13px] leading-[1.65] text-gray-700 md:ml-[46px]">“{review.comment}”</p>
             )}
           </article>
         ))}
@@ -410,7 +410,7 @@ function ProfileFacts({ profile }) {
 function ProfileLoading() {
   return (
     <div aria-busy="true">
-      <div className="bg-ink py-[65px]">
+      <div className="bg-night py-[65px]">
         <div className="mx-auto flex max-w-[1248px] items-center gap-[22px] px-4 md:px-6">
           <Skeleton className="h-[92px] w-[92px] rounded-full opacity-20" />
           <div className="grid flex-1 gap-3">

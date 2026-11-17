@@ -3,11 +3,16 @@ import PropTypes from 'prop-types'
 
 // Número grande del resumen con su etiqueta arriba y una nota abajo.
 // tone="dark" es la tarjeta del dinero: fondo tinta, etiqueta lima y número un poco más chico.
-// tone="green" es la del dinero ya liberado (resumen del freelancer): fondo verde y textos verde claro.
+// tone="green" es la del dinero ya liberado (resumen del freelancer): fondo verde y textos verde claro
+// (en oscuro el verde se aclara, así que el texto pasa a oscuro para que se lea).
 const TONES = {
   light: { card: 'border-line bg-surface', label: 'text-muted', note: 'text-muted' },
-  dark: { card: 'border-ink bg-ink text-white', label: 'text-lime', note: 'text-white/60' },
-  green: { card: 'border-escrow bg-escrow text-white', label: 'text-[#b9d4c4]', note: 'text-[#b9d4c4]' },
+  dark: { card: 'border-night bg-night text-white', label: 'text-lime', note: 'text-white/60' },
+  green: {
+    card: 'border-escrow bg-escrow text-white dark:text-night',
+    label: 'text-[#b9d4c4] dark:text-night/70',
+    note: 'text-[#b9d4c4] dark:text-night/70',
+  },
 }
 
 export default function NumberCard({ label, icon, value, note, loading = false, tone = 'light', className = '' }) {

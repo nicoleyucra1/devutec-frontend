@@ -5,9 +5,8 @@ import { ThemeContext } from './themeContext'
 // Igual que la app: se guarda en 'devutec.theme' y puede ser 'system', 'light' o 'dark'.
 const STORAGE_KEY = 'devutec.theme'
 const PREFERENCES = ['system', 'light', 'dark']
-// Por ahora arranca en "Claro", como la app: todavía hay pantallas con colores fijos.
-// Cuando todas estén adaptadas, el valor inicial pasa a ser 'system' para seguir al sistema.
-const DEFAULT_PREFERENCE = 'light'
+// Si la persona no eligió nada, sigue al sistema (claro u oscuro según su dispositivo).
+const DEFAULT_PREFERENCE = 'system'
 
 function readPreference() {
   try {

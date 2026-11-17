@@ -199,7 +199,7 @@ function SuggestedStrip({ projects, now }) {
       : `${projects.length} ${plural(projects.length, 'proyecto abierto', 'proyectos abiertos')} para ti`
 
   return (
-    <section className="mt-[55px] grid items-center gap-[22px] rounded-2xl bg-ink p-7 text-white md:mt-[60px] lg:grid-cols-[1fr_1fr_auto]">
+    <section className="mt-[55px] grid items-center gap-[22px] rounded-2xl bg-night p-7 text-white md:mt-[60px] lg:grid-cols-[1fr_1fr_auto]">
       <div>
         <p className="text-[11px] font-semibold tracking-[0.13em] text-lime">RECOMENDADO PARA TI</p>
         <h2 className="mt-2 text-[25px] font-semibold leading-tight">{title}</h2>
@@ -328,7 +328,7 @@ export default function FreelancerDashboard() {
           )}
 
           {contracts.data && active.length === 0 && (
-            <div className="flex items-center gap-5 rounded-[15px] border border-dashed border-[#cbc7be] px-[22px] py-5">
+            <div className="flex items-center gap-5 rounded-[15px] border border-dashed border-gray-300 px-[22px] py-5">
               <Cuyi anim="duerme" px={3} />
               <p className="text-[13px] text-muted">
                 Cuando un cliente acepte una de tus propuestas, el contrato aparecerá aquí.{' '}
