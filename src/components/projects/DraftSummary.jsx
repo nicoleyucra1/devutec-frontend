@@ -148,8 +148,8 @@ export default function DraftSummary({ draft, onContinue, onKeepChatting }) {
           ))}
         </ol>
         <p className="mt-3 rounded-xl bg-pending-light p-3 text-xs leading-relaxed text-pending">
-          <strong>Bolsa de emergencia:</strong> es parte de la Entrega final pagada por adelantado. Si el proyecto se detiene, con ella se
-          le paga al estudiante lo que ya entregó; si todo va bien, se usa en la Entrega final.
+          <strong>Bolsa de emergencia:</strong> es un 10 % aparte de las etapas que se paga al inicio. Si el proyecto se detiene, con ella se
+          le paga al estudiante lo que ya entregó; si todo va bien, se le libera al terminar el proyecto.
         </p>
         <p className="mt-4 text-[11px] font-semibold tracking-[0.13em] text-muted">ETAPAS DEL TRABAJO</p>
         <ul className="mt-2 flex flex-wrap gap-1.5">
@@ -158,6 +158,7 @@ export default function DraftSummary({ draft, onContinue, onKeepChatting }) {
               {stage.name} <span className="text-muted">{stage.percent} %</span>
             </li>
           ))}
+          <li className="rounded-full bg-pending-light px-3 py-1 text-xs text-pending">Bolsa de emergencia 10 %</li>
         </ul>
       </div>
 
