@@ -7,6 +7,8 @@ import MoneyAmount from '../../components/contracts/MoneyAmount'
 import PersonCard from '../../components/contracts/PersonCard'
 import WhatsAppCard from '../../components/contracts/WhatsAppCard'
 import TermsDialog from '../../components/contracts/TermsDialog'
+import TranslationCard from '../../components/contracts/TranslationCard'
+import ClientRequestTranslator from '../../components/contracts/ClientRequestTranslator'
 import Cuyi from '../../components/brand/Cuyi'
 import ErrorBox from '../../components/projects/ErrorBox'
 import ErrorState from '../../components/ui/ErrorState'
@@ -374,7 +376,8 @@ export default function ContractDetail() {
                   <span className="shrink-0 text-escrow">Abrir ↗</span>
                 </a>
               )}
-              {contract.deliveryNote && (
+              {/* El cliente ve la nota traducida por Cuyi más abajo; el original queda en «Ver mensaje original» */}
+              {contract.deliveryNote && !isClient && (
                 <blockquote className="mt-3 whitespace-pre-line rounded-xl bg-paper px-4 py-3 text-sm leading-relaxed">
                   <span className="mb-1 block text-[10px] font-semibold tracking-[0.13em] text-muted">NOTA DE {contract.freelancerName?.split(' ')[0]?.toUpperCase()}</span>
                   {contract.deliveryNote}
@@ -396,6 +399,23 @@ export default function ContractDetail() {
                 </p>
               </div>
             </article>
+          )}
+
+          {/* IA traductora: explica la nota de entrega al cliente (el estudiante ve cómo le llegará) */}
+          {contract.deliveryNote && (isClient || isFreelancer) && (
+            <TranslationCard
+              key={contract.deliveryNote}
+              contractId={contract.id}
+              note={contract.deliveryNote}
+              freelancerName={contract.freelancerName}
+              clientName={contract.clientName}
+              isClient={isClient}
+            />
+          )}
+
+          {/* IA traductora al revés: convierte un pedido del cliente en tareas y preguntas para el estudiante */}
+          {isFreelancer && !finished && (
+            <ClientRequestTranslator contractId={contract.id} clientName={contract.clientName} />
           )}
 
           {contract.status === 'CONFIRMED' && (isClient || isFreelancer) && (
