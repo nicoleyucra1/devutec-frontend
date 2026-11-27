@@ -4,6 +4,8 @@ import Button from '../ui/Button'
 import SkillPicker from '../ui/SkillPicker'
 import { useSkills } from '../../hooks/useSkills'
 import { projectShape } from '../../utils/propShapes'
+import { formatBudget } from '../../utils/format'
+import { formatRate, splitClientTotal } from '../../utils/commission'
 
 const LIMITS = { title: [5, 80], description: [40, 2000], minBudget: 50, maxSkills: 5 }
 
@@ -18,6 +20,18 @@ const DISTRICTS = [
 function today() {
   const now = new Date()
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+}
+
+// Borrador del asistente IA: llena el formulario con lo que armó (presupuesto total ya con la comisión)
+function fromDraft(draft) {
+  return {
+    title: draft.title?.slice(0, LIMITS.title[1]) ?? '',
+    description: draft.description?.slice(0, LIMITS.description[1]) ?? '',
+    budget: draft.budgetTotal != null ? String(draft.budgetTotal) : '',
+    deadline: draft.deadline ?? '',
+    location: '',
+    skillIds: (draft.skillIds ?? []).map(String),
+  }
 }
 
 function toFormValues(project) {
@@ -153,10 +167,13 @@ FormHelp.propTypes = {
 
 // Formulario de "Publicar proyecto" y "Editar proyecto" (mockup FormularioProyecto).
 // Avisa los errores al intentar enviar y desde ahí los va actualizando mientras se corrigen.
-export default function ProjectForm({ initialProject, saving, serverError, onSubmit, onCancel }) {
+export default function ProjectForm({ initialProject, draft, saving, serverError, onSubmit, onCancel }) {
   const id = useId()
   const editing = Boolean(initialProject)
-  const [values, setValues] = useState(() => toFormValues(initialProject))
+  const [values, setValues] = useState(() => (draft ? fromDraft(draft) : toFormValues(initialProject)))
+  // Con el asistente, las habilidades las eligió la IA y solo las ven los estudiantes: el cliente no las edita
+  const skillsFromAssistant = Boolean(draft?.skillIds?.length)
+  const split = splitClientTotal(values.budget, Number(draft?.commissionRate ?? 0.1))
   const [submitted, setSubmitted] = useState(false)
   const skills = useSkills()
 
@@ -180,6 +197,8 @@ export default function ProjectForm({ initialProject, saving, serverError, onSub
       deadline: values.deadline,
       location: values.location.trim() || null,
       skillIds: values.skillIds.map(Number),
+      // Solo con el asistente: tipo de proyecto y funcionalidades, para que el estudiante vea las horas estimadas
+      ...(draft ? { category: draft.category, features: draft.features } : {}),
     })
   }
 
@@ -244,6 +263,12 @@ export default function ProjectForm({ initialProject, saving, serverError, onSub
                   style={{ outline: 'none' }}
                 />
               </div>
+              {!editing && split.clientTotal > 0 && (
+                <p className="text-xs text-muted">
+                  Es el total que pagarás: {formatBudget(split.freelancerAmount)} para el estudiante y {formatBudget(split.commission)} de
+                  tarifa DEVUTEC ({formatRate(split.rate)}).
+                </p>
+              )}
             </Field>
             <Field id={`${id}-deadline`} label="Fecha límite" error={errors.deadline}>
               <input
@@ -276,6 +301,14 @@ export default function ProjectForm({ initialProject, saving, serverError, onSub
           </Field>
         </Section>
 
+        {skillsFromAssistant ? (
+          <Section number="03" title="Habilidades" help="Las eligió el asistente según lo que necesitas.">
+            <p className="rounded-xl bg-paper p-4 text-sm leading-relaxed text-muted">
+              No tienes que elegir tecnologías: el asistente ya definió qué debe saber el estudiante. Los postulantes verán estas
+              habilidades en el detalle del proyecto.
+            </p>
+          </Section>
+        ) : (
         <Section number="03" title="Habilidades" help={`Elige hasta ${LIMITS.maxSkills} habilidades que necesita el proyecto.`}>
           <div id={`${id}-skillIds`} tabIndex={-1} className="outline-none">
             {skills.error ? (
@@ -294,6 +327,7 @@ export default function ProjectForm({ initialProject, saving, serverError, onSub
             {errors.skillIds && <p className="mt-2 text-xs text-error">{errors.skillIds}</p>}
           </div>
         </Section>
+        )}
 
         {serverError && (
           <p role="alert" className="mx-[22px] mt-5 rounded-lg bg-error-light px-3.5 py-2.5 text-sm text-error md:mx-8">
@@ -324,6 +358,17 @@ export default function ProjectForm({ initialProject, saving, serverError, onSub
 ProjectForm.propTypes = {
   // Con proyecto es "Editar"; sin proyecto, "Publicar"
   initialProject: projectShape,
+  // Borrador del asistente IA (solo al publicar): llena los campos y oculta la elección de habilidades
+  draft: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    deadline: PropTypes.string,
+    budgetTotal: PropTypes.number,
+    category: PropTypes.string,
+    commissionRate: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    skillIds: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.string])),
+    features: PropTypes.arrayOf(PropTypes.shape({ code: PropTypes.string.isRequired, quantity: PropTypes.number.isRequired })),
+  }),
   saving: PropTypes.bool,
   serverError: PropTypes.node,
   onSubmit: PropTypes.func.isRequired,
