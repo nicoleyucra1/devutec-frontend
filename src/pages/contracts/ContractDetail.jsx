@@ -7,6 +7,7 @@ import MoneyAmount from '../../components/contracts/MoneyAmount'
 import PersonCard from '../../components/contracts/PersonCard'
 import WhatsAppCard from '../../components/contracts/WhatsAppCard'
 import TermsDialog from '../../components/contracts/TermsDialog'
+import StageGuideCard from '../../components/contracts/StageGuideCard'
 import Cuyi from '../../components/brand/Cuyi'
 import ErrorBox from '../../components/projects/ErrorBox'
 import ErrorState from '../../components/ui/ErrorState'
@@ -308,6 +309,10 @@ export default function ContractDetail() {
     contract.paymentStatus === 'HELD' &&
     !contract.paidWithCard
 
+  // Etapa en la que se está trabajando (la manda el backend con las etapas); la Mini guía es para el estudiante
+  const currentStage = contract.stages?.find((stage) => stage.position === contract.currentStage)
+  const showGuide = isFreelancer && !finished && currentStage && currentStage.status !== 'CANCELLED'
+
   const moneyKicker = { HELD: 'PAGO EN GARANTÍA', RELEASED: 'PAGO LIBERADO', REFUNDED: 'PAGO REEMBOLSADO' }[contract.paymentStatus]
   const parties = [contract.clientName, contract.freelancerName].filter(Boolean).join(' · ')
 
@@ -349,6 +354,8 @@ export default function ContractDetail() {
               <ContractTimeline contract={contract} />
             </div>
           </article>
+
+          {showGuide && <StageGuideCard key={currentStage.id} contractId={contract.id} stage={currentStage} clientName={contract.clientName} />}
 
           {contract.deliveredAt ? (
             <article className="rounded-2xl border border-line bg-surface p-6 sm:p-[30px]">
