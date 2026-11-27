@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import { useId, useState } from 'react'
 import Button from '../ui/Button'
 import { formatBudget, formatDate } from '../../utils/format'
-import { formatRate, splitClientTotal } from '../../utils/commission'
+import { formatRate, splitClientTotal, splitInstallments } from '../../utils/commission'
 
 const SOURCE_LABELS = {
   SIMILAR_PROJECTS: 'Proyectos parecidos',
@@ -24,10 +24,8 @@ export default function DraftSummary({ draft, onContinue, onKeepChatting }) {
   const split = splitClientTotal(total, rate)
   const valid = split.clientTotal >= 50
 
-  const stages = draft.stages.map((stage) => {
-    const freelancerAmount = Math.round(split.freelancerAmount * stage.percent) / 100
-    return { ...stage, freelancerAmount, clientAmount: Math.round(freelancerAmount * (1 + rate) * 100) / 100 }
-  })
+  // Los textos (cuándo se paga y qué cubre) vienen del backend; los montos se recalculan con el presupuesto escrito
+  const payments = splitInstallments(split, draft.payments?.length === 2 ? draft.payments : undefined)
 
   return (
     <section aria-labelledby={`${id}-title`} className="chat-msg-in rounded-[17px] border border-line bg-surface">
@@ -122,16 +120,42 @@ export default function DraftSummary({ draft, onContinue, onKeepChatting }) {
       </div>
 
       <div className="border-b border-line p-[22px] md:p-7">
-        <p className="text-[11px] font-semibold tracking-[0.13em] text-muted">PLAN DE PAGOS POR ETAPAS</p>
-        <p className="mt-1 text-xs text-muted">Pagas por avance: cada etapa se libera recién cuando la apruebas.</p>
-        <ul className="mt-3 grid gap-2">
-          {stages.map((stage) => (
-            <li key={stage.name} className="flex items-center justify-between gap-3 rounded-xl border border-line px-3.5 py-2.5 text-sm">
-              <span>
-                <strong>{stage.name}</strong>
-                <span className="ml-2 text-xs text-muted">{stage.percent} %</span>
-              </span>
-              <span className="tabular-nums">{formatBudget(stage.clientAmount)}</span>
+        <p className="text-[11px] font-semibold tracking-[0.13em] text-muted">PLAN DE PAGOS</p>
+        <p className="mt-1 text-xs text-muted">
+          Pagas en dos partes. El dinero queda en garantía y cada etapa se libera recién cuando la apruebas.
+        </p>
+        <ol className="mt-3 grid gap-2.5">
+          {payments.map((payment) => (
+            <li key={payment.number} className="rounded-xl border border-line p-4">
+              <div className="flex items-baseline justify-between gap-3">
+                <p className="text-sm font-semibold">
+                  Pago {payment.number} <span className="ml-1 text-xs font-normal text-muted">{payment.percent} %</span>
+                </p>
+                <p className="text-lg font-semibold tabular-nums">{formatBudget(payment.clientAmount)}</p>
+              </div>
+              <p className="mt-0.5 text-xs text-muted">{payment.dueAt}</p>
+              <ul className="mt-2.5 flex flex-wrap gap-1.5">
+                {payment.covers.map((item) => (
+                  <li
+                    key={item}
+                    className={`rounded-full px-2.5 py-1 text-[11px] ${item.startsWith('Bolsa') ? 'bg-pending-light text-pending' : 'bg-paper'}`}
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ol>
+        <p className="mt-3 rounded-xl bg-pending-light p-3 text-xs leading-relaxed text-pending">
+          <strong>Bolsa de emergencia:</strong> es parte de la Entrega final pagada por adelantado. Si el proyecto se detiene, con ella se
+          le paga al estudiante lo que ya entregó; si todo va bien, se usa en la Entrega final.
+        </p>
+        <p className="mt-4 text-[11px] font-semibold tracking-[0.13em] text-muted">ETAPAS DEL TRABAJO</p>
+        <ul className="mt-2 flex flex-wrap gap-1.5">
+          {draft.stages.map((stage) => (
+            <li key={stage.name} className="rounded-full border border-line px-3 py-1 text-xs">
+              {stage.name} <span className="text-muted">{stage.percent} %</span>
             </li>
           ))}
         </ul>
@@ -179,6 +203,15 @@ DraftSummary.propTypes = {
       ),
     }).isRequired,
     stages: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string.isRequired, percent: PropTypes.number.isRequired })).isRequired,
+    // Pago en dos partes: textos de cuándo se paga y qué cubre (los montos se recalculan en pantalla)
+    payments: PropTypes.arrayOf(
+      PropTypes.shape({
+        number: PropTypes.number.isRequired,
+        percent: PropTypes.number.isRequired,
+        dueAt: PropTypes.string,
+        covers: PropTypes.arrayOf(PropTypes.string),
+      }),
+    ),
   }).isRequired,
   onContinue: PropTypes.func.isRequired,
   onKeepChatting: PropTypes.func.isRequired,

@@ -12,3 +12,21 @@ export function splitClientTotal(total, rate = DEFAULT_COMMISSION_RATE) {
 
 // "10 %" para mostrar la tasa
 export const formatRate = (rate = DEFAULT_COMMISSION_RATE) => `${Math.round(rate * 100)} %`
+
+// Pago en dos partes (misma regla que PaymentPlanner del backend): 50 % al aceptar y 50 % al aprobar Diseño.
+// El pago 1 cubre Descubrimiento (10 %) + Diseño (30 %) + bolsa de emergencia (10 %); el pago 2, Desarrollo (40 %)
+// + el resto de la Entrega final (10 %). Se parten los totales para que los dos pagos sumen exacto, al céntimo.
+export const DEFAULT_INSTALLMENTS = [
+  { number: 1, percent: 50, dueAt: 'Al aceptar la propuesta', covers: ['Descubrimiento (10 %)', 'Diseño (30 %)', 'Bolsa de emergencia (10 %)'] },
+  { number: 2, percent: 50, dueAt: 'Al aprobar la etapa de Diseño, antes de empezar el Desarrollo', covers: ['Desarrollo (40 %)', 'Resto de la Entrega final (10 %)'] },
+]
+
+export function splitInstallments({ clientTotal, freelancerAmount }, installments = DEFAULT_INSTALLMENTS) {
+  const client1 = round(clientTotal / 2)
+  const freelancer1 = round(freelancerAmount / 2)
+  const amounts = [
+    { clientAmount: client1, freelancerAmount: freelancer1 },
+    { clientAmount: round(clientTotal - client1), freelancerAmount: round(freelancerAmount - freelancer1) },
+  ]
+  return installments.map((installment, index) => ({ ...installment, ...amounts[index] }))
+}
