@@ -5,6 +5,7 @@ import { QRCodeSVG } from 'qrcode.react'
 import MoneyAmount from '../../components/contracts/MoneyAmount'
 import ButtonLink from '../../components/projects/ButtonLink'
 import ErrorBox from '../../components/projects/ErrorBox'
+import VerificationBadges from '../../components/verification/VerificationBadges'
 import Avatar from '../../components/ui/Avatar'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
@@ -109,6 +110,8 @@ function ProfileHero({ profile, isOwner }) {
                 )}
               </div>
             )}
+            {/* Verificaciones: correo universitario (.edu.pe) y carnet aprobado por DEVUTEC */}
+            <VerificationBadges profile={profile} className="mt-4" />
           </div>
         </div>
 

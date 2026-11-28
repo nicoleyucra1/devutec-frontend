@@ -38,6 +38,10 @@ export function validateRegister({ nombre, email, password, rol, terms }) {
   if (!nombre.trim()) errors.nombre = rol === 'CLIENT' ? 'El nombre del negocio es obligatorio' : 'Tu nombre es obligatorio'
   const emailError = validateEmail(email)
   if (emailError) errors.email = emailError
+  // Los estudiantes se registran con su correo universitario (el backend también lo exige)
+  else if (rol === 'FREELANCER' && !/@[^@\s]+\.edu\.pe$/i.test(email.trim())) {
+    errors.email = 'Usa tu correo universitario (el que termina en .edu.pe)'
+  }
   const passwordError = validatePassword(password)
   if (passwordError) errors.password = passwordError
   if (!rol) errors.rol = 'Elige si quieres contratar o trabajar'
