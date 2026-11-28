@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import ReportButton from '../reports/ReportButton'
 import { Link } from 'react-router-dom'
 import Badge from '../ui/Badge'
 import Button from '../ui/Button'
@@ -106,6 +107,8 @@ export default function ProposalCard({ application, budget, selected, canDecide,
       </div>
 
       <p className="flex-1 whitespace-pre-line text-[13px] leading-relaxed text-[#55534e] dark:text-gray-600">“{application.message}”</p>
+      {/* Si la propuesta pide pagar o hablar por fuera, el cliente la puede reportar */}
+      <ReportButton applicationId={application.id} personName={application.freelancerName} className="mt-2 self-start" />
 
       {pending && canDecide && (
         <div className="mt-[25px] grid grid-cols-2 gap-1.5">

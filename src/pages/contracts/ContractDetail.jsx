@@ -5,7 +5,7 @@ import ContractReviews from '../../components/contracts/ContractReviews'
 import ContractTimeline from '../../components/contracts/ContractTimeline'
 import MoneyAmount from '../../components/contracts/MoneyAmount'
 import PersonCard from '../../components/contracts/PersonCard'
-import WhatsAppCard from '../../components/contracts/WhatsAppCard'
+import CoordinateCard from '../../components/contracts/CoordinateCard'
 import StageGuideCard from '../../components/contracts/StageGuideCard'
 import TermsDialog from '../../components/contracts/TermsDialog'
 import TranslationCard from '../../components/contracts/TranslationCard'
@@ -513,7 +513,7 @@ export default function ContractDetail() {
             to={`/freelancers/${contract.freelancerUserId}`}
           />
 
-          {(isClient || isFreelancer) && <WhatsAppCard contract={contract} isClient={isClient} />}
+          {(isClient || isFreelancer) && <CoordinateCard contract={contract} isClient={isClient} />}
 
           <dl className="rounded-2xl border border-line bg-surface p-5 text-[13px]">
             {[

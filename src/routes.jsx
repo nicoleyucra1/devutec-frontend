@@ -25,6 +25,7 @@ const ContractDetail = lazyPage(() => import('./pages/contracts/ContractDetail')
 const EditMyProfile = lazyPage(() => import('./pages/freelancers/EditMyProfile'))
 const FreelancerProfile = lazyPage(() => import('./pages/freelancers/FreelancerProfile'))
 const AdminPayments = lazyPage(() => import('./pages/admin/AdminPayments'))
+const AdminReports = lazyPage(() => import('./pages/admin/AdminReports'))
 const LegalPage = lazyPage(() => import('./pages/legal/LegalPage'))
 const PaymentReturn = lazyPage(() => import('./pages/PaymentReturn'))
 
@@ -85,6 +86,7 @@ export default function AppRoutes() {
         {/* Solo administradores */}
         <Route element={<PrivateRoute roles={['ADMIN']} />}>
           <Route path="/admin/payments" element={<AdminPayments />} />
+          <Route path="/admin/reports" element={<AdminReports />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

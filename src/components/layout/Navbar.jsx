@@ -3,7 +3,6 @@ import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import Logo from '../brand/Logo'
 import AvatarUploader from '../profile/AvatarUploader'
-import PhoneEditor from '../profile/PhoneEditor'
 import SocialLinksEditor from '../profile/SocialLinksEditor'
 import ThemePicker from '../profile/ThemePicker'
 import ButtonLink from '../projects/ButtonLink'
@@ -81,7 +80,7 @@ const ICONS = {
   ),
 }
 
-// Opciones del menú del avatar (diseño "Tema · menú"): Mi cuenta (foto y celular), Mi perfil y Editar perfil
+// Opciones del menú del avatar (diseño "Tema · menú"): Mi cuenta (foto y redes), Mi perfil y Editar perfil
 // (solo el freelancer tiene perfil público), Mis contratos, el tema y cerrar sesión
 function UserMenuItems({ user, onNavigate, onLogout, onPhoto }) {
   const itemClass = 'flex w-full items-center gap-3 rounded-lg px-2.5 py-2.5 text-left text-sm hover:bg-soft'
@@ -250,9 +249,6 @@ export default function Navbar() {
         {photoOpen && (
           <div className="mt-2 grid gap-6">
             <AvatarUploader />
-            <div className="border-t border-line pt-6">
-              <PhoneEditor help="Solo lo ve la persona con quien tienes un contrato para escribirte por WhatsApp." />
-            </div>
             {user.rol === 'CLIENT' && (
               <div className="border-t border-line pt-6">
                 <SocialLinksEditor />

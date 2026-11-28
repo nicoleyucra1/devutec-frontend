@@ -46,8 +46,8 @@ export const contractShape = PropTypes.shape({
   deadline: PropTypes.string,
   clientName: PropTypes.string,
   freelancerName: PropTypes.string,
-  clientPhone: PropTypes.string,
-  freelancerPhone: PropTypes.string,
+  // true cuando el cliente ya pagó con tarjeta (el pago está en garantía)
+  paidWithCard: PropTypes.bool,
 })
 
 export const userShape = PropTypes.shape({
