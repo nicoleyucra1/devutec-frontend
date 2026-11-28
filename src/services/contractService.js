@@ -28,9 +28,10 @@ export const contractService = {
     return data
   },
 
-  // Pago con tarjeta (Stripe, modo prueba): devuelve { sessionId, checkoutUrl } para abrir la página de pago de Stripe
-  async startCheckout(id) {
-    const { data } = await api.post(`/contracts/${id}/checkout`)
+  // Pago con tarjeta (Stripe, modo prueba): devuelve { sessionId, checkoutUrl } para abrir la página de pago de Stripe.
+  // installment: qué pago hacer en el pago en dos partes (1 o 2). Sin número, el siguiente pendiente.
+  async startCheckout(id, installment) {
+    const { data } = await api.post(`/contracts/${id}/checkout`, installment ? { installment } : undefined)
     return data
   },
 
