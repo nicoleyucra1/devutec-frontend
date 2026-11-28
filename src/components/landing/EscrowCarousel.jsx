@@ -166,7 +166,7 @@ function SlideCard({ slide, className = '', style, ...props }) {
 }
 
 // Tarjeta del hero con un pago en garantía de ejemplo. Cada 5 s la de adelante se va al fondo de la pila y sube la
-// siguiente, que dibuja su avance. Con el mouse encima se inclina un poco hacia el cursor y sigue rotando; solo se
+// siguiente, que dibuja su avance. Al tocarla pasa a la siguiente. Con el mouse encima se inclina un poco hacia el cursor y sigue rotando; solo se
 // pausa cuando alguien la recorre con el teclado. Si el usuario pidió reducir el movimiento, no rota sola ni se inclina.
 export default function EscrowCarousel() {
   const [state, setState] = useState({ index: 0, leaving: null })
@@ -236,7 +236,10 @@ export default function EscrowCarousel() {
           slide={slide}
           aria-roledescription="diapositiva"
           aria-label={`${index + 1} de ${SLIDES.length}: ${slide.title}`}
-          className="relative"
+          className="relative cursor-pointer select-none"
+          // Al tocar la tarjeta pasa a la siguiente, igual que si hubieran pasado los 5 s
+          onClick={() => goTo((index + 1) % SLIDES.length)}
+          title="Toca para ver el siguiente ejemplo"
           style={leaving === null ? undefined : { animation: `card-in .6s ${ease} both` }}
         />
 
