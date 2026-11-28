@@ -5,6 +5,7 @@ import { QRCodeSVG } from 'qrcode.react'
 import MoneyAmount from '../../components/contracts/MoneyAmount'
 import ButtonLink from '../../components/projects/ButtonLink'
 import ErrorBox from '../../components/projects/ErrorBox'
+import VerificationBadges from '../../components/verification/VerificationBadges'
 import Avatar from '../../components/ui/Avatar'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
@@ -87,7 +88,7 @@ function ProfileHero({ profile, isOwner }) {
           <div className="min-w-0">
             <p className="text-[11px] font-semibold tracking-[0.13em] text-[#a6a39c]">FREELANCER EN DEVUTEC</p>
             <h1 className="mb-[5px] mt-2.5 text-[38px] font-semibold leading-tight tracking-[-0.045em] md:text-[53px]">{profile.nombre}</h1>
-            <p className="text-[#aaa8a0]">{study || 'Estudiante de UTEC'}</p>
+            <p className="text-[#aaa8a0]">{study || 'Estudiante universitario'}</p>
             {(profile.githubUsername || profile.portafolioUrl) && (
               <div className="mt-[18px] flex flex-col gap-2 text-xs text-[#aaa8a0] md:flex-row md:gap-5">
                 {profile.githubUsername && (
@@ -109,6 +110,8 @@ function ProfileHero({ profile, isOwner }) {
                 )}
               </div>
             )}
+            {/* Verificaciones: correo universitario (.edu.pe) y carnet aprobado por DEVUTEC */}
+            <VerificationBadges profile={profile} className="mt-4" />
           </div>
         </div>
 

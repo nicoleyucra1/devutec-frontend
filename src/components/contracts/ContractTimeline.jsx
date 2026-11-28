@@ -1,6 +1,6 @@
 import { formatDate } from '../../utils/format'
 import { contractShape } from '../../utils/propShapes'
-import { nothingPaidYet } from '../../utils/installments'
+import { closedForNonPayment, nothingPaidYet } from '../../utils/installments'
 
 function CheckIcon() {
   return (
@@ -14,6 +14,16 @@ function CheckIcon() {
 function stepsFor(contract) {
   const started = formatDate(contract.startedAt)
   const delivered = contract.deliveredAt ? formatDate(contract.deliveredAt) : null
+
+  // Cerrado porque el cliente no hizo el pago 2: lo aprobado y la bolsa quedan para el estudiante
+  if (closedForNonPayment(contract)) {
+    return [
+      { title: 'Pago 1 en garantía', detail: started, state: 'done' },
+      { title: 'Diseño aprobado', detail: 'Liberado al estudiante', state: 'done' },
+      { title: 'Pago 2 no se hizo', detail: contract.closedAt ? `Venció el ${formatDate(contract.closedAt)}` : 'Venció el plazo', state: 'cancelled' },
+      { title: 'Bolsa al estudiante', detail: 'Lo no usado vuelve al cliente', state: 'done' },
+    ]
+  }
 
   if (contract.status === 'CANCELLED') {
     return [

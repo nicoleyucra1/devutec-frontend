@@ -13,6 +13,16 @@ export const PAYMENT_STATUS = {
 }
 
 // Códigos cortos para buscar y nombrar: el contrato 42 es #CT-0042, el pago 7 es #PG-0007 y el proyecto 5 es #PR-0005
+// Estados de cada etapa del contrato (ContractStage del backend)
+export const STAGE_STATUS = {
+  PENDING: { label: 'Pendiente', color: 'gray' },
+  IN_PROGRESS: { label: 'En curso', color: 'blue' },
+  DELIVERED: { label: 'Por revisar', color: 'yellow' },
+  CHANGES_REQUESTED: { label: 'Con cambios', color: 'yellow' },
+  APPROVED: { label: 'Aprobada', color: 'green' },
+  CANCELLED: { label: 'Cancelada', color: 'gray' },
+}
+
 export const contractCode = (id) => `#CT-${String(id).padStart(4, '0')}`
 export const paymentCode = (id) => `#PG-${String(id).padStart(4, '0')}`
 export const projectCode = (id) => `#PR-${String(id).padStart(4, '0')}`

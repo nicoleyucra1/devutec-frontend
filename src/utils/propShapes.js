@@ -13,6 +13,8 @@ export const skillShape = PropTypes.shape({
 
 export const projectShape = PropTypes.shape({
   id: idType.isRequired,
+  // El cliente pidió métricas DEVUTEC (el estudiante lo ve antes de postular)
+  metricsRequested: PropTypes.bool,
   title: PropTypes.string,
   description: PropTypes.string,
   status: PropTypes.string,
@@ -48,6 +50,10 @@ export const contractShape = PropTypes.shape({
   freelancerName: PropTypes.string,
   // true cuando el cliente ya pagó con tarjeta (el pago está en garantía)
   paidWithCard: PropTypes.bool,
+  // Pago 2: fecha límite y, si el contrato se cerró por no pagarlo, el motivo (PAGO_2_NO_REALIZADO) y cuándo
+  secondPaymentDueAt: PropTypes.string,
+  closedReason: PropTypes.string,
+  closedAt: PropTypes.string,
 })
 
 export const userShape = PropTypes.shape({
@@ -69,6 +75,8 @@ export const freelancerProfileShape = PropTypes.shape({
   portafolioUrl: PropTypes.string,
   avatarUrl: PropTypes.string,
   presentacion: PropTypes.string,
+  universityEmail: PropTypes.bool,
+  carnetVerified: PropTypes.bool,
 })
 
 // Una postulación con lo que agrega useApplicants: el perfil del freelancer y cuántas reseñas tiene
@@ -78,6 +86,9 @@ export const applicationShape = PropTypes.shape({
   freelancerUserId: idType,
   message: PropTypes.string,
   proposedPrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  proposedDeadline: PropTypes.string,
+  projectBudget: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  projectDeadline: PropTypes.string,
   status: PropTypes.oneOf(['PENDING', 'ACCEPTED', 'REJECTED']),
   createdAt: PropTypes.string,
   profile: freelancerProfileShape,

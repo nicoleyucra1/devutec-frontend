@@ -231,7 +231,7 @@ export default function ClientDashboard() {
           <div className="flex flex-col items-center rounded-2xl border border-line bg-surface px-6 py-14 text-center">
             <Cuyi anim="saluda" px={5} />
             <h2 className="mt-5 text-lg font-semibold">Todavía no has publicado proyectos</h2>
-            <p className="mt-1 max-w-md text-sm text-muted">Cuenta qué necesitas y recibe propuestas de estudiantes de UTEC.</p>
+            <p className="mt-1 max-w-md text-sm text-muted">Cuenta qué necesitas y recibe propuestas de estudiantes universitarios.</p>
             <ButtonLink to="/projects/new" className="mt-6">
               Publicar mi primer proyecto
             </ButtonLink>

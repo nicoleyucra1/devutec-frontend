@@ -205,7 +205,7 @@ export default function ProjectApplications() {
               <p className="mt-6 text-[11px] font-semibold tracking-[0.13em]">SIN POSTULACIONES</p>
               <h2 className="my-2.5 text-[25px] font-semibold tracking-[-0.02em]">Todavía nadie postuló.</h2>
               <p className="mb-[22px] max-w-[440px] text-[13px] leading-relaxed text-muted">
-                Cuando un estudiante de UTEC envíe su propuesta, aparecerá aquí para que la compares con las demás.
+                Cuando un estudiante universitario envíe su propuesta, aparecerá aquí para que la compares con las demás.
               </p>
               <ButtonLink to={`/projects/${id}`} variant="secondary">
                 Ver mi proyecto

@@ -1,3 +1,4 @@
+import CarnetCard from '../../components/verification/CarnetCard'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Cuyi from '../../components/brand/Cuyi'
@@ -67,7 +68,7 @@ function contractNote(contract) {
 // Lo que mira "Perfil completo": solo datos que guarda el perfil
 function profileChecklist(profile, avatarUrl) {
   return [
-    { label: 'Datos de UTEC', done: Boolean(profile?.universidad && (profile?.ciclo || profile?.egresado)) },
+    { label: 'Datos de tu universidad', done: Boolean(profile?.universidad && (profile?.ciclo || profile?.egresado)) },
     { label: 'Tarifa por hora', done: Number(profile?.tarifaHora) > 0 },
     { label: 'Usuario de GitHub', done: Boolean(profile?.githubUsername) },
     { label: 'Enlace a tu portafolio', done: Boolean(profile?.portafolioUrl) },
@@ -276,6 +277,9 @@ export default function FreelancerDashboard() {
           Explorar proyectos
         </ButtonLink>
       </header>
+
+      {/* Segunda verificación: la foto del carnet universitario y su estado */}
+      <CarnetCard className="mb-6" />
 
       <section aria-label="Tus números" className="grid grid-cols-2 gap-3 lg:grid-cols-[1.15fr_0.75fr_0.9fr_1.3fr]">
         <NumberCard

@@ -22,8 +22,17 @@ import { daysUntil, formatBudget, formatDate } from '../../utils/format'
 import PropTypes from 'prop-types'
 import { idType, projectShape } from '../../utils/propShapes'
 
-// Misma grilla en la cabecera, las filas y el esqueleto. En celular la tabla se desliza de lado.
-const ROW = 'grid min-w-[850px] grid-cols-[2fr_0.75fr_1fr_0.85fr_1fr_0.55fr] items-center gap-3.5 px-[18px]'
+// Misma grilla en la cabecera, las filas y el esqueleto. En celular cada fila es una tarjeta de 2 columnas
+// (el título arriba y cada dato con su nombre); desde md es la tabla de siempre.
+const ROW =
+  'grid grid-cols-2 items-start gap-x-3.5 gap-y-3 px-[18px] md:min-w-[850px] md:grid-cols-[2fr_0.75fr_1fr_0.85fr_1fr_0.55fr] md:items-center md:gap-y-0'
+
+// Nombre del dato, solo en celular (en computadora lo dice la cabecera de la tabla)
+function CellLabel({ children }) {
+  return <span className="mb-1 block text-[10px] font-semibold tracking-[0.09em] text-muted md:hidden">{children}</span>
+}
+
+CellLabel.propTypes = { children: PropTypes.node }
 
 // Activos = abiertos o en curso; Archivados = terminados. En la URL: ?estado=ARCHIVADOS
 const TABS = [
@@ -85,7 +94,7 @@ function ProjectRow({ project, onDelete }) {
     <li className={`${ROW} min-h-[78px] border-t border-line py-3.5 text-[13px]`}>
       <Link
         to={`/projects/${project.id}`}
-        className="flex min-w-0 items-center gap-2.5 rounded-md hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-progress"
+        className="col-span-2 flex min-w-0 items-center gap-2.5 rounded-md hover:underline md:col-span-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-progress"
       >
         <i className="grid h-[38px] w-[38px] shrink-0 place-items-center rounded-lg bg-paper text-[10px] font-semibold not-italic">
           {projectInitials(project.title)}
@@ -96,11 +105,19 @@ function ProjectRow({ project, onDelete }) {
         </span>
       </Link>
       <span>
+        <CellLabel>ESTADO</CellLabel>
         <ProjectStatusBadge status={project.status} />
       </span>
-      <Applicants project={project} />
-      <strong className="tabular-nums">{formatBudget(project.budget)}</strong>
+      <div>
+        <CellLabel>POSTULANTES</CellLabel>
+        <Applicants project={project} />
+      </div>
+      <div>
+        <CellLabel>PRESUPUESTO</CellLabel>
+        <strong className="tabular-nums">{formatBudget(project.budget)}</strong>
+      </div>
       <span className="flex flex-col gap-1">
+        <CellLabel>FECHA LÍMITE</CellLabel>
         {formatDate(project.deadline)}
         {note && <small className="text-[10px] uppercase tracking-[0.06em] text-pending">{note}</small>}
       </span>
@@ -138,8 +155,8 @@ function ProjectRow({ project, onDelete }) {
 
 function Table({ children, label }) {
   return (
-    <div className="overflow-x-auto rounded-[15px] border border-line bg-surface">
-      <div aria-hidden="true" className={`${ROW} min-h-[43px] bg-table-head text-[10px] font-semibold tracking-[0.09em] text-muted`}>
+    <div className="min-w-0 overflow-x-auto rounded-[15px] border border-line bg-surface">
+      <div aria-hidden="true" className={`${ROW.replace(/^grid /, '')} hidden min-h-[43px] bg-table-head md:grid text-[10px] font-semibold tracking-[0.09em] text-muted`}>
         <span>PROYECTO</span>
         <span>ESTADO</span>
         <span>POSTULANTES</span>
@@ -300,7 +317,7 @@ export default function MyProjects() {
         <Empty
           kicker="TODAVÍA NO HAY PROYECTOS"
           title="Publica tu primer proyecto."
-          text="Cuenta qué necesitas, cuánto quieres invertir y para cuándo. Los estudiantes de UTEC te enviarán sus propuestas."
+          text="Cuenta qué necesitas, cuánto quieres invertir y para cuándo. Los estudiantes universitarios te enviarán sus propuestas."
           action={<ButtonLink to="/projects/new">Publicar proyecto</ButtonLink>}
         />
       )}

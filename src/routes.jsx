@@ -22,10 +22,12 @@ const MyApplications = lazyPage(() => import('./pages/applications/MyApplication
 const ProjectApplications = lazyPage(() => import('./pages/applications/ProjectApplications'))
 const MyContracts = lazyPage(() => import('./pages/contracts/MyContracts'))
 const ContractDetail = lazyPage(() => import('./pages/contracts/ContractDetail'))
+const ContractMetrics = lazyPage(() => import('./pages/contracts/ContractMetrics'))
 const EditMyProfile = lazyPage(() => import('./pages/freelancers/EditMyProfile'))
 const FreelancerProfile = lazyPage(() => import('./pages/freelancers/FreelancerProfile'))
 const AdminPayments = lazyPage(() => import('./pages/admin/AdminPayments'))
 const AdminReports = lazyPage(() => import('./pages/admin/AdminReports'))
+const AdminCarnets = lazyPage(() => import('./pages/admin/AdminCarnets'))
 const LegalPage = lazyPage(() => import('./pages/legal/LegalPage'))
 const PaymentReturn = lazyPage(() => import('./pages/PaymentReturn'))
 
@@ -61,6 +63,7 @@ export default function AppRoutes() {
           <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/contracts" element={<MyContracts />} />
           <Route path="/contracts/:id" element={<ContractDetail />} />
+          <Route path="/contracts/:id/metricas" element={<ContractMetrics />} />
           <Route path="/freelancers/:userId" element={<FreelancerProfile />} />
         </Route>
 
@@ -87,6 +90,7 @@ export default function AppRoutes() {
         <Route element={<PrivateRoute roles={['ADMIN']} />}>
           <Route path="/admin/payments" element={<AdminPayments />} />
           <Route path="/admin/reports" element={<AdminReports />} />
+          <Route path="/admin/carnets" element={<AdminCarnets />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
