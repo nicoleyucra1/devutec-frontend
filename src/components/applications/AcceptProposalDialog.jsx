@@ -15,18 +15,37 @@ const shield = (
 // El contenido va aparte para que la casilla vuelva a empezar sin marcar cada vez que se abre
 function AcceptBody({ application, project, otherPending, busy, onConfirm, onClose }) {
   const [checked, setChecked] = useState(false)
-  const price = formatBudget(application.proposedPrice)
+  const total = Number(application.proposedPrice) || 0
+  const price = formatBudget(total)
+  const firstName = application.freelancerName?.split(' ')[0] ?? 'el freelancer'
+  // Mismo cálculo que el backend: la comisión de DEVUTEC (10 %) ya está dentro del total y el estudiante recibe total ÷ 1,10.
+  // El pago se hace en dos partes iguales (el backend no divide montos menores a S/ 20)
+  const split = total >= 20
+  const student = Math.round((total / 1.1) * 100) / 100
   const rows = [
     ['Proyecto', project.title],
     ['Freelancer', application.freelancerName],
-    ['Monto a retener', price],
+    ['Total del contrato', price],
+    [`Para ${firstName}`, formatBudget(student)],
+    ['Tarifa de DEVUTEC', formatBudget(total - student)],
+    ...(split ? [['Pago 1, al empezar', formatBudget(Math.round((total / 2) * 100) / 100)]] : []),
   ]
 
   return (
     <>
       <p className="text-[13px] leading-relaxed text-muted">
-        Para iniciar el contrato, <strong className="text-ink">{price}</strong> quedarán retenidos en garantía. El dinero solo se
-        libera cuando apruebes la entrega.
+        {split ? (
+          <>
+            Al aceptar se crea el contrato. Pagas en dos partes: el <strong className="text-ink">pago 1</strong> para que {firstName}{' '}
+            empiece y el <strong className="text-ink">pago 2</strong> cuando apruebes el Diseño. Cada pago queda en garantía y se libera
+            a medida que apruebas las etapas.
+          </>
+        ) : (
+          <>
+            Para iniciar el contrato, <strong className="text-ink">{price}</strong> quedarán retenidos en garantía. El dinero solo se
+            libera cuando apruebes la entrega.
+          </>
+        )}
         {otherPending > 0 &&
           ` ${otherPending === 1 ? 'La otra postulación pendiente se rechazará' : `Las otras ${otherPending} postulaciones pendientes se rechazarán`}.`}
       </p>
@@ -49,7 +68,7 @@ function AcceptBody({ application, project, otherPending, busy, onConfirm, onClo
       </label>
       <div className="grid gap-2">
         <Button onClick={onConfirm} disabled={!checked} loading={busy} className="w-full">
-          {busy ? 'Creando el contrato…' : `Retener ${price} y contratar`}
+          {busy ? 'Creando el contrato…' : split ? `Contratar a ${firstName}` : `Retener ${price} y contratar`}
         </Button>
         <Button variant="ghost" onClick={onClose} disabled={busy} className="w-full">
           Seguir comparando
@@ -68,7 +87,7 @@ AcceptBody.propTypes = {
   onClose: PropTypes.func.isRequired,
 }
 
-// Confirmación antes de aceptar una propuesta: aceptar crea el contrato y retiene el pago
+// Confirmación antes de aceptar una propuesta: aceptar crea el contrato; el cobro se hace después, en el contrato (pago 1 y pago 2)
 export default function AcceptProposalDialog({ application, project, otherPending, busy, onConfirm, onClose }) {
   const open = Boolean(application && project)
   return (

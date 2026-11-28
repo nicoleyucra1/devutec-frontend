@@ -27,6 +27,7 @@ import { useContract } from '../../hooks/useContracts'
 import { useToast } from '../../hooks/useToast'
 import { contractService } from '../../services/contractService'
 import { CONTRACT_STATUS, contractCode, PAYMENT_STATUS } from '../../utils/contractStatus'
+import { hasPlan as contractHasPlan, nothingPaidYet, paidByClient } from '../../utils/installments'
 import { errorMessage } from '../../utils/errorMessage'
 import { formatBudget, formatDate } from '../../utils/format'
 
@@ -100,9 +101,12 @@ const ACTIONS = {
     tone: 'red',
     kicker: 'CANCELAR CONTRATO',
     title: () => '¿Cancelar este contrato?',
+    // Con el pago en dos partes solo se devuelve lo que el cliente ya pagó (puede ser nada si no pagó el pago 1)
     text: (c) =>
-      `Se te reembolsarán ${formatBudget(c.amount)} y el proyecto volverá a recibir postulaciones. Esta acción no se puede deshacer.`,
-    summary: (c) => [`Reembolso a ${c.clientName ?? 'ti'}`, c.amount],
+      contractHasPlan(c)
+        ? `${paidByClient(c) > 0 ? `Se te devolverán ${formatBudget(paidByClient(c))} que pagaste` : 'Todavía no pagaste nada, así que no hay nada que devolver'} y el proyecto volverá a recibir postulaciones. Esta acción no se puede deshacer.`
+        : `Se te reembolsarán ${formatBudget(c.amount)} y el proyecto volverá a recibir postulaciones. Esta acción no se puede deshacer.`,
+    summary: (c) => [`Reembolso a ${c.clientName ?? 'ti'}`, contractHasPlan(c) ? paidByClient(c) : c.amount],
     label: 'Sí, cancelar contrato',
     busyLabel: 'Cancelando...',
     back: 'Mantener contrato',
@@ -114,6 +118,13 @@ const ACTIONS = {
 // Texto de la tarjeta de pago según el estado
 function moneyText(contract) {
   const client = contract.clientName ?? 'el cliente'
+  const firstName = contract.freelancerName?.split(' ')[0] ?? 'el freelancer'
+  // Pago en dos partes: el monto grande es el total del contrato, pero en garantía solo está lo que ya se pagó
+  if (contractHasPlan(contract) && contract.status === 'IN_PROGRESS') {
+    return nothingPaidYet(contract)
+      ? `Este es el total del contrato. Todavía no hay dinero en garantía: falta el pago 1 de ${client} para que ${firstName} empiece.`
+      : `Este es el total del contrato. Hay ${formatBudget(paidByClient(contract))} pagados en garantía, que se liberan a ${firstName} a medida que se aprueba cada etapa.`
+  }
   return {
     IN_PROGRESS: 'El dinero está retenido. Nadie puede moverlo hasta que se confirme la entrega o se cancele el contrato.',
     DELIVERED: `La entrega está lista. El pago se libera en cuanto ${client} la confirme.`,
@@ -131,14 +142,20 @@ function nextStep(contract, isClient) {
     case 'IN_PROGRESS':
       return isClient
         ? {
-            kicker: 'EN CURSO',
-            title: `${firstName} está trabajando.`,
-            text: `${contract.deadline ? `La entrega vence el ${formatDate(contract.deadline)}. ` : ''}Puedes cancelar mientras no haya una entrega; el monto se te reembolsa completo.`,
+            kicker: nothingPaidYet(contract) ? 'TE TOCA' : 'EN CURSO',
+            title: nothingPaidYet(contract) ? 'Haz el pago 1 para empezar.' : `${firstName} está trabajando.`,
+            text: `${contract.deadline ? `La entrega vence el ${formatDate(contract.deadline)}. ` : ''}${
+              contractHasPlan(contract)
+                ? 'Puedes cancelar mientras no hayas aprobado ninguna etapa; te devolvemos lo que pagaste.'
+                : 'Puedes cancelar mientras no haya una entrega; el monto se te reembolsa completo.'
+            }`,
           }
         : {
             kicker: 'SIGUIENTE PASO',
             title: '¿Terminaste el trabajo?',
-            text: `Al entregar, ${client} podrá revisarlo y confirmarlo. El pago ya está retenido a tu nombre.`,
+            text: nothingPaidYet(contract)
+              ? `Espera el pago 1 de ${client} antes de empezar. Te avisaremos cuando quede en garantía.`
+              : `Al entregar, ${client} podrá revisarlo y confirmarlo. El pago ya está retenido a tu nombre.`,
           }
     case 'DELIVERED':
       return isClient
@@ -296,7 +313,8 @@ export default function ContractDetail() {
   const isClient = user?.id === contract.clientId
   const isFreelancer = user?.id === contract.freelancerUserId
   const status = CONTRACT_STATUS[contract.status]
-  const payment = PAYMENT_STATUS[contract.paymentStatus]
+  // Con el pago en dos partes, mientras no se haga el pago 1 no hay nada retenido todavía
+  const payment = nothingPaidYet(contract) ? { label: 'Pendiente', color: 'yellow' } : PAYMENT_STATUS[contract.paymentStatus]
   const box = nextStep(contract, isClient)
   const action = pending && ACTIONS[pending]
   const finished = contract.status === 'CONFIRMED' || contract.status === 'CANCELLED'

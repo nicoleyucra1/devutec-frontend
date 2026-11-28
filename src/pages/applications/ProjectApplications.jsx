@@ -182,7 +182,11 @@ export default function ProjectApplications() {
                 <p className="mt-[3px] text-xs text-[#52705f] dark:text-[#9cc9ae]">
                   {project.data?.status === 'DONE'
                     ? 'El proyecto ya terminó y el pago se liberó.'
-                    : `El contrato se creó y ${formatBudget(contract?.amount ?? accepted.proposedPrice)} quedaron retenidos en garantía.`}
+                    : contract?.installments?.length > 0
+                      ? contract.installments[0].status === 'PENDING'
+                        ? `El contrato se creó. Abre el contrato y haz el pago 1 de ${formatBudget(contract.installments[0].clientAmount)} para que ${accepted.freelancerName.split(' ')[0]} empiece.`
+                        : `El contrato está en curso y el pago 1 ya está en garantía.`
+                      : `El contrato se creó y ${formatBudget(contract?.amount ?? accepted.proposedPrice)} quedaron retenidos en garantía.`}
                 </p>
               </div>
               {contract && (
