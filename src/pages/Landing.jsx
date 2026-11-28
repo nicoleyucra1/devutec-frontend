@@ -80,9 +80,13 @@ function Hero() {
   return (
     <section className={`${shell} grid items-center gap-[52px] py-[55px] lg:min-h-[650px] lg:grid-cols-[1.05fr_.95fr] lg:gap-24 lg:py-[70px]`}>
       <div>
-        <p className={kicker}>TALENTO UTEC · PAGOS PROTEGIDOS</p>
-        <h1 className="my-[22px] max-w-[360px] text-[53px] font-semibold leading-[0.94] tracking-[-0.052em] sm:max-w-[650px] lg:mb-[30px] lg:mt-7 lg:text-[clamp(58px,5.25vw,72px)]">
-          Contrata talento junior de UTEC.{' '}
+        <p className={kicker}>TALENTO UNIVERSITARIO · PAGOS PROTEGIDOS</p>
+        {/* La pregunta va aparte y más chica, para que el título no ocupe media pantalla en celular */}
+        <p className="mt-[22px] text-xl font-medium leading-snug tracking-[-0.02em] text-[#4c4b47] dark:text-gray-600 lg:text-2xl">
+          ¿Necesitas una web y no sabes por dónde empezar?
+        </p>
+        <h1 className="mb-[22px] mt-3 max-w-[360px] text-[53px] font-semibold leading-[0.94] tracking-[-0.052em] sm:max-w-[650px] lg:mb-[30px] lg:mt-7 lg:text-[clamp(58px,5.25vw,72px)]">
+          Consigue talento universitario.{' '}
           <em className="block text-escrow">
             Paga solo cuando{' '}
             {/* Trazo a mano que se dibuja una vez al cargar, como un resaltador: lima en claro y verde profundo en oscuro */}
@@ -108,8 +112,8 @@ function Hero() {
           </em>
         </h1>
         <p className="max-w-[530px] text-base leading-normal text-[#4c4b47] dark:text-gray-600 lg:text-lg lg:leading-[1.55]">
-          Publica lo que necesitas, recibe propuestas de estudiantes verificados y mantén tu dinero protegido hasta revisar
-          la entrega.
+          Cuéntale a Cuyi qué necesita tu negocio y te ayuda a armar el proyecto. Recibes propuestas de estudiantes
+          universitarios verificados y tu dinero queda protegido hasta que apruebes la entrega.
         </p>
 
         <div className="mt-8 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">

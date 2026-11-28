@@ -67,7 +67,7 @@ function contractNote(contract) {
 // Lo que mira "Perfil completo": solo datos que guarda el perfil
 function profileChecklist(profile, avatarUrl) {
   return [
-    { label: 'Datos de UTEC', done: Boolean(profile?.universidad && (profile?.ciclo || profile?.egresado)) },
+    { label: 'Datos de tu universidad', done: Boolean(profile?.universidad && (profile?.ciclo || profile?.egresado)) },
     { label: 'Tarifa por hora', done: Number(profile?.tarifaHora) > 0 },
     { label: 'Usuario de GitHub', done: Boolean(profile?.githubUsername) },
     { label: 'Enlace a tu portafolio', done: Boolean(profile?.portafolioUrl) },

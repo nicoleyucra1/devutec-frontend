@@ -3,8 +3,8 @@ import { prefersReducedMotion } from '../../utils/motion'
 import Cuyi from '../brand/Cuyi'
 
 const STEPS = [
-  { title: 'Publica', text: 'Describe el trabajo, presupuesto y fecha de entrega.' },
-  { title: 'Postulan', text: 'Recibe propuestas de estudiantes y egresados UTEC.' },
+  { title: 'Publica', text: 'Cuéntale a Cuyi qué necesitas: te ayuda a armar el proyecto.' },
+  { title: 'Postulan', text: 'Recibe propuestas de estudiantes universitarios verificados.' },
   { title: 'Contratas', text: 'Eliges a quién contratar y dejas el pago en garantía.' },
   { title: 'Apruebas', text: 'Revisas la entrega y recién entonces se libera el pago.' },
 ]

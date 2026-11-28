@@ -27,9 +27,9 @@ export default function PublicHeader() {
         scrolled ? 'shadow-[0_6px_24px_rgba(14,14,12,0.06)]' : ''
       }`}
     >
-      <div className="mx-auto grid h-[72px] max-w-[1200px] grid-cols-[1fr_auto] items-center gap-6 px-6 md:grid-cols-[1fr_auto_1fr]">
+      <div className="mx-auto grid h-[72px] max-w-[1200px] grid-cols-[1fr_auto] items-center gap-3 px-4 sm:gap-6 sm:px-6 md:grid-cols-[1fr_auto_1fr]">
         <Link to="/" aria-label="DEVUTEC, ir al inicio" className="justify-self-start">
-          <Logo />
+          <Logo compact />
         </Link>
         <nav aria-label="Secciones" className="hidden items-center gap-8 md:flex">
           {SECTIONS.map((section) => (
@@ -38,12 +38,14 @@ export default function PublicHeader() {
             </a>
           ))}
         </nav>
-        <div className="flex items-center gap-3 justify-self-end">
-          <Link to="/login" className="hidden p-2.5 text-[13px] font-semibold sm:block">
+        {/* En celular también se puede ingresar: antes solo se veía «Crear cuenta» */}
+        <div className="flex items-center gap-1 justify-self-end sm:gap-3">
+          <Link to="/login" className="whitespace-nowrap p-2 text-[13px] font-semibold sm:p-2.5">
             Ingresar
           </Link>
-          <ButtonLink to="/register" className="min-h-10 px-4">
-            Crear cuenta
+          <ButtonLink to="/register" className="min-h-10 whitespace-nowrap px-3 sm:px-4">
+            <span className="sm:hidden">Regístrate</span>
+            <span className="hidden sm:inline">Crear cuenta</span>
           </ButtonLink>
         </div>
       </div>
