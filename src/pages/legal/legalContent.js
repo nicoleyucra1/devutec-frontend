@@ -45,7 +45,7 @@ export const LEGAL_DOCS = {
         heading: 'Conducta',
         paragraphs: [
           'Está prohibido publicar contenido ilegal, ofensivo o engañoso, y acordar pagos por fuera de la plataforma para evitar la garantía.',
-          'Antes de que exista un contrato no se pueden compartir datos de contacto (celular, correo o redes) en proyectos ni postulaciones. El WhatsApp de la otra persona aparece en el contrato cuando el pago ya está en garantía.',
+          'Antes de que exista un contrato no se pueden compartir datos de contacto (celular, correo o redes) en proyectos ni postulaciones. DEVUTEC no comparte los celulares de cliente y estudiante: todo se coordina dentro de la plataforma.',
           'Durante los 12 meses siguientes a conocerse en DEVUTEC, un cliente y un estudiante no pueden contratarse ni pagarse por fuera de la plataforma. Los textos que lo intenten se bloquean y quedan registrados.',
           'Cualquier persona puede reportar a la otra parte de su contrato o postulación. Según la gravedad y si se repite, DEVUTEC puede dar una advertencia, suspender la cuenta o cerrarla.',
         ],
