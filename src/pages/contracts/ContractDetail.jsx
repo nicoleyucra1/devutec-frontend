@@ -6,6 +6,7 @@ import ContractTimeline from '../../components/contracts/ContractTimeline'
 import MoneyAmount from '../../components/contracts/MoneyAmount'
 import PersonCard from '../../components/contracts/PersonCard'
 import WhatsAppCard from '../../components/contracts/WhatsAppCard'
+import StageGuideCard from '../../components/contracts/StageGuideCard'
 import TermsDialog from '../../components/contracts/TermsDialog'
 import TranslationCard from '../../components/contracts/TranslationCard'
 import ClientRequestTranslator from '../../components/contracts/ClientRequestTranslator'
@@ -299,6 +300,10 @@ export default function ContractDetail() {
   const action = pending && ACTIONS[pending]
   const finished = contract.status === 'CONFIRMED' || contract.status === 'CANCELLED'
 
+  // Etapa en la que se está trabajando (la manda el backend con las etapas); la Mini guía es para el estudiante
+  const currentStage = contract.stages?.find((stage) => stage.position === contract.currentStage)
+  const showGuide = isFreelancer && !finished && currentStage && currentStage.status !== 'CANCELLED'
+
   // Qué botones ve cada participante según el estado del contrato
   const canDeliver = isFreelancer && contract.status === 'IN_PROGRESS'
   const canCancel = isClient && contract.status === 'IN_PROGRESS'
@@ -357,6 +362,8 @@ export default function ContractDetail() {
               <ContractTimeline contract={contract} />
             </div>
           </article>
+
+          {showGuide && <StageGuideCard key={currentStage.id} contractId={contract.id} stage={currentStage} clientName={contract.clientName} />}
 
           {contract.deliveredAt ? (
             <article className="rounded-2xl border border-line bg-surface p-6 sm:p-[30px]">
