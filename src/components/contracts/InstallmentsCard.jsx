@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import Badge from '../ui/Badge'
 import Button from '../ui/Button'
 import { formatBudget, formatDate } from '../../utils/format'
+import { beforeDue, closedForNonPayment, emergencyFundForStudent, secondPaymentDue } from '../../utils/installments'
 
 // Estado de cada pago, con el lenguaje de color de la app
 const STATUS = {
@@ -20,6 +21,10 @@ export default function InstallmentsCard({ contract, isClient, onPay, paying }) 
   const freelancer = contract.freelancerName?.split(' ')[0] ?? 'el estudiante'
   const open = contract.status === 'IN_PROGRESS' || contract.status === 'DELIVERED'
   const next = installments.find((installment) => installment.status === 'PENDING')
+  // Pago 2 con plazo: si no se paga a tiempo, el contrato se cierra solo
+  const due = secondPaymentDue(contract)
+  const client = contract.clientName?.split(' ')[0] ?? 'el cliente'
+  const closedUnpaid = closedForNonPayment(contract)
 
   return (
     <article className="rounded-2xl border border-line bg-surface p-6 sm:p-[30px]">
@@ -36,7 +41,10 @@ export default function InstallmentsCard({ contract, isClient, onPay, paying }) 
 
       <ol className="mt-5 grid gap-3">
         {installments.map((installment) => {
-          const status = STATUS[installment.status] ?? STATUS.PENDING
+          const status =
+            closedUnpaid && installment.status === 'PENDING'
+              ? { label: 'No se pagó', color: 'gray' }
+              : (STATUS[installment.status] ?? STATUS.PENDING)
           const isNext = open && next?.number === installment.number
           return (
             <li key={installment.number} className="rounded-xl border border-line bg-paper p-4">
@@ -75,6 +83,13 @@ export default function InstallmentsCard({ contract, isClient, onPay, paying }) 
                   </p>
                 </div>
               )}
+              {isNext && isClient && installment.payableNow && installment.number === 2 && due && (
+                <p className="mt-3 rounded-lg bg-pending-light px-3 py-2 text-xs leading-relaxed text-pending">
+                  <strong className="font-semibold">Paga {beforeDue(due)}</strong> para que {freelancer} siga con el
+                  Desarrollo. Si no pagas, el contrato se cierra: {freelancer} se queda con lo aprobado y la bolsa de emergencia,
+                  y se te devuelve lo que no se usó.
+                </p>
+              )}
               {isNext && !installment.payableNow && (
                 <p className="mt-3 text-xs text-pending">
                   {isClient
@@ -83,8 +98,16 @@ export default function InstallmentsCard({ contract, isClient, onPay, paying }) 
                 </p>
               )}
               {isNext && installment.payableNow && !isClient && (
-                <p className="mt-3 text-xs text-pending">
+                <p className="mt-3 text-xs leading-relaxed text-pending">
                   Esperando este pago de {contract.clientName ?? 'el cliente'}. Podrás entregar cuando lo haga.
+                  {installment.number === 2 && due && (
+                    <>
+                      {' '}
+                      <strong className="font-semibold">Si {client} no paga {beforeDue(due)}</strong>, el contrato se
+                      cierra y recibes la bolsa de emergencia ({formatBudget(emergencyFundForStudent(contract))}) además de lo
+                      aprobado.
+                    </>
+                  )}
                 </p>
               )}
             </li>
@@ -103,6 +126,8 @@ InstallmentsCard.propTypes = {
     clientName: PropTypes.string,
     studentAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     commissionAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    secondPaymentDueAt: PropTypes.string,
+    closedReason: PropTypes.string,
     installments: PropTypes.arrayOf(
       PropTypes.shape({
         number: PropTypes.number,
@@ -115,6 +140,7 @@ InstallmentsCard.propTypes = {
         status: PropTypes.string,
         payableNow: PropTypes.bool,
         paidAt: PropTypes.string,
+        dueAt: PropTypes.string,
       }),
     ),
   }).isRequired,
