@@ -177,7 +177,10 @@ export default function Navbar() {
               className="flex items-center gap-2 rounded-full border border-line py-1 pl-1 pr-3 text-sm font-medium transition-colors hover:border-gray-400"
             >
               <Avatar name={name} src={user.avatarUrl} size="nav" />
-              <span>{name.split(' ')[0]}</span>
+              <span className="flex flex-col text-left leading-tight">
+                <span>{name.split(' ')[0]}</span>
+                <span className="text-[11px] font-normal text-muted">{ROLE_LABELS[user.rol] ?? user.rol}</span>
+              </span>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
                 <path d={userMenuOpen ? 'm6 15 6-6 6 6' : 'm6 9 6 6 6-6'} strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -191,7 +194,10 @@ export default function Navbar() {
                   <Avatar name={name} src={user.avatarUrl} size="md" />
                   <span className="min-w-0">
                     <span className="block truncate text-sm font-semibold">{name}</span>
-                    <span className="block truncate text-xs text-muted">{user.email ?? ROLE_LABELS[user.rol]}</span>
+                    <span className="block truncate text-xs text-muted">{user.email}</span>
+                    <span className="mt-1 inline-block rounded-full bg-soft px-2 py-0.5 text-[11px] font-medium text-ink">
+                      Estás como {ROLE_LABELS[user.rol] ?? user.rol}
+                    </span>
                   </span>
                 </div>
                 <UserMenuItems user={user} onNavigate={closeAll} onLogout={logout} onPhoto={openPhoto} />
@@ -200,13 +206,17 @@ export default function Navbar() {
           </div>
         </div>
 
+        {/* En celular el rol se ve al lado del menú, sin tener que abrirlo */}
+        <span className="ml-auto rounded-full border border-line px-2.5 py-1 text-xs font-medium text-muted lg:hidden">
+          {ROLE_LABELS[user.rol] ?? user.rol}
+        </span>
         <button
           type="button"
           onClick={() => setMobileOpen((open) => !open)}
           aria-expanded={mobileOpen}
           aria-controls="menu-movil"
           aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
-          className="ml-auto rounded-lg p-2 text-ink hover:bg-soft lg:hidden"
+          className="rounded-lg p-2 text-ink hover:bg-soft lg:hidden"
         >
           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
             {mobileOpen ? (
