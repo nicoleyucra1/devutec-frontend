@@ -27,7 +27,7 @@ function loadGoogleScript() {
 
 const ROLES = [
   { value: 'CLIENT', title: 'Soy cliente', detail: 'Publico proyectos y contrato developers' },
-  { value: 'FREELANCER', title: 'Soy freelancer', detail: 'Estudio o egresé de UTEC y busco proyectos' },
+  { value: 'FREELANCER', title: 'Soy freelancer', detail: 'Estudio o egresé de una universidad y busco proyectos' },
 ]
 
 // Botón "Continuar con Google". Si la cuenta ya existe, inicia sesión; si es nueva, pregunta el rol y la crea.

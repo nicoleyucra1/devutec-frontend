@@ -81,7 +81,7 @@ function VisitorPanel({ project }) {
       </h2>
       <p className="mb-6 text-[13px] leading-relaxed text-muted">
         {project.status === 'OPEN'
-          ? 'Los estudiantes de UTEC pueden postular con su propuesta y su precio.'
+          ? 'Los estudiantes universitarios pueden postular con su propuesta y su precio.'
           : 'Este proyecto ya tiene a alguien trabajando o terminó.'}
       </p>
       <ButtonLink to="/projects" variant="secondary" className="w-full">
