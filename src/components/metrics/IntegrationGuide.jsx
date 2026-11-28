@@ -41,7 +41,7 @@ export default function IntegrationGuide({ contractId, setup, isClient, freelanc
     return () => clearInterval(timer)
   }, [contractId, live.installed])
 
-  const trackSnippet = "// Cuando el pedido se envió bien (por ejemplo, después del fetch de tu formulario)\ndevutec.track('pedido')"
+  const trackSnippet = "// Para otras acciones desde tu código (por ejemplo, al terminar un formulario)\nDevutecMetricas.evento('reserva_confirmada')"
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1fr_300px]">
@@ -51,8 +51,8 @@ export default function IntegrationGuide({ contractId, setup, isClient, freelanc
           {isClient ? `Esto lo instala ${firstName} en tu web` : 'Conecta tu web en 2 minutos'}
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-muted">
-          Es como un Google Analytics de DEVUTEC: cuenta visitas, pedidos y la velocidad de la web, y el cliente lo ve en su
-          panel. Pesa menos de 3 KB y no frena la página.
+          Es como un Google Analytics de DEVUTEC: cuenta visitas, de dónde llegan, pedidos, contactos y la velocidad de la
+          web, y el cliente lo ve en su panel. Es liviano y no frena la página.
         </p>
 
         <ol className="mt-7 grid gap-8">
@@ -62,16 +62,18 @@ export default function IntegrationGuide({ contractId, setup, isClient, freelanc
             <CodeBlock code={setup.snippet} label="Código para instalar las métricas" />
           </Step>
 
-          <Step number={2} title="Marca los pedidos">
-            Agrega <code className="rounded bg-paper px-1">data-devutec-event=&quot;pedido&quot;</code> al botón que hace el
-            pedido. Puedes usar otros nombres para otras acciones, como «whatsapp» o «reserva».
-            <CodeBlock code={setup.orderSnippet} label="Botón de pedido con el evento" />
-            <p className="mt-3">Si el pedido termina por código (un formulario o un pago), llama a esto cuando salga bien:</p>
-            <CodeBlock code={trackSnippet} label="Evento de pedido por código" />
+          <Step number={2} title="Marca los botones importantes">
+            Agrega <code className="rounded bg-paper px-1">data-devutec=&quot;pedido&quot;</code> al botón que hace el pedido,{' '}
+            <code className="rounded bg-paper px-1">&quot;contacto&quot;</code> a WhatsApp, llamar o cómo llegar, y{' '}
+            <code className="rounded bg-paper px-1">&quot;reserva&quot;</code> a las reservas.
+            <CodeBlock code={setup.orderSnippet} label="Botón de pedido marcado" />
+            <p className="mt-3">Si quieres contar otra acción desde tu código:</p>
+            <CodeBlock code={trackSnippet} label="Evento propio por código" />
           </Step>
 
           <Step number={3} title="Publica y abre tu web">
-            Abre la web publicada en tu celular o en el navegador. En unos segundos, la visita aparece aquí al lado.
+            Abre la web publicada en tu celular o en el navegador y acepta el aviso de métricas. En unos segundos, la visita
+            aparece aquí al lado.
           </Step>
         </ol>
       </div>
@@ -92,16 +94,16 @@ export default function IntegrationGuide({ contractId, setup, isClient, freelanc
           <p className="mt-1 text-xs leading-relaxed">
             {live.installed
               ? `Última visita ${timeAgo(live.lastEventAt)}. ¡Ya están llegando los datos!`
-              : 'Revisamos cada 5 segundos. Abre tu web publicada para probar.'}
+              : 'Revisamos cada 5 segundos. Abre tu web publicada y acepta el aviso para probar.'}
           </p>
         </div>
 
         <div className="rounded-2xl border border-line bg-surface p-5 text-xs leading-relaxed text-muted">
           <p className="text-[10px] font-semibold tracking-[0.13em] text-ink">PRIVACIDAD</p>
           <p className="mt-2">
-            Es anónimo: no usa cookies, no guarda la IP ni datos personales. Solo cuenta visitas, pedidos y la velocidad.
+            Antes de contar, el visitante ve un aviso y decide (Ley 29733). Si dice que no, no se envía nada.
           </p>
-          <p className="mt-2">Igual conviene mencionarlo en la política de privacidad de la web del cliente.</p>
+          <p className="mt-2">No usa cookies ni guarda la IP, nombres, correos o teléfonos. Solo cuenta visitas, botones y la velocidad.</p>
         </div>
       </aside>
     </div>

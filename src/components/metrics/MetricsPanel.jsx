@@ -102,8 +102,8 @@ export default function MetricsPanel({ data, isClient, freelancerName, onShowGui
         <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
           <Stat label="VISITAS" value={data.visits} help="Páginas abiertas" />
           <Stat label="PERSONAS" value={data.visitors} help="Visitantes distintos" />
-          <Stat label="PEDIDOS" value={data.orders} help="Clics en «pedido»" />
-          <Stat label="CARGA PROMEDIO" value={loadTime(data.averageLoadMs)} help={speed ? `${speed} en celular y PC` : 'Sin datos'} />
+          <Stat label="PEDIDOS" value={data.orders} help="Botones de pedido tocados" />
+          <Stat label="CARGA PROMEDIO" value={loadTime(data.averageLoadMs)} help={speed ? `${speed}` : 'Sin datos'} />
         </div>
 
         <div className="mt-8">
@@ -113,8 +113,10 @@ export default function MetricsPanel({ data, isClient, freelancerName, onShowGui
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
+        <TopList title="PEDIDOS, CONTACTOS Y RESERVAS" items={data.topEvents} empty="Todavía nadie tocó un botón marcado." />
+        <TopList title="DE DÓNDE LLEGAN" items={data.sources ?? []} empty="Todavía no hay visitas." />
+        <TopList title="CELULAR O COMPUTADORA" items={data.devices ?? []} empty="Todavía no hay visitas." />
         <TopList title="PÁGINAS MÁS VISTAS" items={data.topPages} empty="Todavía no hay visitas." />
-        <TopList title="EVENTOS (PEDIDOS, WHATSAPP…)" items={data.topEvents} empty="Todavía no hay eventos." />
       </div>
     </div>
   )
@@ -132,6 +134,8 @@ MetricsPanel.propTypes = {
     daily: PropTypes.array,
     topPages: PropTypes.array,
     topEvents: PropTypes.array,
+    sources: PropTypes.array,
+    devices: PropTypes.array,
   }).isRequired,
   isClient: PropTypes.bool,
   freelancerName: PropTypes.string,
