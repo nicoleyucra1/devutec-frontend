@@ -1,3 +1,4 @@
+import CarnetCard from '../../components/verification/CarnetCard'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Cuyi from '../../components/brand/Cuyi'
@@ -276,6 +277,9 @@ export default function FreelancerDashboard() {
           Explorar proyectos
         </ButtonLink>
       </header>
+
+      {/* Segunda verificación: la foto del carnet universitario y su estado */}
+      <CarnetCard className="mb-6" />
 
       <section aria-label="Tus números" className="grid grid-cols-2 gap-3 lg:grid-cols-[1.15fr_0.75fr_0.9fr_1.3fr]">
         <NumberCard

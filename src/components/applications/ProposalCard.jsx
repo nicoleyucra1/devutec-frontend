@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import ReportButton from '../reports/ReportButton'
+import VerificationBadges from '../verification/VerificationBadges'
 import { Link } from 'react-router-dom'
 import Badge from '../ui/Badge'
 import Button from '../ui/Button'
@@ -65,6 +66,7 @@ export default function ProposalCard({ application, budget, selected, canDecide,
             </Link>
           </h2>
           <p className="mb-1.5 text-[11px] text-muted">{studyLine(profile)}</p>
+          <VerificationBadges profile={profile} className="mb-1.5" />
           <span className="flex items-center gap-[3px] text-[11px] text-muted">
             {rating ? (
               <>
