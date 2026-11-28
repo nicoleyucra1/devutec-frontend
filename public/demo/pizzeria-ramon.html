@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pizzería Ramón · página de prueba de DEVUTEC</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { --rojo:#c8102e; --amarillo:#ffc72c; --tinta:#1d1b19; --papel:#fff8ec; }
+  * { box-sizing:border-box }
+  body { margin:0; font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; background:var(--papel); color:var(--tinta) }
+  .prueba { background:#0e0e0c; color:#d7f25c; text-align:center; font-size:12px; padding:6px 12px; letter-spacing:.04em }
+  header { background:var(--rojo); color:#fff; padding:28px 20px 34px; text-align:center }
+  header h1 { margin:0; font-size:34px; letter-spacing:-.02em }
+  header p { margin:6px 0 0; opacity:.9 }
+  nav { display:flex; gap:8px; justify-content:center; margin-top:18px; flex-wrap:wrap }
+  nav a { color:var(--tinta); background:var(--amarillo); text-decoration:none; padding:8px 14px; border-radius:999px; font-weight:600; font-size:14px }
+  main { max-width:760px; margin:0 auto; padding:24px 16px 60px }
+  h2 { font-size:22px; margin:28px 0 12px }
+  .carta { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)) }
+  .pizza { background:#fff; border-radius:14px; padding:16px; box-shadow:0 2px 10px rgba(0,0,0,.06) }
+  .pizza h3 { margin:0 0 4px; font-size:17px } .pizza p { margin:0 0 12px; color:#6b6460; font-size:14px }
+  .precio { font-weight:700 }
+  button, .btn { font:inherit; border:0; border-radius:10px; padding:10px 14px; cursor:pointer; font-weight:600; text-decoration:none; display:inline-block }
+  .pedir { background:var(--rojo); color:#fff; width:100% }
+  .acciones { display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)) }
+  .wsp { background:#1fa855; color:#fff } .llamar { background:var(--tinta); color:#fff } .reservar { background:var(--amarillo); color:var(--tinta) }
+  .toast { position:fixed; top:16px; left:50%; transform:translateX(-50%); background:#0e0e0c; color:#fff; padding:10px 16px; border-radius:10px; font-size:14px; opacity:0; transition:opacity .2s }
+  .toast.ver { opacity:1 }
+  footer { text-align:center; font-size:12px; color:#8a837d; padding:20px }
+</style>
+</head>
+<body>
+<div class="prueba">PÁGINA DE PRUEBA DE DEVUTEC · simula la web que entregó el estudiante</div>
+<header>
+  <h1>🍕 Pizzería Ramón</h1>
+  <p>Pizzas al horno de leña en Surco · Delivery de 6 a 11 p. m.</p>
+  <nav><a href="#carta">Carta</a><a href="#contacto">Contacto</a></nav>
+</header>
+<main>
+  <h2 id="carta">Nuestra carta</h2>
+  <div class="carta">
+    <div class="pizza"><h3>Margarita</h3><p>Tomate, mozzarella y albahaca</p><p class="precio">S/ 32</p><button class="pedir" data-devutec="pedido">Pedir</button></div>
+    <div class="pizza"><h3>Americana</h3><p>Jamón y mucho queso</p><p class="precio">S/ 35</p><button class="pedir" data-devutec="pedido">Pedir</button></div>
+    <div class="pizza"><h3>Pepperoni</h3><p>Pepperoni y orégano</p><p class="precio">S/ 38</p><button class="pedir" data-devutec="pedido">Pedir</button></div>
+  </div>
+
+  <h2 id="contacto">¿Hablamos?</h2>
+  <div class="acciones">
+    <button class="wsp" data-devutec="contacto">Pedir por WhatsApp</button>
+    <button class="llamar" data-devutec="contacto">Llamar</button>
+    <button class="reservar" data-devutec="reserva">Reservar una mesa</button>
+  </div>
+</main>
+<footer>Ejemplo para el demo. Los botones no llaman ni abren WhatsApp: solo muestran cómo DEVUTEC cuenta cada contacto.</footer>
+<div class="toast" id="toast"></div>
+<script>
+  // La llave del contrato llega en el link: /demo/pizzeria-ramon.html?key=dv_...
+  var key = new URLSearchParams(location.search).get('key')
+  var toast = document.getElementById('toast')
+  document.addEventListener('click', function (event) {
+    var el = event.target.closest('[data-devutec]')
+    if (!el) return
+    var textos = { pedido: '¡Pedido recibido! (prueba)', contacto: 'Abriendo contacto… (prueba)', reserva: '¡Reserva enviada! (prueba)' }
+    toast.textContent = textos[el.getAttribute('data-devutec')] + (key ? '' : ' · falta ?key= en el link')
+    toast.classList.add('ver'); setTimeout(function () { toast.classList.remove('ver') }, 1600)
+  })
+  if (key) {
+    var s = document.createElement('script')
+    s.src = '/metricas.js'
+    s.defer = true
+    s.setAttribute('data-key', key)
+    var api = new URLSearchParams(location.search).get('api')
+    if (api) s.setAttribute('data-api', api)
+    document.body.appendChild(s)
+  }
+</script>
+</body>
+</html>
