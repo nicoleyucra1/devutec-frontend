@@ -3,7 +3,11 @@ import PropTypes from 'prop-types'
 import ButtonLink from '../projects/ButtonLink'
 import Button from '../ui/Button'
 import Skeleton from '../ui/Skeleton'
+import CopilotCard from './CopilotCard'
+import { useAsync } from '../../hooks/useAsync'
 import { applicationService } from '../../services/applicationService'
+import { pricingService } from '../../services/pricingService'
+import { formatRate, splitClientTotal } from '../../utils/commission'
 import { errorMessage } from '../../utils/errorMessage'
 import { formatBudget, formatDate } from '../../utils/format'
 import { idType, projectShape } from '../../utils/propShapes'
@@ -12,12 +16,19 @@ import { idType, projectShape } from '../../utils/propShapes'
 const MIN_MESSAGE = 20
 const MAX_MESSAGE = 2000
 
-function validate({ message, proposedPrice }) {
+// Hoy en formato AAAA-MM-DD (hora local), para el mínimo del calendario y para validar la fecha propuesta
+function todayIso() {
+  const now = new Date()
+  return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10)
+}
+
+function validate({ message, proposedPrice, proposedDeadline }) {
   const errors = {}
   const length = message.trim().length
   if (length < MIN_MESSAGE) errors.message = `Cuéntale al cliente un poco más (mínimo ${MIN_MESSAGE} caracteres)`
   if (length > MAX_MESSAGE) errors.message = `El mensaje no puede pasar de ${MAX_MESSAGE} caracteres`
   if (!proposedPrice || Number(proposedPrice) <= 0) errors.proposedPrice = 'Ingresa un precio mayor que 0'
+  if (proposedDeadline && proposedDeadline < todayIso()) errors.proposedDeadline = 'La fecha no puede ser pasada'
   return errors
 }
 
@@ -68,11 +79,22 @@ const ClockIcon = (
 // Si ya postuló, en vez del formulario se muestra cómo va su propuesta, así no aparece "Postular" dos veces.
 export default function ApplyPanel({ project, application, contract, loading, onApplied }) {
   const id = useId()
-  const [values, setValues] = useState({ message: '', proposedPrice: project.budget ? String(project.budget) : '' })
+  const [values, setValues] = useState({
+    message: '',
+    proposedPrice: project.budget ? String(project.budget) : '',
+    proposedDeadline: '',
+  })
   const [errors, setErrors] = useState({})
   const [submitError, setSubmitError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const [justSent, setJustSent] = useState(false)
+
+  // El copiloto solo hace falta mientras se puede postular
+  const canApply = !loading && !application && project.status === 'OPEN'
+  const copilot = useAsync(
+    (options) => (canApply ? pricingService.estimateProject(project.id, options) : Promise.resolve(null)),
+    [project.id, canApply],
+  )
 
   const client = project.clientName || 'El cliente'
   const toMyApplications = (
@@ -177,7 +199,8 @@ export default function ApplyPanel({ project, application, contract, loading, on
     const found = validate(values)
     setErrors(found)
     if (Object.keys(found).length > 0) {
-      document.getElementById(`${id}-${found.message ? 'message' : 'price'}`)?.focus()
+      const firstField = found.message ? 'message' : found.proposedPrice ? 'price' : 'deadline'
+      document.getElementById(`${id}-${firstField}`)?.focus()
       return
     }
 
@@ -187,6 +210,7 @@ export default function ApplyPanel({ project, application, contract, loading, on
         projectId: Number(project.id),
         message: values.message.trim(),
         proposedPrice: Number(values.proposedPrice),
+        proposedDeadline: values.proposedDeadline,
       })
       setJustSent(true)
       onApplied?.()
@@ -200,6 +224,20 @@ export default function ApplyPanel({ project, application, contract, loading, on
   const length = values.message.trim().length
   const counterInvalid = errors.message || length > MAX_MESSAGE
 
+  // El precio que escribe el estudiante es el total que paga el cliente: la comisión de DEVUTEC va adentro
+  const split = splitClientTotal(values.proposedPrice)
+  const info = copilot.data?.estimate
+  // Alerta de subestimación: lo que recibiría queda por debajo del mínimo razonable (aviso, no bloquea)
+  const underestimate =
+    info && split.freelancerAmount > 0 && split.freelancerAmount < Number(copilot.data.underestimateBelow)
+  const averageHours = info ? Math.round((info.hoursMin + info.hoursMax) / 2) : 0
+  const perHour = averageHours > 0 ? Math.round(split.freelancerAmount / averageHours) : 0
+  // Plazo corto: la fecha propuesta deja menos semanas de las que suele tomar un proyecto así
+  const daysProposed = values.proposedDeadline
+    ? Math.round((new Date(values.proposedDeadline) - new Date(todayIso())) / 86400000)
+    : null
+  const shortDeadline = info && daysProposed !== null && daysProposed >= 0 && daysProposed < info.weeksMin * 7
+
   return (
     <aside className={PANEL}>
       <p className="text-[11px] font-semibold tracking-[0.13em]">TU PROPUESTA</p>
@@ -209,6 +247,8 @@ export default function ApplyPanel({ project, application, contract, loading, on
       </p>
 
       <form onSubmit={handleSubmit} noValidate className="grid gap-5">
+        <CopilotCard estimate={copilot.data} loading={copilot.loading} error={copilot.error} />
+
         <div className="flex flex-col gap-2 text-xs">
           <label htmlFor={`${id}-message`} className="font-medium">
             Mensaje para el cliente
@@ -237,7 +277,7 @@ export default function ApplyPanel({ project, application, contract, loading, on
 
         <div className="flex flex-col gap-2 text-xs">
           <label htmlFor={`${id}-price`} className="font-medium">
-            Precio propuesto
+            Precio total para el cliente
           </label>
           <div
             className={`flex min-h-12 items-center overflow-hidden rounded-[10px] border bg-surface transition-colors focus-within:border-ink ${
@@ -265,9 +305,54 @@ export default function ApplyPanel({ project, application, contract, loading, on
               {errors.proposedPrice}
             </small>
           ) : (
-            <small id={`${id}-price-help`} className="text-[11px] text-muted">
+            <small id={`${id}-price-help`} className="text-[11px] leading-normal text-muted">
+              {split.freelancerAmount > 0 && (
+                <>
+                  Tú recibes <strong className="font-semibold text-ink">{formatBudget(split.freelancerAmount)}</strong>; el{' '}
+                  {formatRate(split.rate)} es la tarifa de DEVUTEC.{' '}
+                </>
+              )}
               El cliente ofrece {formatBudget(project.budget)}.
             </small>
+          )}
+          {underestimate && (
+            <p role="status" className="rounded-[10px] bg-pending-light p-3 text-[11px] leading-normal text-pending">
+              <strong className="font-semibold">Ojo:</strong> proyectos así toman entre {info.hoursMin} y {info.hoursMax} horas.
+              Con {formatBudget(values.proposedPrice)} estarías cobrando unos S/ {perHour} la hora. Un precio más realista
+              empieza en {formatBudget(info.clientMin)}.
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-2 text-xs">
+          <label htmlFor={`${id}-deadline`} className="font-medium">
+            Fecha en que propones entregar <span className="font-normal text-muted">(opcional)</span>
+          </label>
+          <input
+            id={`${id}-deadline`}
+            name="proposedDeadline"
+            type="date"
+            min={todayIso()}
+            value={values.proposedDeadline}
+            onChange={handleChange}
+            aria-invalid={Boolean(errors.proposedDeadline)}
+            aria-describedby={`${id}-deadline-help`}
+            className={`min-h-12 rounded-[10px] border bg-surface px-3 text-sm transition-colors focus:border-ink ${
+              errors.proposedDeadline ? 'border-error' : 'border-gray-300'
+            }`}
+            style={{ outline: 'none' }}
+          />
+          <small id={`${id}-deadline-help`} className={`text-[11px] ${errors.proposedDeadline ? 'text-error' : 'text-muted'}`}>
+            {errors.proposedDeadline ||
+              (project.deadline
+                ? `El cliente lo necesita para el ${formatDate(project.deadline)}. Déjalo vacío si aceptas esa fecha.`
+                : 'Déjalo vacío si aceptas la fecha del cliente.')}
+          </small>
+          {shortDeadline && (
+            <p role="status" className="rounded-[10px] bg-pending-light p-3 text-[11px] leading-normal text-pending">
+              <strong className="font-semibold">Ojo:</strong> proyectos así suelen tomar {info.weeksMin}{' '}
+              {info.weeksMin === 1 ? 'semana' : 'semanas'} o más. Asegúrate de que te alcance el tiempo.
+            </p>
           )}
         </div>
 
