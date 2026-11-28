@@ -36,8 +36,8 @@ const ROLES = [
   {
     value: 'FREELANCER',
     title: 'Soy freelancer',
-    description: 'Estudio o egresé de UTEC y busco proyectos.',
-    detail: 'Postula, entrega y cobra con seguridad.',
+    description: 'Estudio en la universidad y busco proyectos.',
+    detail: 'Regístrate con tu correo universitario (.edu.pe).',
     icon: code,
     nameLabel: 'Nombres y apellidos',
     namePlaceholder: 'Camila Ríos',
