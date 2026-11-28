@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import ContractDetailSkeleton from '../../components/contracts/ContractDetailSkeleton'
 import ContractReviews from '../../components/contracts/ContractReviews'
+import MetricsLinkCard from '../../components/contracts/MetricsLinkCard'
 import ContractTimeline from '../../components/contracts/ContractTimeline'
 import MoneyAmount from '../../components/contracts/MoneyAmount'
 import PersonCard from '../../components/contracts/PersonCard'
@@ -467,6 +468,11 @@ export default function ContractDetail() {
               stageName={translatedStage?.name}
               request={changeRequest ?? undefined}
             />
+          )}
+
+          {/* Proyectos web: acceso al panel de visitas y pedidos (y a «Cómo integrarlo» para el estudiante) */}
+          {(isClient || isFreelancer) && contract.status !== 'CANCELLED' && (
+            <MetricsLinkCard contractId={contract.id} isClient={isClient} />
           )}
 
           {contract.status === 'CONFIRMED' && (isClient || isFreelancer) && (
