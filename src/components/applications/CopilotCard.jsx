@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import Skeleton from '../ui/Skeleton'
+import { hasFeatureDetail } from '../../utils/copilot'
 import { formatBudget } from '../../utils/format'
 
 // Copiloto "Antes de postular": horas que suele tomar el proyecto, cuánto cobrar y lo que se suele olvidar.
@@ -20,6 +21,9 @@ export default function CopilotCard({ estimate, loading, error }) {
 
   const { estimate: info, myHourlyRate, myMin, myMax, commonlyForgotten } = estimate
   const weeks = info.weeksMin === info.weeksMax ? `${info.weeksMin}` : `${info.weeksMin} a ${info.weeksMax}`
+  // Sin funcionalidades no hay horas reales; y si el precio también salió de las horas, tampoco se muestra
+  const detailed = hasFeatureDetail(info)
+  const showPrice = detailed || info.source !== 'HOURS'
 
   return (
     <details open className="group rounded-[12px] border border-line bg-paper p-4 text-xs">
@@ -30,35 +34,48 @@ export default function CopilotCard({ estimate, loading, error }) {
         </span>
       </summary>
 
+      {!detailed && (
+        <p className="mt-4 rounded-[10px] bg-surface p-3 leading-relaxed text-muted">
+          Este proyecto se publicó sin el asistente, así que no tenemos el detalle de sus funcionalidades para estimar
+          las horas. Revisa la descripción y calcula cuánto te tomaría.
+        </p>
+      )}
+
       <dl className="mt-4 grid gap-3">
-        <div>
-          <dt className="text-muted">Horas que suele tomar</dt>
-          <dd className="mt-0.5 text-[15px] font-semibold tabular-nums">
-            {info.hoursMin} a {info.hoursMax} horas · {weeks} {info.weeksMax === 1 ? 'semana' : 'semanas'}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-muted">Precio sugerido (lo que paga el cliente)</dt>
-          <dd className="mt-0.5 text-[15px] font-semibold tabular-nums">
-            {formatBudget(info.clientMin)} a {formatBudget(info.clientMax)}
-          </dd>
-          <dd className="mt-0.5 text-muted">
-            Tú recibirías {formatBudget(info.freelancerMin)} a {formatBudget(info.freelancerMax)}.
-          </dd>
-        </div>
-        <div>
-          <dt className="text-muted">Con tu tarifa por hora</dt>
-          <dd className="mt-0.5 font-medium tabular-nums">
-            {myHourlyRate
-              ? `S/ ${Number(myHourlyRate)} × ${info.hoursMin}–${info.hoursMax} h = ${formatBudget(myMin)} a ${formatBudget(myMax)} para ti`
-              : 'Agrega tu tarifa por hora en tu perfil para calcular cuánto cobrarías tú.'}
-          </dd>
-        </div>
+        {detailed && (
+          <div>
+            <dt className="text-muted">Horas que suele tomar</dt>
+            <dd className="mt-0.5 text-[15px] font-semibold tabular-nums">
+              {info.hoursMin} a {info.hoursMax} horas · {weeks} {info.weeksMax === 1 ? 'semana' : 'semanas'}
+            </dd>
+          </div>
+        )}
+        {showPrice && (
+          <div>
+            <dt className="text-muted">Precio sugerido (lo que paga el cliente)</dt>
+            <dd className="mt-0.5 text-[15px] font-semibold tabular-nums">
+              {formatBudget(info.clientMin)} a {formatBudget(info.clientMax)}
+            </dd>
+            <dd className="mt-0.5 text-muted">
+              Tú recibirías {formatBudget(info.freelancerMin)} a {formatBudget(info.freelancerMax)}.
+            </dd>
+          </div>
+        )}
+        {detailed && (
+          <div>
+            <dt className="text-muted">Con tu tarifa por hora</dt>
+            <dd className="mt-0.5 font-medium tabular-nums">
+              {myHourlyRate
+                ? `S/ ${Number(myHourlyRate)} × ${info.hoursMin}–${info.hoursMax} h = ${formatBudget(myMin)} a ${formatBudget(myMax)} para ti`
+                : 'Agrega tu tarifa por hora en tu perfil para calcular cuánto cobrarías tú.'}
+            </dd>
+          </div>
+        )}
       </dl>
 
-      <p className="mt-3 leading-relaxed text-muted">{info.explanation}</p>
+      {showPrice && <p className="mt-3 leading-relaxed text-muted">{info.explanation}</p>}
 
-      {info.stages?.length > 0 && (
+      {detailed && info.stages?.length > 0 && (
         <>
           <p className="mt-4 font-medium">Horas por etapa</p>
           <ul className="mt-2 grid gap-1">
@@ -95,7 +112,9 @@ const money = PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 CopilotCard.propTypes = {
   estimate: PropTypes.shape({
     estimate: PropTypes.shape({
+      source: PropTypes.string,
       explanation: PropTypes.string,
+      features: PropTypes.arrayOf(PropTypes.shape({ code: PropTypes.string })),
       hoursMin: PropTypes.number,
       hoursMax: PropTypes.number,
       weeksMin: PropTypes.number,

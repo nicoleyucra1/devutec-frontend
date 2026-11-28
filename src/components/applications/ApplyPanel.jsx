@@ -8,6 +8,7 @@ import { useAsync } from '../../hooks/useAsync'
 import { applicationService } from '../../services/applicationService'
 import { pricingService } from '../../services/pricingService'
 import { formatRate, splitClientTotal } from '../../utils/commission'
+import { hasFeatureDetail } from '../../utils/copilot'
 import { errorMessage } from '../../utils/errorMessage'
 import { formatBudget, formatDate } from '../../utils/format'
 import { idType, projectShape } from '../../utils/propShapes'
@@ -228,15 +229,19 @@ export default function ApplyPanel({ project, application, contract, loading, on
   const split = splitClientTotal(values.proposedPrice)
   const info = copilot.data?.estimate
   // Alerta de subestimación: lo que recibiría queda por debajo del mínimo razonable (aviso, no bloquea)
+  // Sin funcionalidades, las horas no son reales: no se usan para las alertas
+  const detailed = hasFeatureDetail(info)
+  // Si el precio sugerido también salió de esas horas, no hay con qué comparar
+  const priceReliable = info && (detailed || info.source !== 'HOURS')
   const underestimate =
-    info && split.freelancerAmount > 0 && split.freelancerAmount < Number(copilot.data.underestimateBelow)
+    priceReliable && split.freelancerAmount > 0 && split.freelancerAmount < Number(copilot.data.underestimateBelow)
   const averageHours = info ? Math.round((info.hoursMin + info.hoursMax) / 2) : 0
   const perHour = averageHours > 0 ? Math.round(split.freelancerAmount / averageHours) : 0
   // Plazo corto: la fecha propuesta deja menos semanas de las que suele tomar un proyecto así
   const daysProposed = values.proposedDeadline
     ? Math.round((new Date(values.proposedDeadline) - new Date(todayIso())) / 86400000)
     : null
-  const shortDeadline = info && daysProposed !== null && daysProposed >= 0 && daysProposed < info.weeksMin * 7
+  const shortDeadline = detailed && daysProposed !== null && daysProposed >= 0 && daysProposed < info.weeksMin * 7
 
   return (
     <aside className={PANEL}>
@@ -317,9 +322,11 @@ export default function ApplyPanel({ project, application, contract, loading, on
           )}
           {underestimate && (
             <p role="status" className="rounded-[10px] bg-pending-light p-3 text-[11px] leading-normal text-pending">
-              <strong className="font-semibold">Ojo:</strong> proyectos así toman entre {info.hoursMin} y {info.hoursMax} horas.
-              Con {formatBudget(values.proposedPrice)} estarías cobrando unos S/ {perHour} la hora. Un precio más realista
-              empieza en {formatBudget(info.clientMin)}.
+              <strong className="font-semibold">Ojo:</strong>{' '}
+              {detailed
+                ? `proyectos así toman entre ${info.hoursMin} y ${info.hoursMax} horas. Con ${formatBudget(values.proposedPrice)} estarías cobrando unos S/ ${perHour} la hora. `
+                : `proyectos parecidos terminados en DEVUTEC se cobraron más. `}
+              Un precio más realista empieza en {formatBudget(info.clientMin)}.
             </p>
           )}
         </div>
