@@ -22,6 +22,7 @@ const MyApplications = lazyPage(() => import('./pages/applications/MyApplication
 const ProjectApplications = lazyPage(() => import('./pages/applications/ProjectApplications'))
 const MyContracts = lazyPage(() => import('./pages/contracts/MyContracts'))
 const ContractDetail = lazyPage(() => import('./pages/contracts/ContractDetail'))
+const ContractMetrics = lazyPage(() => import('./pages/contracts/ContractMetrics'))
 const EditMyProfile = lazyPage(() => import('./pages/freelancers/EditMyProfile'))
 const FreelancerProfile = lazyPage(() => import('./pages/freelancers/FreelancerProfile'))
 const AdminPayments = lazyPage(() => import('./pages/admin/AdminPayments'))
@@ -61,6 +62,7 @@ export default function AppRoutes() {
           <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/contracts" element={<MyContracts />} />
           <Route path="/contracts/:id" element={<ContractDetail />} />
+          <Route path="/contracts/:id/metricas" element={<ContractMetrics />} />
           <Route path="/freelancers/:userId" element={<FreelancerProfile />} />
         </Route>
 
