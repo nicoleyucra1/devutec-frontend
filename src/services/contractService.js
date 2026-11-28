@@ -23,6 +23,12 @@ export const contractService = {
     return data
   },
 
+  // El cliente pide cambios en la etapa entregada: { nota }. Máximo 2 rondas por etapa.
+  async requestChanges(id, { nota }) {
+    const { data } = await api.patch(`/contracts/${id}/request-changes`, { nota })
+    return data
+  },
+
   async cancel(id) {
     const { data } = await api.patch(`/contracts/${id}/cancel`)
     return data
