@@ -9,6 +9,7 @@ import CoordinateCard from '../../components/contracts/CoordinateCard'
 import StageGuideCard from '../../components/contracts/StageGuideCard'
 import TermsDialog from '../../components/contracts/TermsDialog'
 import TranslationCard from '../../components/contracts/TranslationCard'
+import InstallmentsCard from '../../components/contracts/InstallmentsCard'
 import ClientRequestTranslator from '../../components/contracts/ClientRequestTranslator'
 import Cuyi from '../../components/brand/Cuyi'
 import ErrorBox from '../../components/projects/ErrorBox'
@@ -200,10 +201,10 @@ export default function ContractDetail() {
   }, [id, searchParams, setSearchParams, toast, reload])
 
   // Pide al backend la página de pago de Stripe y lleva al cliente ahí
-  const payWithCard = async () => {
+  const payWithCard = async (installment) => {
     setPaying(true)
     try {
-      const { checkoutUrl } = await contractService.startCheckout(id)
+      const { checkoutUrl } = await contractService.startCheckout(id, typeof installment === 'number' ? installment : undefined)
       window.location.assign(checkoutUrl)
     } catch (err) {
       toast.error(errorMessage(err))
@@ -304,8 +305,17 @@ export default function ContractDetail() {
   const currentStage = contract.stages?.find((stage) => stage.position === contract.currentStage)
   const showGuide = isFreelancer && !finished && currentStage && currentStage.status !== 'CANCELLED'
 
+  // Pago en dos partes: el estudiante no entrega una etapa si el cliente no pagó la parte que la cubre
+  const installments = contract.installments ?? []
+  const hasPlan = installments.length > 0
+  const coveringInstallment = hasPlan && currentStage
+    ? installments.find((installment) => installment.number === Math.min(currentStage.paymentPart ?? 1, installments.length))
+    : null
+  const stagePaid = !coveringInstallment || coveringInstallment.status !== 'PENDING'
+  const nextInstallment = installments.find((installment) => installment.status === 'PENDING')
+
   // Qué botones ve cada participante según el estado del contrato
-  const canDeliver = isFreelancer && contract.status === 'IN_PROGRESS'
+  const canDeliver = isFreelancer && contract.status === 'IN_PROGRESS' && stagePaid
   const canCancel = isClient && contract.status === 'IN_PROGRESS'
   const canConfirm = isClient && contract.status === 'DELIVERED'
   // El cliente puede pagar con tarjeta mientras el contrato siga abierto y no lo haya pagado antes
@@ -313,7 +323,7 @@ export default function ContractDetail() {
     isClient &&
     (contract.status === 'IN_PROGRESS' || contract.status === 'DELIVERED') &&
     contract.paymentStatus === 'HELD' &&
-    !contract.paidWithCard
+    (hasPlan ? Boolean(nextInstallment?.payableNow) : !contract.paidWithCard)
 
   // Con etapas: la entrega y el pedido de cambios de la etapa en curso se traducen con su nombre como contexto
   const translatedStage = contract.stages?.find((stage) => stage.position === contract.currentStage)
@@ -362,6 +372,8 @@ export default function ContractDetail() {
               <ContractTimeline contract={contract} />
             </div>
           </article>
+
+          <InstallmentsCard contract={contract} isClient={isClient} onPay={payWithCard} paying={paying} />
 
           {showGuide && <StageGuideCard key={currentStage.id} contractId={contract.id} stage={currentStage} clientName={contract.clientName} />}
 
@@ -461,12 +473,21 @@ export default function ContractDetail() {
             {contract.paidWithCard && (
               <p className="mt-4 text-[12px] font-semibold text-lime">Pagado con tarjeta ✓</p>
             )}
+            {isFreelancer && contract.status === 'IN_PROGRESS' && !stagePaid && (
+              <p className="mt-4 text-[12px] font-semibold text-lime">
+                Esperando el pago {coveringInstallment.number} de {contract.clientName ?? 'el cliente'} para seguir con esta etapa.
+              </p>
+            )}
             {(canPay || canDeliver || canConfirm || canCancel || finished) && (
               <div className="mt-6 grid gap-2">
                 {canPay && (
                   <>
-                    <Button onClick={payWithCard} loading={paying} variant="lime" className="w-full">
-                      {paying ? 'Abriendo Stripe...' : 'Pagar con tarjeta'}
+                    <Button onClick={() => payWithCard(nextInstallment?.number)} loading={paying} variant="lime" className="w-full">
+                      {paying
+                        ? 'Abriendo Stripe...'
+                        : nextInstallment
+                          ? `Pagar ${formatBudget(nextInstallment.clientAmount)} (pago ${nextInstallment.number} de ${installments.length})`
+                          : 'Pagar con tarjeta'}
                     </Button>
                     <p className="text-center text-[11px] text-white/60">
                       Modo de prueba: tarjeta 4242 4242 4242 4242, cualquier fecha futura y CVC
