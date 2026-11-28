@@ -139,6 +139,8 @@ export default function ProjectDetail() {
   const isOwner = Boolean(user?.id && project && user.id === project.clientId)
   const canManage = isOwner || user?.rol === 'ADMIN'
   const isFreelancer = user?.rol === 'FREELANCER'
+  // Las habilidades son para que el estudiante sepa si el proyecto es para él: al cliente no se le muestran
+  const showSkills = user?.rol !== 'CLIENT'
   const mine = useMyProjectApplication(id, isFreelancer)
 
   const facts = project
@@ -210,7 +212,7 @@ export default function ProjectDetail() {
                 <p className="mt-5 whitespace-pre-line text-[15px] leading-[1.75] text-[#55534e] dark:text-gray-600">{project.description || 'Sin descripción.'}</p>
               </div>
 
-              {project.skills?.length > 0 && (
+              {showSkills && project.skills?.length > 0 && (
                 <div className="border-b border-line py-11">
                   <p className="text-[11px] font-semibold tracking-[0.13em]">HABILIDADES SOLICITADAS</p>
                   <ul className="mt-5 flex flex-wrap gap-1.5">
