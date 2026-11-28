@@ -40,8 +40,8 @@ export default function InstallmentsCard({ contract, isClient, onPay, paying }) 
           const isNext = open && next?.number === installment.number
           return (
             <li key={installment.number} className="rounded-xl border border-line bg-paper p-4">
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <div className="min-w-0">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold">{installment.label}</p>
                   <p className="mt-1 text-xs text-muted">
                     {formatBudget(installment.studentAmount)} para {freelancer} + {formatBudget(installment.commissionAmount)} de
@@ -50,7 +50,7 @@ export default function InstallmentsCard({ contract, isClient, onPay, paying }) 
                       ` · Incluye ${formatBudget(installment.reserveAmount)} de bolsa de emergencia, que se libera al final`}
                   </p>
                 </div>
-                <div className="flex flex-col items-end gap-1">
+                <div className="flex shrink-0 flex-col items-end gap-1">
                   <span className="text-lg font-semibold tabular-nums">{formatBudget(installment.clientAmount)}</span>
                   <Badge color={status.color}>{status.label}</Badge>
                 </div>

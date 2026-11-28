@@ -1,5 +1,6 @@
 import { formatDate } from '../../utils/format'
 import { contractShape } from '../../utils/propShapes'
+import { nothingPaidYet } from '../../utils/installments'
 
 function CheckIcon() {
   return (
@@ -23,10 +24,14 @@ function stepsFor(contract) {
     ]
   }
 
-  const reached = { IN_PROGRESS: 1, DELIVERED: 2, CONFIRMED: 4 }[contract.status] ?? 1
+  // Pago en dos partes: el primer paso recién se marca cuando el cliente hace el pago 1
+  const unpaid = nothingPaidYet(contract)
+  const reached = unpaid ? 0 : ({ IN_PROGRESS: 1, DELIVERED: 2, CONFIRMED: 4 }[contract.status] ?? 1)
   const stateOf = (index) => (index < reached ? 'done' : index === reached ? 'current' : 'todo')
   return [
-    { title: 'Pago retenido', detail: started, state: 'done' },
+    unpaid
+      ? { title: 'Pago 1 en garantía', detail: 'Falta pagar', state: 'current' }
+      : { title: 'Pago retenido', detail: started, state: 'done' },
     {
       title: 'Trabajo entregado',
       detail: delivered ?? (contract.deadline ? `Vence el ${formatDate(contract.deadline)}` : 'Pendiente'),
