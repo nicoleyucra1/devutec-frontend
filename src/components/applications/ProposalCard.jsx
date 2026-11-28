@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types'
 import ReportButton from '../reports/ReportButton'
+import ProposalExplainer from './ProposalExplainer'
+import { proposalChanges } from './proposalChanges'
 import { Link } from 'react-router-dom'
 import Badge from '../ui/Badge'
 import Button from '../ui/Button'
@@ -107,6 +109,10 @@ export default function ProposalCard({ application, budget, selected, canDecide,
       </div>
 
       <p className="flex-1 whitespace-pre-line text-[13px] leading-relaxed text-[#55534e] dark:text-gray-600">“{application.message}”</p>
+      {/* Si propone otro precio u otro plazo, Cuyi le explica al cliente qué cambia y por qué */}
+      {pending && canDecide && proposalChanges(application, budget) && (
+        <ProposalExplainer applicationId={application.id} freelancerName={application.freelancerName} />
+      )}
       {/* Si la propuesta pide pagar o hablar por fuera, el cliente la puede reportar */}
       <ReportButton applicationId={application.id} personName={application.freelancerName} className="mt-2 self-start" />
 
