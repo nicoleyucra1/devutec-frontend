@@ -9,6 +9,7 @@ import PersonCard from '../../components/contracts/PersonCard'
 import CoordinateCard from '../../components/contracts/CoordinateCard'
 import StageGuideCard from '../../components/contracts/StageGuideCard'
 import StagesCard from '../../components/contracts/StagesCard'
+import QualityCard from '../../components/contracts/QualityCard'
 import TermsDialog from '../../components/contracts/TermsDialog'
 import TranslationCard from '../../components/contracts/TranslationCard'
 import InstallmentsCard from '../../components/contracts/InstallmentsCard'
@@ -527,6 +528,17 @@ export default function ContractDetail() {
           {showGuide && <StageGuideCard key={currentStage.id} contractId={contract.id} stage={currentStage} clientName={contract.clientName} />}
 
           {(isClient || isFreelancer) && <StagesCard contract={contract} isClient={isClient} />}
+
+          {/* Entrega final de una web: tiene que pasar el estándar de calidad de DEVUTEC (la tarjeta decide si aplica) */}
+          {currentStage && !finished && (isClient || isFreelancer) && (
+            <QualityCard
+              key={`quality-${currentStage.id}`}
+              contractId={contract.id}
+              stage={currentStage}
+              isClient={isClient}
+              freelancerName={contract.freelancerName}
+            />
+          )}
 
           {contract.deliveredAt ? (
             <article className="rounded-2xl border border-line bg-surface p-6 sm:p-[30px]">
