@@ -31,6 +31,7 @@ function fromDraft(draft) {
     deadline: draft.deadline ?? '',
     location: '',
     skillIds: (draft.skillIds ?? []).map(String),
+    metricsRequested: Boolean(draft.metricsRequested),
   }
 }
 
@@ -42,6 +43,7 @@ function toFormValues(project) {
     deadline: project?.deadline ?? '',
     location: project?.location ?? '',
     skillIds: project?.skills?.map((skill) => String(skill.id)) ?? [],
+    metricsRequested: Boolean(project?.metricsRequested),
   }
 }
 
@@ -197,6 +199,7 @@ export default function ProjectForm({ initialProject, draft, saving, serverError
       deadline: values.deadline,
       location: values.location.trim() || null,
       skillIds: values.skillIds.map(Number),
+      metricsRequested: Boolean(values.metricsRequested),
       // Solo con el asistente: tipo de proyecto y funcionalidades, para que el estudiante vea las horas estimadas
       ...(draft ? { category: draft.category, features: draft.features } : {}),
     })
@@ -328,6 +331,24 @@ export default function ProjectForm({ initialProject, draft, saving, serverError
           </div>
         </Section>
         )}
+
+        <Section number="04" title="Métricas de tu web" help="Opcional. Lo ves en tu perfil de DEVUTEC.">
+          <label htmlFor={`${id}-metricsRequested`} className="flex cursor-pointer items-start gap-3 rounded-xl border border-line p-4 has-[:checked]:border-ink">
+            <input
+              id={`${id}-metricsRequested`}
+              type="checkbox"
+              checked={Boolean(values.metricsRequested)}
+              onChange={(event) => setField('metricsRequested', event.target.checked)}
+              className="mt-1 h-4 w-4 accent-[#0e0e0c]"
+            />
+            <span className="text-sm leading-relaxed">
+              <strong className="font-semibold">Quiero ver cuántas personas visitan mi web y cuántas me contactan.</strong>
+              <span className="mt-1 block text-xs text-muted">
+                El estudiante deja instaladas las métricas de DEVUTEC sin costo extra. Las ves en tu perfil con 3 meses gratis.
+              </span>
+            </span>
+          </label>
+        </Section>
 
         {serverError && (
           <p role="alert" className="mx-[22px] mt-5 rounded-lg bg-error-light px-3.5 py-2.5 text-sm text-error md:mx-8">

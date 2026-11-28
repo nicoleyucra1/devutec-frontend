@@ -38,6 +38,12 @@ export default function DraftSummary({ draft, onContinue, onKeepChatting }) {
         <p className="mt-3 text-xs text-muted">
           Entrega sugerida: <strong className="text-ink">{formatDate(draft.deadline)}</strong>
         </p>
+        {draft.metricsRequested && (
+          <p className="mt-2 text-xs text-muted">
+            Métricas DEVUTEC: <strong className="text-ink">sí</strong>, verás las visitas y los contactos de tu web en tu perfil (3
+            meses gratis).
+          </p>
+        )}
       </div>
 
       <div className="grid gap-5 border-b border-line p-[22px] md:p-7">
@@ -205,6 +211,7 @@ DraftSummary.propTypes = {
     }).isRequired,
     stages: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string.isRequired, percent: PropTypes.number.isRequired })).isRequired,
     // Pago en dos partes: textos de cuándo se paga y qué cubre (los montos se recalculan en pantalla)
+    metricsRequested: PropTypes.bool,
     payments: PropTypes.arrayOf(
       PropTypes.shape({
         number: PropTypes.number.isRequired,

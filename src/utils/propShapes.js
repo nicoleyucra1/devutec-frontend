@@ -13,6 +13,8 @@ export const skillShape = PropTypes.shape({
 
 export const projectShape = PropTypes.shape({
   id: idType.isRequired,
+  // El cliente pidió métricas DEVUTEC (el estudiante lo ve antes de postular)
+  metricsRequested: PropTypes.bool,
   title: PropTypes.string,
   description: PropTypes.string,
   status: PropTypes.string,

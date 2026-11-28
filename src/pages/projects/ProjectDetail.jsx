@@ -165,6 +165,11 @@ export default function ProjectDetail() {
               <div className="flex items-center gap-3">
                 <ProjectStatusBadge status={project.status} />
                 <span className="font-mono text-xs text-muted">{projectCode(project.id)}</span>
+                {project.metricsRequested && (
+                  <span className="rounded-full bg-progress-light px-2.5 py-1 text-[11px] font-semibold text-progress">
+                    Incluye métricas DEVUTEC
+                  </span>
+                )}
               </div>
               <h1 className="mb-2 mt-[18px] text-[40px] font-semibold leading-[1.02] tracking-[-0.045em] md:text-[57px]">{project.title}</h1>
               <p className="text-muted">{byline}</p>
@@ -192,6 +197,13 @@ export default function ProjectDetail() {
                   </div>
                 ))}
               </dl>
+
+              {project.metricsRequested && (
+                <p className="mt-5 rounded-xl bg-progress-light p-4 text-sm leading-relaxed text-progress">
+                  <strong className="font-semibold">El cliente pidió métricas DEVUTEC.</strong> Antes de la Entrega final tienes que
+                  dejar instalado el script de métricas en su web (es una línea y DEVUTEC te da las instrucciones). Sin costo extra.
+                </p>
+              )}
 
               <div className="border-b border-line py-11">
                 <p className="text-[11px] font-semibold tracking-[0.13em]">DESCRIPCIÓN</p>
