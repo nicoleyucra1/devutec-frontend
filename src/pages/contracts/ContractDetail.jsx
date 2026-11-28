@@ -10,6 +10,7 @@ import StageGuideCard from '../../components/contracts/StageGuideCard'
 import TermsDialog from '../../components/contracts/TermsDialog'
 import TranslationCard from '../../components/contracts/TranslationCard'
 import InstallmentsCard from '../../components/contracts/InstallmentsCard'
+import ClosedForNonPaymentCard from '../../components/contracts/ClosedForNonPaymentCard'
 import ClientRequestTranslator from '../../components/contracts/ClientRequestTranslator'
 import Cuyi from '../../components/brand/Cuyi'
 import ErrorBox from '../../components/projects/ErrorBox'
@@ -27,7 +28,7 @@ import { useContract } from '../../hooks/useContracts'
 import { useToast } from '../../hooks/useToast'
 import { contractService } from '../../services/contractService'
 import { CONTRACT_STATUS, contractCode, PAYMENT_STATUS } from '../../utils/contractStatus'
-import { hasPlan as contractHasPlan, nothingPaidYet, paidByClient } from '../../utils/installments'
+import { closedForNonPayment, hasPlan as contractHasPlan, nothingPaidYet, paidByClient } from '../../utils/installments'
 import { errorMessage } from '../../utils/errorMessage'
 import { formatBudget, formatDate } from '../../utils/format'
 
@@ -129,7 +130,9 @@ function moneyText(contract) {
     IN_PROGRESS: 'El dinero está retenido. Nadie puede moverlo hasta que se confirme la entrega o se cancele el contrato.',
     DELIVERED: `La entrega está lista. El pago se libera en cuanto ${client} la confirme.`,
     CONFIRMED: `Pago liberado a ${contract.freelancerName}. El contrato quedó finalizado.`,
-    CANCELLED: `El contrato se canceló antes de la entrega. El monto se reembolsó a ${client}.`,
+    CANCELLED: closedForNonPayment(contract)
+      ? `El contrato se cerró porque no se hizo el pago 2. Lo aprobado y la bolsa de emergencia son de ${firstName}; lo que no se usó volvió a ${client}.`
+      : `El contrato se canceló antes de la entrega. El monto se reembolsó a ${client}.`,
   }[contract.status]
 }
 
@@ -168,6 +171,11 @@ function nextStep(contract, isClient) {
         text: isClient ? `Pagaste ${amount} por un trabajo que aprobaste.` : `Recibiste ${amount} por este trabajo.`,
       }
     default:
+      if (closedForNonPayment(contract)) {
+        return isClient
+          ? { kicker: 'CERRADO', title: 'Contrato cerrado.', text: 'No se hizo el pago 2 a tiempo. Abajo ves qué recibió cada uno.' }
+          : { kicker: 'CERRADO', title: 'Tu trabajo quedó pagado.', text: `${client} no hizo el pago 2. Recibes lo aprobado y la bolsa de emergencia.` }
+      }
       return { kicker: 'CANCELADO', title: 'Contrato cancelado.', text: `Los ${amount} se reembolsaron a ${client}.` }
   }
 }
@@ -312,7 +320,10 @@ export default function ContractDetail() {
   // El rol en este contrato se decide comparando el id de la sesión con los ids que manda el backend
   const isClient = user?.id === contract.clientId
   const isFreelancer = user?.id === contract.freelancerUserId
-  const status = CONTRACT_STATUS[contract.status]
+  // Cerrado por falta del pago 2: no es un "Cancelado" cualquiera
+  const status = closedForNonPayment(contract)
+    ? { label: 'Cerrado: no se hizo el pago 2', color: 'yellow' }
+    : CONTRACT_STATUS[contract.status]
   // Con el pago en dos partes, mientras no se haga el pago 1 no hay nada retenido todavía
   const payment = nothingPaidYet(contract) ? { label: 'Pendiente', color: 'yellow' } : PAYMENT_STATUS[contract.paymentStatus]
   const box = nextStep(contract, isClient)
@@ -391,6 +402,8 @@ export default function ContractDetail() {
             </div>
           </article>
 
+          <ClosedForNonPaymentCard contract={contract} isClient={isClient} />
+
           <InstallmentsCard contract={contract} isClient={isClient} onPay={payWithCard} paying={paying} />
 
           {showGuide && <StageGuideCard key={currentStage.id} contractId={contract.id} stage={currentStage} clientName={contract.clientName} />}
@@ -434,7 +447,9 @@ export default function ContractDetail() {
                 <p className="text-[10px] font-semibold tracking-[0.13em] text-muted">ENTREGAS</p>
                 <h2 className="mb-1 mt-2 text-xl font-semibold tracking-tight">Aún no hay entregas</h2>
                 <p className="text-xs text-muted">
-                  {contract.status === 'CANCELLED'
+                  {closedForNonPayment(contract)
+                    ? 'El contrato se cerró porque no se hizo el pago 2.'
+                    : contract.status === 'CANCELLED'
                     ? 'El contrato se canceló antes de recibir una entrega.'
                     : isClient
                       ? `Cuando ${contract.freelancerName} entregue, lo verás aquí.`

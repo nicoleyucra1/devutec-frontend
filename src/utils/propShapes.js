@@ -48,6 +48,10 @@ export const contractShape = PropTypes.shape({
   freelancerName: PropTypes.string,
   // true cuando el cliente ya pagó con tarjeta (el pago está en garantía)
   paidWithCard: PropTypes.bool,
+  // Pago 2: fecha límite y, si el contrato se cerró por no pagarlo, el motivo (PAGO_2_NO_REALIZADO) y cuándo
+  secondPaymentDueAt: PropTypes.string,
+  closedReason: PropTypes.string,
+  closedAt: PropTypes.string,
 })
 
 export const userShape = PropTypes.shape({
