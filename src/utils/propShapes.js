@@ -46,6 +46,8 @@ export const contractShape = PropTypes.shape({
   deadline: PropTypes.string,
   clientName: PropTypes.string,
   freelancerName: PropTypes.string,
+  // true cuando el pago está en garantía: recién ahí llegan los celulares
+  paidWithCard: PropTypes.bool,
   clientPhone: PropTypes.string,
   freelancerPhone: PropTypes.string,
 })

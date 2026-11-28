@@ -5,6 +5,8 @@ import ItemList from '../../components/dashboard/ItemList'
 import StatCard from '../../components/dashboard/StatCard'
 import StatGrid from '../../components/dashboard/StatGrid'
 import { usePayments } from '../../hooks/usePayments'
+import { useReports } from '../../hooks/useReports'
+import { REPORT_REASON_LABELS } from '../../services/reportService'
 import { useProjects } from '../../hooks/useProjects'
 import { PAYMENT_STATUS, paymentCode } from '../../utils/contractStatus'
 import { formatBudget, formatDate } from '../../utils/format'
@@ -14,6 +16,8 @@ export default function AdminDashboard() {
   // Solo se necesita el total, así que se pide una página de 1 elemento
   const projects = useProjects({ page: 1, size: 1 })
   const payments = usePayments()
+  const reports = useReports()
+  const openReports = (reports.data ?? []).filter((report) => report.status === 'OPEN')
 
   const counts = countBy(payments.data ?? [], 'status')
   const totalOf = (status) => sumBy(payments.data ?? [], 'amount', (payment) => payment.status === status)
@@ -46,6 +50,24 @@ export default function AdminDashboard() {
               detail: formatBudget(payment.amount),
               status: PAYMENT_STATUS[payment.status]?.label ?? payment.status,
               statusColor: PAYMENT_STATUS[payment.status]?.color,
+            }))}
+          />
+        )}
+      </DashboardSection>
+
+      <DashboardSection title="Reportes pendientes" linkTo="/admin/reports" linkLabel="Ver todos los reportes →">
+        {reports.loading && <ItemList loading />}
+        {reports.error && <ErrorBox message={reports.error} status={reports.status} onRetry={reports.reload} compact />}
+        {reports.data && openReports.length === 0 && <EmptyState title="No hay reportes pendientes" />}
+        {openReports.length > 0 && (
+          <ItemList
+            items={openReports.slice(0, 5).map((report) => ({
+              key: report.id,
+              title: report.reportedName,
+              subtitle: `${report.place} · ${formatDate(report.createdAt)}`,
+              detail: `${report.reportedReports} en total`,
+              status: REPORT_REASON_LABELS[report.reason] ?? report.reason,
+              statusColor: report.reason === 'FILTRO_AUTOMATICO' ? 'gray' : 'red',
             }))}
           />
         )}
