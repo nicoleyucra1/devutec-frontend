@@ -7,6 +7,8 @@ import MoneyAmount from '../../components/contracts/MoneyAmount'
 import PersonCard from '../../components/contracts/PersonCard'
 import WhatsAppCard from '../../components/contracts/WhatsAppCard'
 import TermsDialog from '../../components/contracts/TermsDialog'
+import TranslationCard from '../../components/contracts/TranslationCard'
+import ClientRequestTranslator from '../../components/contracts/ClientRequestTranslator'
 import Cuyi from '../../components/brand/Cuyi'
 import ErrorBox from '../../components/projects/ErrorBox'
 import ErrorState from '../../components/ui/ErrorState'
@@ -308,6 +310,12 @@ export default function ContractDetail() {
     contract.paymentStatus === 'HELD' &&
     !contract.paidWithCard
 
+  // Con etapas: la entrega y el pedido de cambios de la etapa en curso se traducen con su nombre como contexto
+  const translatedStage = contract.stages?.find((stage) => stage.position === contract.currentStage)
+  const deliveryNote = translatedStage?.deliveryNote || contract.deliveryNote
+  const deliveryStageName = translatedStage?.deliveryNote ? translatedStage.name : undefined
+  const changeRequest = translatedStage?.status === 'CHANGES_REQUESTED' ? translatedStage.changeRequestNote : null
+
   const moneyKicker = { HELD: 'PAGO EN GARANTÍA', RELEASED: 'PAGO LIBERADO', REFUNDED: 'PAGO REEMBOLSADO' }[contract.paymentStatus]
   const parties = [contract.clientName, contract.freelancerName].filter(Boolean).join(' · ')
 
@@ -374,7 +382,8 @@ export default function ContractDetail() {
                   <span className="shrink-0 text-escrow">Abrir ↗</span>
                 </a>
               )}
-              {contract.deliveryNote && (
+              {/* El cliente ve la nota traducida por Cuyi más abajo; el original queda en «Ver mensaje original» */}
+              {contract.deliveryNote && !isClient && (
                 <blockquote className="mt-3 whitespace-pre-line rounded-xl bg-paper px-4 py-3 text-sm leading-relaxed">
                   <span className="mb-1 block text-[10px] font-semibold tracking-[0.13em] text-muted">NOTA DE {contract.freelancerName?.split(' ')[0]?.toUpperCase()}</span>
                   {contract.deliveryNote}
@@ -396,6 +405,31 @@ export default function ContractDetail() {
                 </p>
               </div>
             </article>
+          )}
+
+          {/* IA traductora: explica la nota de entrega al cliente (el estudiante ve cómo le llegará) */}
+          {deliveryNote && (isClient || isFreelancer) && (
+            <TranslationCard
+              key={deliveryNote}
+              contractId={contract.id}
+              note={deliveryNote}
+              stageName={deliveryStageName}
+              freelancerName={contract.freelancerName}
+              clientName={contract.clientName}
+              isClient={isClient}
+            />
+          )}
+
+          {/* IA traductora al revés: el pedido de cambios del cliente se traduce solo para el estudiante;
+              si no hay pedido, el estudiante puede pegar cualquier mensaje del cliente */}
+          {isFreelancer && !finished && (
+            <ClientRequestTranslator
+              key={changeRequest ?? 'manual'}
+              contractId={contract.id}
+              clientName={contract.clientName}
+              stageName={translatedStage?.name}
+              request={changeRequest ?? undefined}
+            />
           )}
 
           {contract.status === 'CONFIRMED' && (isClient || isFreelancer) && (
